@@ -72,6 +72,6 @@ class ResultAggregator:
         return race_output[race_output["position"] <= top_k].sort_values("position")
     
     def aggregate_results(self):
-        aggregated_sprint_results = self._get_position_scores(self.sprint_results)
-        aggregated_race_results = self._get_position_scores(self.race_results)
+        aggregated_sprint_results = self._get_position_scores(self.sprint_results,10)
+        aggregated_race_results = self._get_position_scores(self.race_results,3)
         return aggregated_race_results, aggregated_sprint_results
