@@ -12,12 +12,15 @@ class ResultAggregator:
         self.race_calendar = self._build_race_calendar()
         self.meeting_key, self.race_session_key, self.sprint_session_key = self._find_meeting_keys()
         self.race_results = self._fetch("session_result", session_key=self.race_session_key)
+        self.drivers = self._fetch("drivers", )
         if self.sprint_session_key is None:
             self.championship_standings = self._fetch("championship_drivers", session_key=self.race_session_key)
+            self.drivers = self._fetch("drivers", session_key=self.race_session_key)
             self.sprint_results = None
         else:
             self.championship_standings = self._fetch("championship_drivers", session_key=self.sprint_session_key)
-            self.sprint_results = self._fetch("session_result", session_key=self.race_session_key)
+            self.drivers = self._fetch("drivers", session_key=self.sprint_session_key)
+            self.sprint_results = self._fetch("session_result", session_key=self.sprint_session_key)
 
     def _fetch(self, endpoint: str, **params) -> pd.DataFrame:
         query = "&".join(f"{k}={v}" for k, v in params.items())
@@ -72,6 +75,11 @@ class ResultAggregator:
         return race_output[race_output["position"] <= top_k].sort_values("position")
     
     def aggregate_results(self):
-        aggregated_sprint_results = self._get_position_scores(self.sprint_results,10)
-        aggregated_race_results = self._get_position_scores(self.race_results,3)
+        if self.sprint_results is None:
+            print("No Sprint Race")
+            aggregated_sprint_results = None
+        else:
+            print("Sprint Race")
+            aggregated_sprint_results = self._get_position_scores(self.sprint_results,3)
+        aggregated_race_results = self._get_position_scores(self.race_results,10)
         return aggregated_race_results, aggregated_sprint_results
