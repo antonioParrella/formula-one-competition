@@ -233,7 +233,7 @@
     /* ── Race results grid ── */
     .rounds-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
       gap: 16px;
     }
 
@@ -299,23 +299,59 @@
       margin-top: 14px;
       padding-top: 14px;
       border-top: 1px solid var(--border);
-      display: flex;
     }
 
-    .round-score-item { flex: 1; text-align: center; }
+    .round-score-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 3px 0;
+    }
 
-    .round-score-item + .round-score-item {
-      border-left: 1px solid var(--border);
+    .round-score-rank {
+      font-family: var(--font-display);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--dim);
+      width: 20px;
+      flex-shrink: 0;
+    }
+
+    .round-score-rank.r1 { color: #ffd700; }
+    .round-score-rank.r2 { color: #c0c0c0; }
+    .round-score-rank.r3 { color: #cd7f32; }
+
+    .round-score-name {
+      flex: 1;
+      font-size: 13px;
+      color: var(--text);
+      padding: 0 8px;
     }
 
     .round-score-pts {
       font-family: var(--font-display);
-      font-size: 22px;
+      font-size: 15px;
       font-weight: 700;
       color: var(--accent2);
     }
 
-    .round-score-name { font-size: 11px; color: var(--muted); margin-top: 2px; }
+    .round-scores-toggle {
+      font-family: var(--font-display);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px 0 0;
+      display: block;
+      width: 100%;
+      text-align: left;
+    }
+
+    .round-scores-toggle:hover { color: var(--text); }
 
     /* ── Chart view ── */
     .chart-card {
@@ -341,7 +377,7 @@
       display: flex;
       gap: 10px;
       flex-wrap: wrap;
-      margin-bottom: 24px;
+      margin-bottom: 20px;
     }
 
     .race-btn {
@@ -361,6 +397,93 @@
 
     .race-btn:hover { color: var(--text); border-color: var(--dim); }
     .race-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .race-btn.sprint-btn.active { background: #7c3aed; border-color: #7c3aed; }
+
+    /* Sub-tabs within Tips */
+    .sub-tabs {
+      display: flex;
+      gap: 0;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 24px;
+    }
+
+    .sub-tab {
+      font-family: var(--font-display);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding: 10px 18px;
+      cursor: pointer;
+      border: none;
+      background: none;
+      border-bottom: 2px solid transparent;
+      transition: color 0.15s, border-color 0.15s;
+      position: relative;
+      top: 1px;
+    }
+
+    .sub-tab:hover { color: var(--text); }
+    .sub-tab.active { color: var(--text); border-bottom-color: var(--accent); }
+    .sub-tab.sprint { }
+    .sub-tab.sprint.active { border-bottom-color: #7c3aed; }
+    .sub-tab.dnf.active { border-bottom-color: var(--accent2); }
+
+    .sub-view { display: none; }
+    .sub-view.active { display: block; }
+
+    /* Tips tables — transposed layout for main race (positions as rows) */
+    .tips-table-scroll { overflow-x: auto; }
+
+    /* Hit/miss cell colouring */
+    td.hit  { color: #4ade80; font-weight: 500; }
+    td.miss { color: var(--dim); }
+    td.partial { color: var(--accent2); font-weight: 500; }
+
+    /* DNF budget tracker */
+    .dnf-budget-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    .dnf-budget-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 16px;
+    }
+
+    .dnf-budget-name {
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .dnf-pips {
+      display: flex;
+      gap: 5px;
+    }
+
+    .dnf-pip {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: var(--surface);
+    }
+
+    .dnf-pip.used { background: var(--accent2); border-color: var(--accent2); }
+    .dnf-pip.hit  { background: #4ade80; border-color: #4ade80; }
+
+    .dnf-budget-label {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 6px;
+    }
 
     /* ── Empty state ── */
     .empty {
@@ -410,8 +533,12 @@
         <div class="stat-value accent" id="stat-leader">—</div>
       </div>
       <div class="stat-card">
-        <div class="stat-label">Points gap</div>
+        <div class="stat-label">Gap P1 → P2</div>
         <div class="stat-value" id="stat-gap">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Players</div>
+        <div class="stat-value" id="stat-players">—</div>
       </div>
       <div class="stat-card">
         <div class="stat-label">Rounds played</div>
@@ -457,6 +584,7 @@
     <div class="section-sub">Points over the season</div>
     <div class="chart-card">
       <div class="chart-title">Cumulative points — all players</div>
+      <div id="chart-player-toggles" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;"></div>
       <canvas id="chart-cumulative" height="100"></canvas>
     </div>
     <div class="chart-card">
@@ -471,23 +599,59 @@
   <div class="view" id="view-tips">
     <div class="section-title">Tips</div>
     <div class="section-sub">What everyone tipped, and how it scored</div>
-    <div class="tips-race-selector" id="tips-race-selector"></div>
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>Player</th>
-            <th>P1 tip</th>
-            <th>P2 tip</th>
-            <th>P3 tip</th>
-            <th>Pole tip</th>
-            <th>Fastest lap</th>
-            <th class="right">Score</th>
-          </tr>
-        </thead>
-        <tbody id="tips-body"></tbody>
-      </table>
+
+    <!-- Sub-tab bar -->
+    <div class="sub-tabs">
+      <button class="sub-tab active" onclick="showSubTab('main', this)">Main Race</button>
+      <button class="sub-tab sprint" onclick="showSubTab('sprint', this)">Sprint</button>
+      <button class="sub-tab dnf" onclick="showSubTab('dnf', this)">DNFs</button>
     </div>
+
+    <!-- ── Main race sub-view ── -->
+    <div class="sub-view active" id="sub-main">
+      <div class="tips-race-selector" id="main-race-selector"></div>
+      <div class="tips-table-scroll">
+        <div class="table-wrap">
+          <table>
+            <thead id="main-tips-head"></thead>
+            <tbody id="main-tips-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Sprint sub-view ── -->
+    <div class="sub-view" id="sub-sprint">
+      <div class="tips-race-selector" id="sprint-race-selector"></div>
+      <div class="tips-table-scroll">
+        <div class="table-wrap">
+          <table>
+            <thead id="sprint-tips-head"></thead>
+            <tbody id="sprint-tips-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── DNF sub-view ── -->
+    <div class="sub-view" id="sub-dnf">
+      <div class="dnf-budget-grid" id="dnf-budget-grid"></div>
+      <div class="tips-race-selector" id="dnf-race-selector"></div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Player</th>
+              <th>Drivers tipped to DNF</th>
+              <th class="right">Picks used</th>
+              <th class="right">Round score</th>
+            </tr>
+          </thead>
+          <tbody id="dnf-tips-body"></tbody>
+        </table>
+      </div>
+    </div>
+
   </div>
 
 </main>
@@ -514,29 +678,112 @@
 */
 
 // DATA_START
-const PLAYERS = ["Alice", "Bob"];
+const PLAYERS = ["James", "Sarah", "Tom", "Priya", "Marcus", "Zoe"];
 
 const STANDINGS = [
-  { name: "Alice", points: 0, lastRace: 0, bestRound: 0, roundScores: [] },
-  { name: "Bob",   points: 0, lastRace: 0, bestRound: 0, roundScores: [] },
+  { name: "James",  points: 87, lastRace: 22, bestRound: 28, roundScores: [28,18,12,22,7] },
+  { name: "Priya",  points: 81, lastRace: 14, bestRound: 26, roundScores: [16,26,11,14,14] },
+  { name: "Sarah",  points: 74, lastRace: 19, bestRound: 24, roundScores: [14,12,24,19,5] },
+  { name: "Marcus", points: 68, lastRace: 11, bestRound: 22, roundScores: [22,9,16,11,10] },
+  { name: "Zoe",    points: 55, lastRace: 17, bestRound: 20, roundScores: [8,10,20,17,0] },
+  { name: "Tom",    points: 49, lastRace: 8,  bestRound: 18, roundScores: [10,13,18,8,0] },
 ];
 
 const ROUNDS = [
-  // Example — uncomment and fill to test:
-  // { round: 1, name: "Bahrain GP", date: "2 Mar 2025",
-  //   winner: "Verstappen", pole: "Verstappen", fastest: "Leclerc",
-  //   scores: { Alice: 8, Bob: 5 } },
+  { round: 1, name: "Bahrain GP",   date: "2 Mar 2025",  winner: "Verstappen", pole: "Verstappen", fastest: "Perez",
+    scores: { James: 28, Marcus: 22, Priya: 16, Sarah: 14, Tom: 10, Zoe: 8 } },
+  { round: 2, name: "Saudi Arabian GP", date: "16 Mar 2025", winner: "Leclerc", pole: "Leclerc", fastest: "Norris",
+    scores: { Priya: 26, James: 18, Tom: 13, Sarah: 12, Zoe: 10, Marcus: 9 } },
+  { round: 3, name: "Australian GP", date: "30 Mar 2025", winner: "Norris",    pole: "Norris",    fastest: "Norris",
+    scores: { Sarah: 24, Marcus: 16, Zoe: 20, James: 12, Tom: 18, Priya: 11 } },
+  { round: 4, name: "Japanese GP",  date: "6 Apr 2025",  winner: "Verstappen", pole: "Verstappen", fastest: "Hamilton",
+    scores: { James: 22, Sarah: 19, Zoe: 17, Priya: 14, Marcus: 11, Tom: 8 } },
+  { round: 5, name: "Chinese GP",   date: "20 Apr 2025", winner: "Norris",    pole: "Russell",   fastest: "Norris",
+    scores: { James: 7, Priya: 14, Sarah: 5, Marcus: 10, Zoe: 0, Tom: 0 } },
 ];
 
-const TIPS = [
-  // Example:
-  // { round: 1, raceName: "Bahrain GP",
-  //   tips: [
-  //     { player: "Alice", p1: "Verstappen", p2: "Leclerc", p3: "Perez",
-  //       pole: "Verstappen", fastest: "Hamilton", score: 8 },
-  //     { player: "Bob",   p1: "Leclerc",    p2: "Perez",   p3: "Hamilton",
-  //       pole: "Leclerc",    fastest: "Verstappen", score: 5 },
-  //   ]},
+const MAIN_TIPS = [
+  { round: 1, raceName: "Bahrain GP",
+    positions: ["Verstappen","Perez","Leclerc","Sainz","Russell","Hamilton","Norris","Alonso","Stroll","Gasly"],
+    tips: [
+      { player: "James",  picks: ["Verstappen","Perez","Leclerc","Sainz","Russell","Hamilton","Norris","Alonso","Stroll","Gasly"], score: 28 },
+      { player: "Sarah",  picks: ["Verstappen","Leclerc","Perez","Russell","Sainz","Norris","Hamilton","Stroll","Alonso","Gasly"], score: 14 },
+      { player: "Tom",    picks: ["Leclerc","Verstappen","Perez","Sainz","Hamilton","Russell","Alonso","Norris","Gasly","Stroll"], score: 10 },
+      { player: "Priya",  picks: ["Verstappen","Perez","Sainz","Leclerc","Russell","Hamilton","Norris","Alonso","Gasly","Stroll"], score: 16 },
+      { player: "Marcus", picks: ["Verstappen","Leclerc","Perez","Sainz","Russell","Norris","Hamilton","Alonso","Stroll","Gasly"], score: 22 },
+      { player: "Zoe",    picks: ["Perez","Verstappen","Leclerc","Russell","Sainz","Hamilton","Alonso","Norris","Gasly","Stroll"], score: 8 },
+    ]},
+  { round: 2, raceName: "Saudi Arabian GP",
+    positions: ["Leclerc","Verstappen","Norris","Russell","Hamilton","Sainz","Perez","Alonso","Piastri","Stroll"],
+    tips: [
+      { player: "James",  picks: ["Verstappen","Leclerc","Norris","Russell","Hamilton","Sainz","Perez","Alonso","Piastri","Stroll"], score: 18 },
+      { player: "Sarah",  picks: ["Leclerc","Norris","Verstappen","Hamilton","Russell","Sainz","Alonso","Perez","Stroll","Piastri"], score: 12 },
+      { player: "Tom",    picks: ["Leclerc","Verstappen","Russell","Norris","Hamilton","Alonso","Sainz","Piastri","Perez","Stroll"], score: 13 },
+      { player: "Priya",  picks: ["Leclerc","Verstappen","Norris","Russell","Sainz","Hamilton","Perez","Piastri","Alonso","Stroll"], score: 26 },
+      { player: "Marcus", picks: ["Verstappen","Norris","Leclerc","Hamilton","Russell","Sainz","Alonso","Perez","Stroll","Piastri"], score: 9 },
+      { player: "Zoe",    picks: ["Norris","Leclerc","Verstappen","Russell","Hamilton","Perez","Sainz","Alonso","Piastri","Stroll"], score: 10 },
+    ]},
+  { round: 5, raceName: "Chinese GP",
+    positions: ["Norris","Piastri","Russell","Leclerc","Verstappen","Hamilton","Sainz","Alonso","Perez","Tsunoda"],
+    tips: [
+      { player: "James",  picks: ["Verstappen","Norris","Leclerc","Russell","Piastri","Hamilton","Sainz","Alonso","Perez","Tsunoda"], score: 7 },
+      { player: "Sarah",  picks: ["Russell","Norris","Piastri","Verstappen","Leclerc","Hamilton","Sainz","Alonso","Perez","Tsunoda"], score: 5 },
+      { player: "Tom",    picks: ["Verstappen","Leclerc","Russell","Norris","Hamilton","Piastri","Sainz","Tsunoda","Alonso","Perez"], score: 0 },
+      { player: "Priya",  picks: ["Norris","Russell","Piastri","Leclerc","Verstappen","Hamilton","Sainz","Alonso","Tsunoda","Perez"], score: 14 },
+      { player: "Marcus", picks: ["Norris","Leclerc","Verstappen","Russell","Piastri","Sainz","Hamilton","Alonso","Perez","Tsunoda"], score: 10 },
+      { player: "Zoe",    picks: ["Leclerc","Verstappen","Norris","Piastri","Russell","Hamilton","Sainz","Alonso","Perez","Tsunoda"], score: 0 },
+    ]},
+];
+
+const SPRINT_TIPS = [
+  { round: 3, raceName: "Australian Sprint",
+    positions: ["Norris","Piastri","Russell"],
+    tips: [
+      { player: "James",  picks: ["Norris","Russell","Piastri"], score: 2 },
+      { player: "Sarah",  picks: ["Norris","Piastri","Russell"], score: 3 },
+      { player: "Tom",    picks: ["Piastri","Norris","Russell"],  score: 1 },
+      { player: "Priya",  picks: ["Russell","Norris","Piastri"], score: 1 },
+      { player: "Marcus", picks: ["Norris","Piastri","Leclerc"], score: 2 },
+      { player: "Zoe",    picks: ["Norris","Piastri","Russell"], score: 3 },
+    ]},
+  { round: 5, raceName: "Chinese Sprint",
+    positions: ["Verstappen","Norris","Leclerc"],
+    tips: [
+      { player: "James",  picks: ["Verstappen","Norris","Leclerc"],  score: 3 },
+      { player: "Sarah",  picks: ["Norris","Verstappen","Leclerc"],  score: 1 },
+      { player: "Tom",    picks: ["Verstappen","Leclerc","Norris"],   score: 1 },
+      { player: "Priya",  picks: ["Verstappen","Leclerc","Norris"],   score: 1 },
+      { player: "Marcus", picks: ["Norris","Verstappen","Russell"],   score: 1 },
+      { player: "Zoe",    picks: ["Leclerc","Verstappen","Norris"],   score: 1 },
+    ]},
+];
+
+const DNF_TIPS = [
+  { round: 1, raceName: "Bahrain GP",
+    actualDnfs: ["Albon","Zhou"],
+    tips: [
+      { player: "James",  picks: ["Albon","Bottas"],   picksUsed: 2, score: 1 },
+      { player: "Sarah",  picks: ["Zhou"],              picksUsed: 1, score: 1 },
+      { player: "Tom",    picks: ["Albon","Sargeant"],  picksUsed: 2, score: 1 },
+      { player: "Priya",  picks: ["Bottas"],             picksUsed: 1, score: 0 },
+      { player: "Marcus", picks: ["Zhou","Sargeant"],   picksUsed: 2, score: 1 },
+    ]},
+  { round: 2, raceName: "Saudi Arabian GP",
+    actualDnfs: ["Perez","Sargeant"],
+    tips: [
+      { player: "James",  picks: ["Sargeant"],          picksUsed: 1, score: 1 },
+      { player: "Sarah",  picks: ["Perez","Sargeant"],  picksUsed: 2, score: 2 },
+      { player: "Zoe",    picks: ["Bottas","Albon"],    picksUsed: 2, score: 0 },
+      { player: "Marcus", picks: ["Sargeant"],          picksUsed: 1, score: 1 },
+    ]},
+  { round: 3, raceName: "Australian GP",
+    actualDnfs: ["Hamilton","Albon"],
+    tips: [
+      { player: "Tom",    picks: ["Albon"],              picksUsed: 1, score: 1 },
+      { player: "Priya",  picks: ["Hamilton","Albon"],   picksUsed: 2, score: 2 },
+      { player: "Zoe",    picks: ["Hamilton"],            picksUsed: 1, score: 1 },
+      { player: "James",  picks: ["Bottas"],              picksUsed: 1, score: 0 },
+    ]},
 ];
 // DATA_END
 
@@ -544,7 +791,15 @@ const TIPS = [
    HELPERS
    ═══════════════════════════════════════════════════════════ */
 const $ = id => document.getElementById(id);
-const PLAYER_COLORS = ["#e8002d","#ff8700","#00d2ff","#a78bfa","#4ade80","#facc15"];
+
+// Generates a distinct colour for any number of players using
+// golden-ratio hue spacing so colours never clash or repeat.
+function playerColor(index, total) {
+  const hue = (index * 360 / Math.max(total, 1) + 10) % 360;
+  return `hsl(${hue}, 75%, 58%)`;
+}
+
+const PLAYER_COLORS = PLAYERS.map((_, i) => playerColor(i, PLAYERS.length));
 
 /* ═══════════════════════════════════════════════════════════
    TAB SWITCHING
@@ -566,11 +821,13 @@ function renderLeaderboard() {
 
   $('lb-round-count').textContent = roundsPlayed;
   $('stat-rounds').textContent = roundsPlayed;
+  $('stat-players').textContent = PLAYERS.length;
 
   if (sorted.length >= 1) {
     $('stat-leader').textContent = sorted[0].name;
-    const gap = sorted.length >= 2 ? sorted[0].points - sorted[1].points : sorted[0].points;
-    $('stat-gap').textContent = gap + ' pts';
+  }
+  if (sorted.length >= 2) {
+    $('stat-gap').textContent = (sorted[0].points - sorted[1].points) + ' pts';
   }
 
   if (ROUNDS.length > 0) {
@@ -589,10 +846,12 @@ function renderLeaderboard() {
 
   body.innerHTML = sorted.map((p, i) => {
     const avg = roundsPlayed > 0 ? (p.points / roundsPlayed).toFixed(1) : '—';
-    const gap = i > 0 ? `<span style="color:var(--dim);font-size:12px">-${sorted[0].points - p.points}</span>` : '';
+    const gap = i > 0
+      ? `<span style="color:var(--dim);font-size:12px;margin-left:6px">-${sorted[0].points - p.points}</span>`
+      : '';
     return `<tr class="${i === 0 ? 'leader' : ''}">
       <td class="pos ${posClasses[i] || ''}">${i + 1}</td>
-      <td><span class="player-name">${p.name}</span> ${gap}</td>
+      <td><span class="player-name">${p.name}</span>${gap}</td>
       <td class="right"><span class="points">${p.points}</span></td>
       <td class="right">${p.lastRace !== undefined ? p.lastRace : '—'}</td>
       <td class="right">${p.bestRound || '—'}</td>
@@ -603,6 +862,7 @@ function renderLeaderboard() {
 
 /* ═══════════════════════════════════════════════════════════
    RACE RESULTS
+   Shows top 3 scores on the card; "show all" expands the rest.
    ═══════════════════════════════════════════════════════════ */
 function renderRaces() {
   const grid = $('rounds-grid');
@@ -613,13 +873,21 @@ function renderRaces() {
   }
 
   grid.innerHTML = [...ROUNDS].reverse().map(r => {
-    const scoreItems = Object.entries(r.scores)
-      .sort((a, b) => b[1] - a[1])
-      .map(([name, pts]) => `
-        <div class="round-score-item">
-          <div class="round-score-pts">${pts}</div>
-          <div class="round-score-name">${name}</div>
-        </div>`).join('');
+    const allScores = Object.entries(r.scores).sort((a, b) => b[1] - a[1]);
+    const rankClass = ['r1','r2','r3'];
+
+    const scoreRows = allScores.map(([name, pts], i) => {
+      const hidden = i >= 3 ? ' class="score-extra" style="display:none"' : '';
+      return `<div class="round-score-item"${hidden}>
+        <span class="round-score-rank ${rankClass[i] || ''}">${i + 1}</span>
+        <span class="round-score-name">${name}</span>
+        <span class="round-score-pts">${pts}</span>
+      </div>`;
+    }).join('');
+
+    const toggleBtn = allScores.length > 3
+      ? `<button class="round-scores-toggle" onclick="toggleScores(this)">+ ${allScores.length - 3} more</button>`
+      : '';
 
     return `<div class="round-card">
       <div class="round-header">
@@ -643,16 +911,31 @@ function renderRaces() {
           <span class="round-row-label">Fastest lap</span>
           <span class="round-row-value">${r.fastest}</span>
         </div>
-        <div class="round-scores">${scoreItems}</div>
+        <div class="round-scores">
+          ${scoreRows}
+          ${toggleBtn}
+        </div>
       </div>
     </div>`;
   }).join('');
 }
 
+function toggleScores(btn) {
+  const extras = btn.parentElement.querySelectorAll('.score-extra');
+  const expanded = extras[0].style.display !== 'none';
+  extras.forEach(el => el.style.display = expanded ? 'none' : 'flex');
+  btn.textContent = expanded
+    ? `+ ${extras.length} more`
+    : '- show less';
+}
+
 /* ═══════════════════════════════════════════════════════════
    CHARTS
+   Cumulative line chart has per-player toggle buttons so
+   the chart stays readable with 10+ players.
    ═══════════════════════════════════════════════════════════ */
 let chartsRendered = false;
+let cumChart = null;
 
 function renderCharts() {
   if (chartsRendered) return;
@@ -660,7 +943,7 @@ function renderCharts() {
 
   const labels = ROUNDS.map(r => r.name.replace(' Grand Prix','').replace(' GP',''));
   const axisStyle = { grid: { color: '#2a2a3a' }, ticks: { color: '#888', font: { family: 'Barlow' } } };
-  const legendStyle = { labels: { color: '#888', font: { family: 'Barlow', size: 12 }, boxWidth: 12 } };
+  const legendStyle = { display: false }; // we use custom toggles instead
 
   // Cumulative line chart
   const cumDatasets = STANDINGS.map((p, i) => {
@@ -673,16 +956,33 @@ function renderCharts() {
       tension: 0.35,
       pointRadius: 4,
       pointBackgroundColor: PLAYER_COLORS[i],
+      borderWidth: 2,
     };
   });
 
-  new Chart($('chart-cumulative'), {
+  cumChart = new Chart($('chart-cumulative'), {
     type: 'line',
     data: { labels, datasets: cumDatasets },
-    options: { responsive: true, plugins: { legend: legendStyle }, scales: { x: axisStyle, y: axisStyle } }
+    options: {
+      responsive: true,
+      plugins: { legend: legendStyle },
+      scales: { x: axisStyle, y: axisStyle }
+    }
   });
 
-  // Per-round bar chart
+  // Render player toggle buttons
+  const togglesEl = $('chart-player-toggles');
+  togglesEl.innerHTML = STANDINGS.map((p, i) => {
+    const col = PLAYER_COLORS[i];
+    return `<button onclick="togglePlayer(${i}, this)"
+      style="font-family:var(--font-display);font-size:12px;font-weight:600;
+             letter-spacing:0.06em;text-transform:uppercase;cursor:pointer;
+             padding:4px 12px;border-radius:4px;border:1px solid ${col};
+             background:${col}33;color:${col};transition:all 0.15s;"
+      data-active="true">${p.name}</button>`;
+  }).join('');
+
+  // Per-round bar chart — all players, no toggle needed (grouped bars)
   const barDatasets = STANDINGS.map((p, i) => ({
     label: p.name,
     data: ROUNDS.map(r => r.scores[p.name] || 0),
@@ -695,50 +995,233 @@ function renderCharts() {
   new Chart($('chart-perround'), {
     type: 'bar',
     data: { labels, datasets: barDatasets },
-    options: { responsive: true, plugins: { legend: legendStyle }, scales: { x: axisStyle, y: axisStyle } }
+    options: {
+      responsive: true,
+      plugins: { legend: { labels: { color: '#888', font: { family: 'Barlow', size: 11 }, boxWidth: 10 } } },
+      scales: { x: axisStyle, y: axisStyle }
+    }
   });
 }
 
-/* ═══════════════════════════════════════════════════════════
-   ALL TIPS
-   ═══════════════════════════════════════════════════════════ */
-let activeRound = null;
+function togglePlayer(index, btn) {
+  const active = btn.dataset.active === 'true';
+  const meta = cumChart.getDatasetMeta(index);
+  meta.hidden = active;
+  cumChart.update();
+  btn.dataset.active = active ? 'false' : 'true';
+  const col = PLAYER_COLORS[index];
+  btn.style.background = active ? 'transparent' : col + '33';
+  btn.style.opacity = active ? '0.4' : '1';
+}
 
-function renderTipsSelector() {
-  const sel = $('tips-race-selector');
-  sel.innerHTML = TIPS.map(t =>
-    `<button class="race-btn ${activeRound === t.round ? 'active' : ''}"
-      onclick="showTipsRound(${t.round})">${t.raceName}</button>`
+/* ═══════════════════════════════════════════════════════════
+   TIPS — SUB-TAB SWITCHING
+   ═══════════════════════════════════════════════════════════ */
+function showSubTab(name, el) {
+  document.querySelectorAll('.sub-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.sub-view').forEach(v => v.classList.remove('active'));
+  el.classList.add('active');
+  $('sub-' + name).classList.add('active');
+}
+
+/* ── Main race tips ─────────────────────────────────────── */
+let activeMainRound = null;
+
+function renderMainSelector() {
+  $('main-race-selector').innerHTML = MAIN_TIPS.map(t =>
+    `<button class="race-btn ${activeMainRound === t.round ? 'active' : ''}"
+      onclick="showMainRound(${t.round})">${t.raceName}</button>`
+  ).join('') || `<div class="empty" style="padding:0">No races tipped yet</div>`;
+}
+
+function showMainRound(round) {
+  activeMainRound = round;
+  renderMainSelector();
+  const rnd = MAIN_TIPS.find(t => t.round === round);
+  const head = $('main-tips-head');
+  const body = $('main-tips-body');
+  if (!rnd) { head.innerHTML = ''; body.innerHTML = ''; return; }
+
+  // Header: Player | P1 | P2 | ... | P10 | Score
+  head.innerHTML = `<tr>
+    <th>Player</th>
+    ${rnd.positions.map((_, i) => `<th class="right">P${i+1}</th>`).join('')}
+    <th class="right">Score</th>
+  </tr>`;
+
+  // Each row: player's picks, coloured hit/miss against actual positions
+  const sorted = [...rnd.tips].sort((a, b) => b.score - a.score);
+  body.innerHTML = sorted.map((t, i) => {
+    const cells = t.picks.map((driver, pos) => {
+      const actual = rnd.positions[pos];
+      const cls = driver === actual ? 'hit' : 'miss';
+      return `<td class="right ${cls}">${driver}</td>`;
+    }).join('');
+    return `<tr class="${i === 0 ? 'leader' : ''}">
+      <td><span class="player-name">${t.player}</span></td>
+      ${cells}
+      <td class="right"><span class="points">${t.score}</span></td>
+    </tr>`;
+  }).join('');
+}
+
+function renderMainTips() {
+  renderMainSelector();
+  if (MAIN_TIPS.length > 0) showMainRound(MAIN_TIPS[MAIN_TIPS.length - 1].round);
+  else {
+    $('main-tips-head').innerHTML = '';
+    $('main-tips-body').innerHTML = `<tr><td colspan="12"><div class="empty">No main race tips yet</div></td></tr>`;
+  }
+}
+
+/* ── Sprint tips ─────────────────────────────────────────── */
+let activeSprintRound = null;
+
+function renderSprintSelector() {
+  const el = $('sprint-race-selector');
+  if (SPRINT_TIPS.length === 0) {
+    el.innerHTML = `<div class="empty" style="padding:0">No sprint rounds yet</div>`;
+    return;
+  }
+  el.innerHTML = SPRINT_TIPS.map(t =>
+    `<button class="race-btn sprint-btn ${activeSprintRound === t.round ? 'active' : ''}"
+      onclick="showSprintRound(${t.round})">${t.raceName}</button>`
   ).join('');
 }
 
-function showTipsRound(round) {
-  activeRound = round;
-  renderTipsSelector();
-  const rnd = TIPS.find(t => t.round === round);
-  const body = $('tips-body');
+function showSprintRound(round) {
+  activeSprintRound = round;
+  renderSprintSelector();
+  const rnd = SPRINT_TIPS.find(t => t.round === round);
+  const head = $('sprint-tips-head');
+  const body = $('sprint-tips-body');
+  if (!rnd) { head.innerHTML = ''; body.innerHTML = ''; return; }
+
+  head.innerHTML = `<tr>
+    <th>Player</th>
+    <th class="right">P1 tip</th>
+    <th class="right">P2 tip</th>
+    <th class="right">P3 tip</th>
+    <th class="right">Score</th>
+  </tr>`;
+
+  const sorted = [...rnd.tips].sort((a, b) => b.score - a.score);
+  body.innerHTML = sorted.map((t, i) => {
+    const cells = t.picks.map((driver, pos) => {
+      const cls = driver === rnd.positions[pos] ? 'hit' : 'miss';
+      return `<td class="right ${cls}">${driver}</td>`;
+    }).join('');
+    return `<tr class="${i === 0 ? 'leader' : ''}">
+      <td><span class="player-name">${t.player}</span></td>
+      ${cells}
+      <td class="right"><span class="points">${t.score}</span></td>
+    </tr>`;
+  }).join('');
+}
+
+function renderSprintTips() {
+  renderSprintSelector();
+  if (SPRINT_TIPS.length > 0) showSprintRound(SPRINT_TIPS[SPRINT_TIPS.length - 1].round);
+  else {
+    $('sprint-tips-head').innerHTML = '';
+    $('sprint-tips-body').innerHTML = `<tr><td colspan="5"><div class="empty">No sprint rounds recorded yet</div></td></tr>`;
+  }
+}
+
+/* ── DNF tips ────────────────────────────────────────────── */
+let activeDnfRound = null;
+const DNF_BUDGET = 5;
+
+function dnfBudgetUsed(playerName) {
+  return DNF_TIPS.reduce((sum, rnd) => {
+    const t = rnd.tips.find(t => t.player === playerName);
+    return sum + (t ? t.picksUsed : 0);
+  }, 0);
+}
+
+function dnfHits(playerName) {
+  return DNF_TIPS.reduce((sum, rnd) => {
+    const t = rnd.tips.find(t => t.player === playerName);
+    if (!t) return sum;
+    return sum + t.picks.filter(d => rnd.actualDnfs.includes(d)).length;
+  }, 0);
+}
+
+function renderDnfBudget() {
+  $('dnf-budget-grid').innerHTML = PLAYERS.map(name => {
+    const used = dnfBudgetUsed(name);
+    const hits = dnfHits(name);
+    const remaining = DNF_BUDGET - used;
+    const pips = Array.from({length: DNF_BUDGET}, (_, i) => {
+      if (i < hits) return `<div class="dnf-pip hit" title="Hit"></div>`;
+      if (i < used) return `<div class="dnf-pip used" title="Used — miss"></div>`;
+      return `<div class="dnf-pip" title="Remaining"></div>`;
+    }).join('');
+    return `<div class="dnf-budget-card">
+      <div class="dnf-budget-name">${name}</div>
+      <div class="dnf-pips">${pips}</div>
+      <div class="dnf-budget-label">${remaining} pick${remaining !== 1 ? 's' : ''} remaining · ${hits} hit${hits !== 1 ? 's' : ''}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderDnfSelector() {
+  const el = $('dnf-race-selector');
+  if (DNF_TIPS.length === 0) {
+    el.innerHTML = '';
+    return;
+  }
+  el.innerHTML = DNF_TIPS.map(t =>
+    `<button class="race-btn ${activeDnfRound === t.round ? 'active' : ''}"
+      onclick="showDnfRound(${t.round})">${t.raceName}</button>`
+  ).join('');
+}
+
+function showDnfRound(round) {
+  activeDnfRound = round;
+  renderDnfSelector();
+  const rnd = DNF_TIPS.find(t => t.round === round);
+  const body = $('dnf-tips-body');
   if (!rnd) { body.innerHTML = ''; return; }
 
   const sorted = [...rnd.tips].sort((a, b) => b.score - a.score);
-  body.innerHTML = sorted.map((t, i) => `
-    <tr class="${i === 0 ? 'leader' : ''}">
+  body.innerHTML = sorted.map((t, i) => {
+    const driverCells = t.picks.map(d => {
+      const hit = rnd.actualDnfs.includes(d);
+      return `<span class="${hit ? 'hit' : 'miss'}" style="margin-right:10px">${d}</span>`;
+    }).join('');
+    const budgetUsed = dnfBudgetUsed(t.player);
+    const remaining = DNF_BUDGET - budgetUsed;
+    return `<tr class="${i === 0 ? 'leader' : ''}">
       <td><span class="player-name">${t.player}</span></td>
-      <td>${t.p1}</td>
-      <td>${t.p2}</td>
-      <td>${t.p3}</td>
-      <td>${t.pole}</td>
-      <td>${t.fastest}</td>
+      <td>${driverCells}
+        <span style="color:var(--dim);font-size:11px">
+          (actual: ${rnd.actualDnfs.join(', ') || 'none'})
+        </span>
+      </td>
+      <td class="right" style="color:var(--muted)">${budgetUsed}/${DNF_BUDGET} used · <span style="color:${remaining <= 1 ? '#e8002d' : 'var(--accent2)'}">${remaining} left</span></td>
       <td class="right"><span class="points">${t.score}</span></td>
-    </tr>`).join('');
+    </tr>`;
+  }).join('');
+
+  // Also show players who made no pick this round
+  const tippedPlayers = rnd.tips.map(t => t.player);
+  const noPickRows = PLAYERS.filter(p => !tippedPlayers.includes(p)).map(p =>
+    `<tr>
+      <td><span class="player-name" style="color:var(--dim)">${p}</span></td>
+      <td style="color:var(--dim);font-size:12px">No pick this round</td>
+      <td class="right" style="color:var(--muted)">${dnfBudgetUsed(p)}/${DNF_BUDGET} used · <span style="color:var(--accent2)">${DNF_BUDGET - dnfBudgetUsed(p)} left</span></td>
+      <td class="right">—</td>
+    </tr>`
+  ).join('');
+  body.innerHTML += noPickRows;
 }
 
-function renderTips() {
-  if (TIPS.length === 0) {
-    $('tips-body').innerHTML = `<tr><td colspan="7"><div class="empty">No tips recorded yet</div></td></tr>`;
-    return;
-  }
-  renderTipsSelector();
-  showTipsRound(TIPS[TIPS.length - 1].round);
+function renderDnfTips() {
+  renderDnfBudget();
+  renderDnfSelector();
+  if (DNF_TIPS.length > 0) showDnfRound(DNF_TIPS[DNF_TIPS.length - 1].round);
+  else $('dnf-tips-body').innerHTML = `<tr><td colspan="4"><div class="empty">No DNF tips recorded yet</div></td></tr>`;
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -746,7 +1229,9 @@ function renderTips() {
    ═══════════════════════════════════════════════════════════ */
 renderLeaderboard();
 renderRaces();
-renderTips();
+renderMainTips();
+renderSprintTips();
+renderDnfTips();
 </script>
 </body>
 </html>
