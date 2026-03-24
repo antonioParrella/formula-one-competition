@@ -436,10 +436,47 @@
     /* Tips tables — transposed layout for main race (positions as rows) */
     .tips-table-scroll { overflow-x: auto; }
 
-    /* Hit/miss cell colouring */
-    td.hit  { color: #4ade80; font-weight: 500; }
-    td.miss { color: var(--dim); }
-    td.partial { color: var(--accent2); font-weight: 500; }
+    /* Scoring cell colours
+       exact   = correct position     (5 pts)  bright green
+       close   = one position off     (3 pts)  amber
+       top10   = in top 10, wrong pos (1 pt)   sky blue
+       miss    = not in top 10        (0 pts)  dim grey     */
+    td.exact { color: #4ade80; font-weight: 600; }
+    td.close { color: #fbbf24; font-weight: 500; }
+    td.top10 { color: #38bdf8; font-weight: 400; }
+    td.miss  { color: var(--dim); font-weight: 400; }
+
+    .ud-star {
+      display: inline-block;
+      font-size: 9px;
+      vertical-align: super;
+      margin-left: 2px;
+      color: #f472b6;
+      line-height: 1;
+    }
+
+    .tips-legend {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+      font-size: 12px;
+    }
+
+    .tips-legend-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      color: var(--muted);
+    }
+
+    .tips-legend-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
 
     /* DNF budget tracker */
     .dnf-budget-grid {
@@ -610,6 +647,13 @@
     <!-- ── Main race sub-view ── -->
     <div class="sub-view active" id="sub-main">
       <div class="tips-race-selector" id="main-race-selector"></div>
+      <div class="tips-legend">
+        <div class="tips-legend-item"><div class="tips-legend-dot" style="background:#4ade80"></div> Exact (5 pts)</div>
+        <div class="tips-legend-item"><div class="tips-legend-dot" style="background:#fbbf24"></div> One off (3 pts)</div>
+        <div class="tips-legend-item"><div class="tips-legend-dot" style="background:#38bdf8"></div> In top 10 (1 pt)</div>
+        <div class="tips-legend-item"><div class="tips-legend-dot" style="background:var(--dim)"></div> Miss (0 pts)</div>
+        <div class="tips-legend-item"><span class="ud-star">★</span> Underdog bonus (2×)</div>
+      </div>
       <div class="tips-table-scroll">
         <div class="table-wrap">
           <table>
@@ -706,32 +750,104 @@ const MAIN_TIPS = [
   { round: 1, raceName: "Bahrain GP",
     positions: ["Verstappen","Perez","Leclerc","Sainz","Russell","Hamilton","Norris","Alonso","Stroll","Gasly"],
     tips: [
-      { player: "James",  picks: ["Verstappen","Perez","Leclerc","Sainz","Russell","Hamilton","Norris","Alonso","Stroll","Gasly"], score: 28 },
-      { player: "Sarah",  picks: ["Verstappen","Leclerc","Perez","Russell","Sainz","Norris","Hamilton","Stroll","Alonso","Gasly"], score: 14 },
-      { player: "Tom",    picks: ["Leclerc","Verstappen","Perez","Sainz","Hamilton","Russell","Alonso","Norris","Gasly","Stroll"], score: 10 },
-      { player: "Priya",  picks: ["Verstappen","Perez","Sainz","Leclerc","Russell","Hamilton","Norris","Alonso","Gasly","Stroll"], score: 16 },
-      { player: "Marcus", picks: ["Verstappen","Leclerc","Perez","Sainz","Russell","Norris","Hamilton","Alonso","Stroll","Gasly"], score: 22 },
-      { player: "Zoe",    picks: ["Perez","Verstappen","Leclerc","Russell","Sainz","Hamilton","Alonso","Norris","Gasly","Stroll"], score: 8 },
+      { player: "James",  score: 28, picks: [
+          {driver:"Verstappen",result:"exact"}, {driver:"Perez",result:"exact"}, {driver:"Leclerc",result:"exact"},
+          {driver:"Sainz",result:"exact"},      {driver:"Russell",result:"exact"},{driver:"Hamilton",result:"exact"},
+          {driver:"Norris",result:"exact"},     {driver:"Alonso",result:"exact"},{driver:"Stroll",result:"exact"},
+          {driver:"Gasly",result:"exact"} ]},
+      { player: "Sarah",  score: 14, picks: [
+          {driver:"Verstappen",result:"exact"}, {driver:"Leclerc",result:"close"},{driver:"Perez",result:"close"},
+          {driver:"Russell",result:"top10"},    {driver:"Sainz",result:"top10"},  {driver:"Norris",result:"top10"},
+          {driver:"Hamilton",result:"top10"},   {driver:"Stroll",result:"top10"}, {driver:"Alonso",result:"top10"},
+          {driver:"Gasly",result:"exact"} ]},
+      { player: "Tom",    score: 10, picks: [
+          {driver:"Leclerc",result:"miss"},     {driver:"Verstappen",result:"miss"},{driver:"Perez",result:"exact"},
+          {driver:"Sainz",result:"exact"},      {driver:"Hamilton",result:"top10"},{driver:"Russell",result:"top10"},
+          {driver:"Alonso",result:"top10"},     {driver:"Norris",result:"top10"},  {driver:"Gasly",result:"miss"},
+          {driver:"Stroll",result:"top10"} ]},
+      { player: "Priya",  score: 16, picks: [
+          {driver:"Verstappen",result:"exact"}, {driver:"Perez",result:"exact"},  {driver:"Sainz",result:"miss"},
+          {driver:"Leclerc",result:"miss"},     {driver:"Russell",result:"exact"},{driver:"Hamilton",result:"exact"},
+          {driver:"Norris",result:"exact"},     {driver:"Alonso",result:"exact"}, {driver:"Gasly",result:"miss"},
+          {driver:"Stroll",result:"top10"} ]},
+      { player: "Marcus", score: 22, picks: [
+          {driver:"Verstappen",result:"exact"}, {driver:"Leclerc",result:"close"},{driver:"Perez",result:"close"},
+          {driver:"Sainz",result:"exact"},      {driver:"Russell",result:"exact"},{driver:"Norris",result:"top10"},
+          {driver:"Hamilton",result:"top10"},   {driver:"Alonso",result:"exact"}, {driver:"Stroll",result:"exact"},
+          {driver:"Gasly",result:"exact"} ]},
+      { player: "Zoe",    score: 8,  picks: [
+          {driver:"Perez",result:"miss"},       {driver:"Verstappen",result:"miss"},{driver:"Leclerc",result:"exact"},
+          {driver:"Russell",result:"top10"},    {driver:"Sainz",result:"top10"},   {driver:"Hamilton",result:"exact"},
+          {driver:"Alonso",result:"top10"},     {driver:"Norris",result:"top10"},  {driver:"Gasly",result:"exact"},
+          {driver:"Stroll",result:"top10"} ]},
     ]},
   { round: 2, raceName: "Saudi Arabian GP",
     positions: ["Leclerc","Verstappen","Norris","Russell","Hamilton","Sainz","Perez","Alonso","Piastri","Stroll"],
     tips: [
-      { player: "James",  picks: ["Verstappen","Leclerc","Norris","Russell","Hamilton","Sainz","Perez","Alonso","Piastri","Stroll"], score: 18 },
-      { player: "Sarah",  picks: ["Leclerc","Norris","Verstappen","Hamilton","Russell","Sainz","Alonso","Perez","Stroll","Piastri"], score: 12 },
-      { player: "Tom",    picks: ["Leclerc","Verstappen","Russell","Norris","Hamilton","Alonso","Sainz","Piastri","Perez","Stroll"], score: 13 },
-      { player: "Priya",  picks: ["Leclerc","Verstappen","Norris","Russell","Sainz","Hamilton","Perez","Piastri","Alonso","Stroll"], score: 26 },
-      { player: "Marcus", picks: ["Verstappen","Norris","Leclerc","Hamilton","Russell","Sainz","Alonso","Perez","Stroll","Piastri"], score: 9 },
-      { player: "Zoe",    picks: ["Norris","Leclerc","Verstappen","Russell","Hamilton","Perez","Sainz","Alonso","Piastri","Stroll"], score: 10 },
+      { player: "James",  score: 18, picks: [
+          {driver:"Verstappen",result:"close"},  {driver:"Leclerc",result:"close"}, {driver:"Norris",result:"exact"},
+          {driver:"Russell",result:"exact"},     {driver:"Hamilton",result:"exact"},{driver:"Sainz",result:"exact"},
+          {driver:"Perez",result:"exact"},       {driver:"Alonso",result:"exact"},  {driver:"Piastri",result:"exact"},
+          {driver:"Stroll",result:"exact"} ]},
+      { player: "Sarah",  score: 12, picks: [
+          {driver:"Leclerc",result:"exact"},    {driver:"Norris",result:"top10"},  {driver:"Verstappen",result:"miss"},
+          {driver:"Hamilton",result:"top10"},   {driver:"Russell",result:"top10"}, {driver:"Sainz",result:"exact"},
+          {driver:"Alonso",result:"top10"},     {driver:"Perez",result:"top10"},   {driver:"Stroll",result:"top10"},
+          {driver:"Piastri",result:"top10"} ]},
+      { player: "Tom",    score: 13, picks: [
+          {driver:"Leclerc",result:"exact"},    {driver:"Verstappen",result:"exact"},{driver:"Russell",result:"top10"},
+          {driver:"Norris",result:"top10"},     {driver:"Hamilton",result:"exact"}, {driver:"Alonso",result:"top10"},
+          {driver:"Sainz",result:"top10"},      {driver:"Piastri",result:"top10"},  {driver:"Perez",result:"top10"},
+          {driver:"Stroll",result:"exact"} ]},
+      { player: "Priya",  score: 26, picks: [
+          {driver:"Leclerc",result:"exact"},    {driver:"Verstappen",result:"exact"},{driver:"Norris",result:"exact"},
+          {driver:"Russell",result:"exact"},    {driver:"Sainz",result:"top10"},    {driver:"Hamilton",result:"top10"},
+          {driver:"Perez",result:"exact"},      {driver:"Piastri",result:"top10"},  {driver:"Alonso",result:"top10"},
+          {driver:"Stroll",result:"exact"} ]},
+      { player: "Marcus", score: 9,  picks: [
+          {driver:"Verstappen",result:"top10"}, {driver:"Norris",result:"top10"},  {driver:"Leclerc",result:"top10"},
+          {driver:"Hamilton",result:"top10"},   {driver:"Russell",result:"exact"},  {driver:"Sainz",result:"exact"},
+          {driver:"Alonso",result:"top10"},     {driver:"Perez",result:"top10"},    {driver:"Stroll",result:"exact"},
+          {driver:"Piastri",result:"top10"} ]},
+      { player: "Zoe",    score: 10, picks: [
+          {driver:"Norris",result:"top10"},     {driver:"Leclerc",result:"top10"},  {driver:"Verstappen",result:"top10"},
+          {driver:"Russell",result:"exact"},    {driver:"Hamilton",result:"exact"}, {driver:"Perez",result:"top10"},
+          {driver:"Sainz",result:"top10"},      {driver:"Alonso",result:"exact"},   {driver:"Piastri",result:"exact"},
+          {driver:"Stroll",result:"exact"} ]},
     ]},
   { round: 5, raceName: "Chinese GP",
     positions: ["Norris","Piastri","Russell","Leclerc","Verstappen","Hamilton","Sainz","Alonso","Perez","Tsunoda"],
     tips: [
-      { player: "James",  picks: ["Verstappen","Norris","Leclerc","Russell","Piastri","Hamilton","Sainz","Alonso","Perez","Tsunoda"], score: 7 },
-      { player: "Sarah",  picks: ["Russell","Norris","Piastri","Verstappen","Leclerc","Hamilton","Sainz","Alonso","Perez","Tsunoda"], score: 5 },
-      { player: "Tom",    picks: ["Verstappen","Leclerc","Russell","Norris","Hamilton","Piastri","Sainz","Tsunoda","Alonso","Perez"], score: 0 },
-      { player: "Priya",  picks: ["Norris","Russell","Piastri","Leclerc","Verstappen","Hamilton","Sainz","Alonso","Tsunoda","Perez"], score: 14 },
-      { player: "Marcus", picks: ["Norris","Leclerc","Verstappen","Russell","Piastri","Sainz","Hamilton","Alonso","Perez","Tsunoda"], score: 10 },
-      { player: "Zoe",    picks: ["Leclerc","Verstappen","Norris","Piastri","Russell","Hamilton","Sainz","Alonso","Perez","Tsunoda"], score: 0 },
+      { player: "James",  score: 7,  picks: [
+          {driver:"Verstappen",result:"miss"},  {driver:"Norris",result:"miss"},    {driver:"Leclerc",result:"miss"},
+          {driver:"Russell",result:"top10"},    {driver:"Piastri",result:"top10"},  {driver:"Hamilton",result:"exact"},
+          {driver:"Sainz",result:"exact"},      {driver:"Alonso",result:"exact"},   {driver:"Perez",result:"exact"},
+          {driver:"Tsunoda",result:"exact",underdog:true} ]},
+      { player: "Sarah",  score: 5,  picks: [
+          {driver:"Russell",result:"top10"},    {driver:"Norris",result:"miss"},    {driver:"Piastri",result:"top10"},
+          {driver:"Verstappen",result:"miss"},  {driver:"Leclerc",result:"top10"},  {driver:"Hamilton",result:"exact"},
+          {driver:"Sainz",result:"exact"},      {driver:"Alonso",result:"exact"},   {driver:"Perez",result:"exact"},
+          {driver:"Tsunoda",result:"exact",underdog:true} ]},
+      { player: "Tom",    score: 0,  picks: [
+          {driver:"Verstappen",result:"miss"},  {driver:"Leclerc",result:"miss"},   {driver:"Russell",result:"top10"},
+          {driver:"Norris",result:"top10"},     {driver:"Hamilton",result:"top10"}, {driver:"Piastri",result:"top10"},
+          {driver:"Sainz",result:"exact"},      {driver:"Tsunoda",result:"miss",underdog:true},{driver:"Alonso",result:"top10"},
+          {driver:"Perez",result:"top10"} ]},
+      { player: "Priya",  score: 14, picks: [
+          {driver:"Norris",result:"exact"},     {driver:"Russell",result:"miss"},   {driver:"Piastri",result:"miss"},
+          {driver:"Leclerc",result:"top10"},    {driver:"Verstappen",result:"exact"},{driver:"Hamilton",result:"exact"},
+          {driver:"Sainz",result:"exact"},      {driver:"Alonso",result:"exact"},   {driver:"Tsunoda",result:"miss",underdog:true},
+          {driver:"Perez",result:"exact"} ]},
+      { player: "Marcus", score: 10, picks: [
+          {driver:"Norris",result:"exact"},     {driver:"Leclerc",result:"miss"},   {driver:"Verstappen",result:"miss"},
+          {driver:"Russell",result:"top10"},    {driver:"Piastri",result:"top10"},  {driver:"Sainz",result:"top10"},
+          {driver:"Hamilton",result:"top10"},   {driver:"Alonso",result:"exact"},   {driver:"Perez",result:"exact"},
+          {driver:"Tsunoda",result:"exact",underdog:true} ]},
+      { player: "Zoe",    score: 0,  picks: [
+          {driver:"Leclerc",result:"miss"},     {driver:"Verstappen",result:"miss"},{driver:"Norris",result:"top10"},
+          {driver:"Piastri",result:"top10"},    {driver:"Russell",result:"top10"},  {driver:"Hamilton",result:"top10"},
+          {driver:"Sainz",result:"top10"},      {driver:"Alonso",result:"top10"},   {driver:"Perez",result:"top10"},
+          {driver:"Tsunoda",result:"miss",underdog:true} ]},
     ]},
 ];
 
@@ -739,22 +855,22 @@ const SPRINT_TIPS = [
   { round: 3, raceName: "Australian Sprint",
     positions: ["Norris","Piastri","Russell"],
     tips: [
-      { player: "James",  picks: ["Norris","Russell","Piastri"], score: 2 },
-      { player: "Sarah",  picks: ["Norris","Piastri","Russell"], score: 3 },
-      { player: "Tom",    picks: ["Piastri","Norris","Russell"],  score: 1 },
-      { player: "Priya",  picks: ["Russell","Norris","Piastri"], score: 1 },
-      { player: "Marcus", picks: ["Norris","Piastri","Leclerc"], score: 2 },
-      { player: "Zoe",    picks: ["Norris","Piastri","Russell"], score: 3 },
+      { player: "James",  score: 2, picks: [{driver:"Norris",result:"exact"},{driver:"Russell",result:"miss"},{driver:"Piastri",result:"miss"}] },
+      { player: "Sarah",  score: 3, picks: [{driver:"Norris",result:"exact"},{driver:"Piastri",result:"exact"},{driver:"Russell",result:"exact"}] },
+      { player: "Tom",    score: 1, picks: [{driver:"Piastri",result:"miss"},{driver:"Norris",result:"miss"},{driver:"Russell",result:"exact"}] },
+      { player: "Priya",  score: 1, picks: [{driver:"Russell",result:"miss"},{driver:"Norris",result:"miss"},{driver:"Piastri",result:"top10"}] },
+      { player: "Marcus", score: 2, picks: [{driver:"Norris",result:"exact"},{driver:"Piastri",result:"exact"},{driver:"Leclerc",result:"miss"}] },
+      { player: "Zoe",    score: 3, picks: [{driver:"Norris",result:"exact"},{driver:"Piastri",result:"exact"},{driver:"Russell",result:"exact"}] },
     ]},
   { round: 5, raceName: "Chinese Sprint",
     positions: ["Verstappen","Norris","Leclerc"],
     tips: [
-      { player: "James",  picks: ["Verstappen","Norris","Leclerc"],  score: 3 },
-      { player: "Sarah",  picks: ["Norris","Verstappen","Leclerc"],  score: 1 },
-      { player: "Tom",    picks: ["Verstappen","Leclerc","Norris"],   score: 1 },
-      { player: "Priya",  picks: ["Verstappen","Leclerc","Norris"],   score: 1 },
-      { player: "Marcus", picks: ["Norris","Verstappen","Russell"],   score: 1 },
-      { player: "Zoe",    picks: ["Leclerc","Verstappen","Norris"],   score: 1 },
+      { player: "James",  score: 3, picks: [{driver:"Verstappen",result:"exact"},{driver:"Norris",result:"exact"},{driver:"Leclerc",result:"exact"}] },
+      { player: "Sarah",  score: 1, picks: [{driver:"Norris",result:"miss"},{driver:"Verstappen",result:"miss"},{driver:"Leclerc",result:"top10"}] },
+      { player: "Tom",    score: 1, picks: [{driver:"Verstappen",result:"exact"},{driver:"Leclerc",result:"miss"},{driver:"Norris",result:"miss"}] },
+      { player: "Priya",  score: 1, picks: [{driver:"Verstappen",result:"exact"},{driver:"Leclerc",result:"miss"},{driver:"Norris",result:"miss"}] },
+      { player: "Marcus", score: 1, picks: [{driver:"Norris",result:"miss"},{driver:"Verstappen",result:"miss"},{driver:"Russell",result:"miss"}] },
+      { player: "Zoe",    score: 1, picks: [{driver:"Leclerc",result:"miss"},{driver:"Verstappen",result:"miss"},{driver:"Norris",result:"top10"}] },
     ]},
 ];
 
@@ -1049,13 +1165,16 @@ function showMainRound(round) {
     <th class="right">Score</th>
   </tr>`;
 
-  // Each row: player's picks, coloured hit/miss against actual positions
+  // Each row: player's picks coloured by scoring result
   const sorted = [...rnd.tips].sort((a, b) => b.score - a.score);
   body.innerHTML = sorted.map((t, i) => {
-    const cells = t.picks.map((driver, pos) => {
-      const actual = rnd.positions[pos];
-      const cls = driver === actual ? 'hit' : 'miss';
-      return `<td class="right ${cls}">${driver}</td>`;
+    const cells = t.picks.map((pick, pos) => {
+      // pick is either a string (driver name) or object {driver, result, underdog}
+      const driver  = typeof pick === 'object' ? pick.driver   : pick;
+      const result  = typeof pick === 'object' ? pick.result   : (driver === rnd.positions[pos] ? 'exact' : (rnd.positions.includes(driver) ? 'top10' : 'miss'));
+      const underdog = typeof pick === 'object' ? pick.underdog : false;
+      const star = underdog ? `<span class="ud-star">★</span>` : '';
+      return `<td class="right ${result}">${driver}${star}</td>`;
     }).join('');
     return `<tr class="${i === 0 ? 'leader' : ''}">
       <td><span class="player-name">${t.player}</span></td>
@@ -1107,9 +1226,12 @@ function showSprintRound(round) {
 
   const sorted = [...rnd.tips].sort((a, b) => b.score - a.score);
   body.innerHTML = sorted.map((t, i) => {
-    const cells = t.picks.map((driver, pos) => {
-      const cls = driver === rnd.positions[pos] ? 'hit' : 'miss';
-      return `<td class="right ${cls}">${driver}</td>`;
+    const cells = t.picks.map((pick, pos) => {
+      const driver   = typeof pick === 'object' ? pick.driver   : pick;
+      const result   = typeof pick === 'object' ? pick.result   : (driver === rnd.positions[pos] ? 'exact' : (rnd.positions.includes(driver) ? 'top10' : 'miss'));
+      const underdog = typeof pick === 'object' ? pick.underdog : false;
+      const star = underdog ? `<span class="ud-star">★</span>` : '';
+      return `<td class="right ${result}">${driver}${star}</td>`;
     }).join('');
     return `<tr class="${i === 0 ? 'leader' : ''}">
       <td><span class="player-name">${t.player}</span></td>
