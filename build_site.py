@@ -76,7 +76,7 @@ class SiteBuilder:
             flags=re.DOTALL,
         )
 
-        self.html_file.write_text(new_html)
+        self.html_file.write_text(new_html, encoding="utf-8")
         print(f"Updated {self.html_file} with {len(stand_array)} players, {len(rounds_array)} rounds")
 
     # ─────────────────────────────────────────────────────────
