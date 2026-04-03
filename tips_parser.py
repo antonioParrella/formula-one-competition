@@ -37,6 +37,7 @@ from pathlib import Path
 from datetime import datetime
 
 from survey_mars import SurveyMarsClient
+from race_utils import clean_race_name
 
 
 class TipsParser:
@@ -92,6 +93,10 @@ class TipsParser:
     Q_SPRINT_S3  = 60003
     Q_DNF        = 50000
 
+    # Championship predictions (round 1 only)
+    Q_DRIVERS_CHAMP      = 30000
+    Q_CONSTRUCTORS_CHAMP = 40000
+
     def __init__(self, client: SurveyMarsClient, output_dir: str = "data/raw/tips"):
         self.client     = client
         self.output_dir = Path(output_dir)
@@ -122,7 +127,7 @@ class TipsParser:
         round_num : int
             Race round number e.g. 4.
         race_name : str
-            Human-readable race name e.g. "Japan GP".
+            Human-readable race name (e.g. "Japan GP" → "Japan").
         force : bool
             If True, re-fetch and overwrite existing output.
 
@@ -131,6 +136,7 @@ class TipsParser:
         Path
             Path to the saved JSON file.
         """
+        race_name = clean_race_name(race_name)
         out_path = self._output_path(round_num, race_name)
 
         if out_path.exists() and not force:
@@ -149,6 +155,10 @@ class TipsParser:
         submissions = [self._parse_response(r, is_sprint) for r in raw_responses]
         self._warn_unknown_players(submissions)
 
+        has_predictions = self._has_championship_predictions(raw_responses)
+        if has_predictions:
+            print("  Championship predictions detected")
+
         payload = {
             "round":             round_num,
             "race_name":         race_name,
@@ -158,6 +168,11 @@ class TipsParser:
             "total_responses":   len(submissions),
             "submissions":       submissions,
         }
+
+        # Championship predictions (round 1 only) — saved to a separate file
+        if has_predictions:
+            predictions = [self._extract_prediction(r) for r in raw_responses]
+            self._save_championship_predictions(predictions, survey_id, round_num, race_name)
 
         out_path.parent.mkdir(parents=True, exist_ok=True)
         out_path.write_text(json.dumps(payload, indent=2))
@@ -204,6 +219,53 @@ class TipsParser:
             return False
         items = raw_responses[0].get("items", {})
         return str(self.Q_SPRINT_S1) in items
+
+    # ─────────────────────────────────────────────────────────
+    # Championship prediction detection & saving
+    # ─────────────────────────────────────────────────────────
+
+    def _has_championship_predictions(self, raw_responses: list[dict]) -> bool:
+        """Check if any response contains championship prediction questions."""
+        if not raw_responses:
+            return False
+        items = raw_responses[0].get("items", {})
+        return str(self.Q_DRIVERS_CHAMP) in items
+
+    def _extract_prediction(self, raw: dict) -> dict:
+        """Extract one player's championship prediction."""
+        items = raw.get("items", {})
+
+        drivers = items.get(str(self.Q_DRIVERS_CHAMP), {}).get("answer_text", "").strip().upper()
+        constructors = items.get(str(self.Q_CONSTRUCTORS_CHAMP), {}).get("answer_text", "").strip().title()
+
+        player_name = self._get_player_name(items)
+
+        return {
+            "player":          player_name,
+            "drivers_pick":    drivers or None,
+            "constructors_pick": constructors if constructors else None,
+        }
+
+    def _save_championship_predictions(
+        self,
+        predictions: list[dict],
+        survey_id: str,
+        round_num: int,
+        race_name: str,
+    ) -> Path:
+        """Save championship predictions to a separate JSON file."""
+        payload = {
+            "round":       round_num,
+            "race_name":   race_name,
+            "survey_id":   survey_id,
+            "predictions": [p for p in predictions if p.get("drivers_pick") or p.get("constructors_pick")],
+        }
+
+        out_path = self.output_dir / "championship_predictions.json"
+        out_path.parent.mkdir(parents=True, exist_ok=True)
+        out_path.write_text(json.dumps(payload, indent=2))
+        print(f"Saved {len(payload['predictions'])} championship predictions → {out_path}")
+        return out_path
 
     # ─────────────────────────────────────────────────────────
     # Fetching
@@ -314,7 +376,8 @@ class TipsParser:
     # ─────────────────────────────────────────────────────────
 
     def _output_path(self, round_num: int, race_name: str) -> Path:
-        slug = race_name.lower().replace(" ", "_")
+        name = clean_race_name(race_name)
+        slug = name.lower().replace(" ", "_")
         return self.output_dir / f"r{round_num:02d}_{slug}_tips.json"
 
     def _warn_unknown_players(self, submissions: list[dict]) -> None:
@@ -330,30 +393,3 @@ class TipsParser:
             sprint = " → ".join(str(d) for d in s["sprint"]) if s["sprint"] else "—"
             dnfs   = ", ".join(s["dnf_picks"]) if s["dnf_picks"] else "—"
             print(f"{s['player']:<12} {top3:<38} {sprint:<22} {dnfs}")
-
-
-# ─────────────────────────────────────────────────────────────
-# CLI entry point
-# ─────────────────────────────────────────────────────────────
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Fetch and parse SurveyMars tips")
-    parser.add_argument("--survey-id", required=True,       help="SurveyMars survey ID e.g. m1BbiXKjA")
-    parser.add_argument("--round",     required=True,       type=int, help="Race round number e.g. 4")
-    parser.add_argument("--race",      required=True,       help="Race name e.g. 'Japan GP'")
-    # Sprint weekends are auto-detected from survey responses
-    parser.add_argument("--force",     action="store_true", help="Re-fetch even if output already exists")
-    args = parser.parse_args()
-
-    client = SurveyMarsClient(
-        account_id=os.environ["SURVEYMARS_ACCOUNT_ID"],
-        secret=os.environ["SURVEYMARS_SECRET"],
-    )
-    client.authenticate()
-
-    tips_parser = TipsParser(client)
-    tips_parser.fetch_and_save(
-        survey_id = args.survey_id,
-        round_num = args.round,
-        race_name = args.race,
-        force     = args.force,
-    )
