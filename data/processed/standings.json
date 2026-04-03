@@ -1,0 +1,247 @@
+{
+  "players": [
+    {
+      "name": "Dean",
+      "rank": 1,
+      "games_played": 3,
+      "points": 98,
+      "lastRace": 17,
+      "bestRound": 53,
+      "roundScores": {
+        "1": {
+          "race": "Melbourne",
+          "points": 28
+        },
+        "2": {
+          "race": "China",
+          "points": 53
+        },
+        "3": {
+          "race": "Japan",
+          "points": 17
+        }
+      }
+    },
+    {
+      "name": "Jake",
+      "rank": 2,
+      "games_played": 3,
+      "points": 78,
+      "lastRace": 18,
+      "bestRound": 41,
+      "roundScores": {
+        "1": {
+          "race": "Melbourne",
+          "points": 19
+        },
+        "2": {
+          "race": "China",
+          "points": 41
+        },
+        "3": {
+          "race": "Japan",
+          "points": 18
+        }
+      }
+    },
+    {
+      "name": "Barry",
+      "rank": 3,
+      "games_played": 3,
+      "points": 64,
+      "lastRace": 10,
+      "bestRound": 47,
+      "roundScores": {
+        "1": {
+          "race": "Melbourne",
+          "points": 7
+        },
+        "2": {
+          "race": "China",
+          "points": 47
+        },
+        "3": {
+          "race": "Japan",
+          "points": 10
+        }
+      }
+    },
+    {
+      "name": "Tara",
+      "rank": 4,
+      "games_played": 3,
+      "points": 63,
+      "lastRace": 20,
+      "bestRound": 36,
+      "roundScores": {
+        "1": {
+          "race": "Melbourne",
+          "points": 7
+        },
+        "2": {
+          "race": "China",
+          "points": 36
+        },
+        "3": {
+          "race": "Japan",
+          "points": 20
+        }
+      }
+    },
+    {
+      "name": "Veljko",
+      "rank": 5,
+      "games_played": 3,
+      "points": 57,
+      "lastRace": 13,
+      "bestRound": 33,
+      "roundScores": {
+        "1": {
+          "race": "Melbourne",
+          "points": 11
+        },
+        "2": {
+          "race": "China",
+          "points": 33
+        },
+        "3": {
+          "race": "Japan",
+          "points": 13
+        }
+      }
+    },
+    {
+      "name": "Luca",
+      "rank": 6,
+      "games_played": 3,
+      "points": 53,
+      "lastRace": 11,
+      "bestRound": 28,
+      "roundScores": {
+        "1": {
+          "race": "Melbourne",
+          "points": 28
+        },
+        "2": {
+          "race": "China",
+          "points": 14
+        },
+        "3": {
+          "race": "Japan",
+          "points": 11
+        }
+      }
+    },
+    {
+      "name": "Riki",
+      "rank": 7,
+      "games_played": 3,
+      "points": 52,
+      "lastRace": 28,
+      "bestRound": 28,
+      "roundScores": {
+        "1": {
+          "race": "Melbourne",
+          "points": 8
+        },
+        "2": {
+          "race": "China",
+          "points": 16
+        },
+        "3": {
+          "race": "Japan",
+          "points": 28
+        }
+      }
+    },
+    {
+      "name": "Rino",
+      "rank": 8,
+      "games_played": 3,
+      "points": 51,
+      "lastRace": 16,
+      "bestRound": 23,
+      "roundScores": {
+        "1": {
+          "race": "Melbourne",
+          "points": 23
+        },
+        "2": {
+          "race": "China",
+          "points": 12
+        },
+        "3": {
+          "race": "Japan",
+          "points": 16
+        }
+      }
+    },
+    {
+      "name": "Alex",
+      "rank": 9,
+      "games_played": 3,
+      "points": 50,
+      "lastRace": 15,
+      "bestRound": 21,
+      "roundScores": {
+        "1": {
+          "race": "Melbourne",
+          "points": 21
+        },
+        "2": {
+          "race": "China",
+          "points": 14
+        },
+        "3": {
+          "race": "Japan",
+          "points": 15
+        }
+      }
+    },
+    {
+      "name": "Antonio",
+      "rank": 10,
+      "games_played": 3,
+      "points": 50,
+      "lastRace": 17,
+      "bestRound": 22,
+      "roundScores": {
+        "1": {
+          "race": "Melbourne",
+          "points": 11
+        },
+        "2": {
+          "race": "China",
+          "points": 22
+        },
+        "3": {
+          "race": "Japan",
+          "points": 17
+        }
+      }
+    },
+    {
+      "name": "Josh",
+      "rank": 11,
+      "games_played": 3,
+      "points": 47,
+      "lastRace": 11,
+      "bestRound": 20,
+      "roundScores": {
+        "1": {
+          "race": "Melbourne",
+          "points": 16
+        },
+        "2": {
+          "race": "China",
+          "points": 20
+        },
+        "3": {
+          "race": "Japan",
+          "points": 11
+        }
+      }
+    }
+  ],
+  "total_rounds": 3
+}
