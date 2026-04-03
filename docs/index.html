@@ -2991,17 +2991,14 @@ function renderRaces() {
     const rankClass = ['r1','r2','r3'];
 
     const scoreRows = allScores.map(([name, pts], i) => {
-      const hidden = i >= 3 ? ' class="score-extra" style="display:none"' : '';
-      return `<div class="round-score-item"${hidden}>
+      return `<div class="round-score-item">
         <span class="round-score-rank ${rankClass[i] || ''}">${i + 1}</span>
         <span class="round-score-name">${name}</span>
         <span class="round-score-pts">${pts}</span>
       </div>`;
     }).join('');
 
-    const toggleBtn = allScores.length > 3
-      ? `<button class="round-scores-toggle" onclick="toggleScores(this)">+ ${allScores.length - 3} more</button>`
-      : '';
+    const toggleBtn = '';
 
     return `<div class="round-card">
       <div class="round-header">
@@ -3009,22 +3006,6 @@ function renderRaces() {
         <div class="round-num">R${r.round}</div>
       </div>
       <div class="round-body">
-        <div class="round-row">
-          <span class="round-row-label">Date</span>
-          <span class="round-row-value">${r.date}</span>
-        </div>
-        <div class="round-row">
-          <span class="round-row-label">Winner</span>
-          <span class="round-row-value">${r.winner}</span>
-        </div>
-        <div class="round-row">
-          <span class="round-row-label">Pole</span>
-          <span class="round-row-value">${r.pole}</span>
-        </div>
-        <div class="round-row">
-          <span class="round-row-label">Fastest lap</span>
-          <span class="round-row-value">${r.fastest}</span>
-        </div>
         <div class="round-scores">
           ${scoreRows}
           ${toggleBtn}
@@ -3156,30 +3137,37 @@ function showMainRound(round) {
   const body = $('main-tips-body');
   if (!rnd) { head.innerHTML = ''; body.innerHTML = ''; return; }
 
-  // Header: Player | P1 | P2 | ... | P10 | Score
+  // Transposed: rows = positions (P1–P10), columns = players
+  const sorted = [...rnd.tips].sort((a, b) => b.score - a.score);
+
+  // Header: Pos | Player1 | Player2 | ... | Score
   head.innerHTML = `<tr>
-    <th>Player</th>
-    ${rnd.positions.map((_, i) => `<th class="right">P${i+1}</th>`).join('')}
-    <th class="right">Score</th>
+    <th>Pos</th>
+    ${sorted.map(t => `<th class="right">${t.player}</th>`).join('')}
   </tr>`;
 
-  // Each row: player's picks coloured by scoring result
-  const sorted = [...rnd.tips].sort((a, b) => b.score - a.score);
-  body.innerHTML = sorted.map((t, i) => {
-    const cells = t.picks.map((pick, pos) => {
-      // pick is either a string (driver name) or object {driver, result, underdog}
+  // Body: for each position row, show each player's pick
+  body.innerHTML = rnd.positions.map((posDriver, pos) => {
+    const cells = sorted.map(t => {
+      const pick = t.picks[pos];
+      if (!pick) return `<td class="right miss">—</td>`;
       const driver  = typeof pick === 'object' ? pick.driver   : pick;
-      const result  = typeof pick === 'object' ? pick.result   : (driver === rnd.positions[pos] ? 'exact' : (rnd.positions.includes(driver) ? 'top10' : 'miss'));
+      const result  = typeof pick === 'object' ? pick.result   : (driver === posDriver ? 'exact' : (rnd.positions.includes(driver) ? 'top10' : 'miss'));
       const underdog = typeof pick === 'object' ? pick.underdog : false;
       const star = underdog ? `<span class="ud-star">★</span>` : '';
       return `<td class="right ${result}">${driver}${star}</td>`;
     }).join('');
-    return `<tr class="${i === 0 ? 'leader' : ''}">
-      <td><span class="player-name">${t.player}</span></td>
+    return `<tr>
+      <th style="text-align:center;padding-right:10px">P${pos + 1}</th>
       ${cells}
-      <td class="right"><span class="points">${t.score}</span></td>
     </tr>`;
   }).join('');
+
+  // Score footer row
+  body.innerHTML += `<tr class="leader">
+    <th style="text-align:center;padding-right:10px">Score</th>
+    ${sorted.map(t => `<td class="right">${t.score}</td>`).join('')}
+  </tr>`;
 }
 
 function renderMainTips() {
@@ -3214,29 +3202,32 @@ function showSprintRound(round) {
   const body = $('sprint-tips-body');
   if (!rnd) { head.innerHTML = ''; body.innerHTML = ''; return; }
 
+  const sorted = [...rnd.tips].sort((a, b) => b.score - a.score);
+
   head.innerHTML = `<tr>
-    <th>Player</th>
-    <th class="right">P1 tip</th>
-    <th class="right">P2 tip</th>
-    <th class="right">P3 tip</th>
-    <th class="right">Score</th>
+    <th>Pos</th>
+    ${sorted.map(t => `<th class="right">${t.player}</th>`).join('')}
   </tr>`;
 
-  const sorted = [...rnd.tips].sort((a, b) => b.score - a.score);
-  body.innerHTML = sorted.map((t, i) => {
-    const cells = t.picks.map((pick, pos) => {
+  body.innerHTML = rnd.positions.map((posDriver, pos) => {
+    const cells = sorted.map(t => {
+      const pick = t.picks[pos];
+      if (!pick) return `<td class="right miss">—</td>`;
       const driver   = typeof pick === 'object' ? pick.driver   : pick;
-      const result   = typeof pick === 'object' ? pick.result   : (driver === rnd.positions[pos] ? 'exact' : (rnd.positions.includes(driver) ? 'top10' : 'miss'));
-      const underdog = typeof pick === 'object' ? pick.underdog : false;
-      const star = underdog ? `<span class="ud-star">★</span>` : '';
+      const result   = typeof pick === 'object' ? pick.result   : (driver === posDriver ? 'exact' : 'miss');
+      const star = typeof pick === 'object' && pick.underdog ? `<span class="ud-star">★</span>` : '';
       return `<td class="right ${result}">${driver}${star}</td>`;
     }).join('');
-    return `<tr class="${i === 0 ? 'leader' : ''}">
-      <td><span class="player-name">${t.player}</span></td>
+    return `<tr>
+      <th style="text-align:center;padding-right:10px">P${pos + 1}</th>
       ${cells}
-      <td class="right"><span class="points">${t.score}</span></td>
     </tr>`;
   }).join('');
+
+  body.innerHTML += `<tr class="leader">
+    <th style="text-align:center;padding-right:10px">Score</th>
+    ${sorted.map(t => `<td class="right">${t.score}</td>`).join('')}
+  </tr>`;
 }
 
 function renderSprintTips() {
