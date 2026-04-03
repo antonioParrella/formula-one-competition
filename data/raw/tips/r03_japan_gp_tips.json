@@ -1,0 +1,230 @@
+{
+  "round": 3,
+  "race_name": "Japan GP",
+  "survey_id": "m1BbiXKjA",
+  "is_sprint_weekend": false,
+  "fetched_at": "2026-04-03T06:40:52.785466",
+  "total_responses": 11,
+  "submissions": [
+    {
+      "player": "Tara",
+      "response_id": 11,
+      "submitted_at": "2026-03-27T12:40:10",
+      "time_spent_s": 138,
+      "main_race": [
+        "RUS",
+        "ANT",
+        "LEC",
+        "HAM",
+        "NOR",
+        "VER",
+        "PIA",
+        "BEA",
+        "HAD",
+        "LAW"
+      ],
+      "sprint": null,
+      "dnf_picks": []
+    },
+    {
+      "player": "Antonio",
+      "response_id": 10,
+      "submitted_at": "2026-03-27T12:39:40",
+      "time_spent_s": 138,
+      "main_race": [
+        "RUS",
+        "ANT",
+        "LEC",
+        "HAM",
+        "NOR",
+        "VER",
+        "PIA",
+        "HAD",
+        "SAI",
+        "BOR"
+      ],
+      "sprint": null,
+      "dnf_picks": []
+    },
+    {
+      "player": "Rino",
+      "response_id": 9,
+      "submitted_at": "2026-03-27T05:51:52",
+      "time_spent_s": 119,
+      "main_race": [
+        "RUS",
+        "ANT",
+        "HAM",
+        "LEC",
+        "NOR",
+        "VER",
+        "PIA",
+        "HAD",
+        "GAS",
+        "ALB"
+      ],
+      "sprint": null,
+      "dnf_picks": []
+    },
+    {
+      "player": "Alex",
+      "response_id": 8,
+      "submitted_at": "2026-03-26T22:36:44",
+      "time_spent_s": 26,
+      "main_race": [
+        "LEC",
+        "VER",
+        "PIA",
+        "NOR",
+        "HAD",
+        "HAM",
+        "RUS",
+        "ANT",
+        "ALB",
+        "SAI"
+      ],
+      "sprint": null,
+      "dnf_picks": []
+    },
+    {
+      "player": "Luca",
+      "response_id": 7,
+      "submitted_at": "2026-03-26T22:32:33",
+      "time_spent_s": 154,
+      "main_race": [
+        "RUS",
+        "LEC",
+        "HAM",
+        "ANT",
+        "PIA",
+        "BEA",
+        "HAD",
+        "NOR",
+        "SAI",
+        "LAW"
+      ],
+      "sprint": null,
+      "dnf_picks": []
+    },
+    {
+      "player": "Dean",
+      "response_id": 6,
+      "submitted_at": "2026-03-26T20:28:12",
+      "time_spent_s": 44,
+      "main_race": [
+        "RUS",
+        "ANT",
+        "LEC",
+        "HAM",
+        "PIA",
+        "VER",
+        "NOR",
+        "BEA",
+        "GAS",
+        "LAW"
+      ],
+      "sprint": null,
+      "dnf_picks": []
+    },
+    {
+      "player": "Josh",
+      "response_id": 5,
+      "submitted_at": "2026-03-26T17:10:42",
+      "time_spent_s": 65,
+      "main_race": [
+        "HAM",
+        "RUS",
+        "LEC",
+        "ANT",
+        "VER",
+        "PIA",
+        "NOR",
+        "HAD",
+        "BEA",
+        "LIN"
+      ],
+      "sprint": null,
+      "dnf_picks": []
+    },
+    {
+      "player": "Veljko",
+      "response_id": 4,
+      "submitted_at": "2026-03-26T10:46:20",
+      "time_spent_s": 84,
+      "main_race": [
+        "RUS",
+        "LEC",
+        "ANT",
+        "HAM",
+        "NOR",
+        "VER",
+        "PIA",
+        "BEA",
+        "BOR",
+        "ALO"
+      ],
+      "sprint": null,
+      "dnf_picks": []
+    },
+    {
+      "player": "Barry",
+      "response_id": 3,
+      "submitted_at": "2026-03-26T09:44:52",
+      "time_spent_s": 732,
+      "main_race": [
+        "RUS",
+        "HAM",
+        "ANT",
+        "LEC",
+        "VER",
+        "PIA",
+        "NOR",
+        "HAD",
+        "GAS",
+        "BEA"
+      ],
+      "sprint": null,
+      "dnf_picks": []
+    },
+    {
+      "player": "Jake",
+      "response_id": 2,
+      "submitted_at": "2026-03-25T16:12:31",
+      "time_spent_s": 60,
+      "main_race": [
+        "RUS",
+        "ANT",
+        "HAM",
+        "LEC",
+        "NOR",
+        "PIA",
+        "VER",
+        "BEA",
+        "HAD",
+        "GAS"
+      ],
+      "sprint": null,
+      "dnf_picks": []
+    },
+    {
+      "player": "Riki",
+      "response_id": 1,
+      "submitted_at": "2026-03-25T11:51:49",
+      "time_spent_s": 39,
+      "main_race": [
+        "RUS",
+        "ANT",
+        "LEC",
+        "HAM",
+        "PIA",
+        "NOR",
+        "VER",
+        "BEA",
+        "GAS",
+        "OCO"
+      ],
+      "sprint": null,
+      "dnf_picks": []
+    }
+  ]
+}
