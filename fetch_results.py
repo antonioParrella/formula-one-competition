@@ -112,14 +112,17 @@ class ResultsFetcher:
 
     def _get_dnfs(self) -> list[str]:
         """Drivers who started the race but didn't finish (dnf=true)."""
-        race_results = self.aggregator.race_results
-        dnf_numbers = {
-            r["driver_number"]
-            for r in race_results
-            if r.get("dnf") is True
-        }
-        driver_codes = {r["driver_number"]: r["name_acronym"] for r in race_results}
-        return [driver_codes[n] for n in dnf_numbers]
+        race_df = self.aggregator.race_results
+
+        # Merge driver acronyms into race results
+        merged = race_df.merge(
+            self.aggregator.drivers[["driver_number", "name_acronym"]],
+            on="driver_number",
+            how="left",
+        )
+
+        dnfs = merged[merged["dnf"] == True]
+        return dnfs["name_acronym"].tolist()
 
     def _get_sprint_top3(self) -> list[str] | None:
         """Top 3 from the sprint race, or None if no sprint this round."""
@@ -133,7 +136,19 @@ class ResultsFetcher:
     def _is_sprint_weekend(self) -> bool:
         return self.aggregator.sprint_results is not None
 
-    def _get_championship_top10(self) -> list[str]:
-        """Top 10 in championship standings before this round."""
+    def _get_championship_top10(self) -> list[str] | None:
+        """Top 10 in championship standings before this round.
+
+        Returns None for round 1 — no pre-race standings exist yet.
+        """
+        if self.round_num == 1:
+            return None
+
         standings = self.aggregator.championship_standings.head(10)
-        return standings["name_acronym"].tolist()
+
+        merged = standings.merge(
+            self.aggregator.drivers[["driver_number", "name_acronym"]],
+            on="driver_number",
+            how="left",
+        )
+        return merged["name_acronym"].tolist()

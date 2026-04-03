@@ -1,0 +1,36 @@
+{
+  "round": 1,
+  "race_name": "Melbourne",
+  "year": 2026,
+  "is_sprint_weekend": false,
+  "top10": [
+    "RUS",
+    "ANT",
+    "LEC",
+    "HAM",
+    "NOR",
+    "VER",
+    "BEA",
+    "LIN",
+    "BOR",
+    "GAS"
+  ],
+  "dnfs": [
+    "ALO",
+    "BOT",
+    "HAD"
+  ],
+  "sprint_top3": null,
+  "championship_top10_before_race": [
+    "RUS",
+    "ANT",
+    "LEC",
+    "HAM",
+    "NOR",
+    "VER",
+    "BEA",
+    "LIN",
+    "BOR",
+    "GAS"
+  ]
+}

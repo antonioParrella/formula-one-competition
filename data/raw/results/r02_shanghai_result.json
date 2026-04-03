@@ -1,0 +1,40 @@
+{
+  "round": 2,
+  "race_name": "Shanghai",
+  "year": 2026,
+  "is_sprint_weekend": true,
+  "top10": [
+    "ANT",
+    "RUS",
+    "HAM",
+    "LEC",
+    "BEA",
+    "GAS",
+    "LAW",
+    "HAD",
+    "SAI",
+    "COL"
+  ],
+  "dnfs": [
+    "VER",
+    "ALO",
+    "STR"
+  ],
+  "sprint_top3": [
+    "RUS",
+    "LEC",
+    "HAM"
+  ],
+  "championship_top10_before_race": [
+    "RUS",
+    "ANT",
+    "LEC",
+    "HAM",
+    "NOR",
+    "VER",
+    "BEA",
+    "LIN",
+    "PIA",
+    "BOR"
+  ]
+}
