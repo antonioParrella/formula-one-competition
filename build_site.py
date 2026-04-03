@@ -17,6 +17,13 @@ import json
 from pathlib import Path
 from datetime import datetime
 
+from race_utils import DRIVER_MAP
+
+
+def _resolve_dnfs(dnf_codes: list[str]) -> list[str]:
+    """Convert raw DNF codes to driver surnames for the website."""
+    return [DRIVER_MAP.get(code, code) for code in dnf_codes if code]
+
 
 class SiteBuilder:
     """Builds the website data by injecting JSON into index.html.
@@ -213,7 +220,7 @@ class SiteBuilder:
             if not any_picks:
                 continue
 
-            actual_dnfs = data.get("race_dnfs") or []
+            actual_dnfs = _resolve_dnfs(data.get("race_dnfs") or [])
 
             tips = []
             for pt in data["player_tips"]:

@@ -552,7 +552,8 @@
   <button class="tab active" onclick="showTab('leaderboard', this)">Leaderboard</button>
   <button class="tab" onclick="showTab('races', this)">Race Results</button>
   <button class="tab" onclick="showTab('charts', this)">Charts</button>
-  <button class="tab" onclick="showTab('tips', this)">All Tips</button>
+  <button class="tab" onclick="showTab('tips', this)">Tips</button>
+  <button class="tab" onclick="showTab('dnf', this)">DNF Tracker</button>
 </nav>
 
 <main>
@@ -641,7 +642,6 @@
     <div class="sub-tabs">
       <button class="sub-tab active" onclick="showSubTab('main', this)">Main Race</button>
       <button class="sub-tab sprint" onclick="showSubTab('sprint', this)">Sprint</button>
-      <button class="sub-tab dnf" onclick="showSubTab('dnf', this)">DNFs</button>
     </div>
 
     <!-- ── Main race sub-view ── -->
@@ -677,25 +677,29 @@
       </div>
     </div>
 
-    <!-- ── DNF sub-view ── -->
-    <div class="sub-view" id="sub-dnf">
-      <div class="dnf-budget-grid" id="dnf-budget-grid"></div>
-      <div class="tips-race-selector" id="dnf-race-selector"></div>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Player</th>
-              <th>Drivers tipped to DNF</th>
-              <th class="right">Picks used</th>
-              <th class="right">Round score</th>
-            </tr>
-          </thead>
-          <tbody id="dnf-tips-body"></tbody>
-        </table>
-      </div>
-    </div>
+  </div>
 
+  <!-- ══════════════════════════════════════════
+       DNF TRACKER
+  ══════════════════════════════════════════ -->
+  <div class="view" id="view-dnf">
+    <div class="section-title">DNF Tracker</div>
+    <div class="section-sub">Who tipped the DNFs and how the 5-pick season budget is tracking</div>
+    <div class="dnf-budget-grid" id="dnf-budget-grid"></div>
+    <div class="tips-race-selector" id="dnf-race-selector"></div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Player</th>
+            <th>Drivers tipped to DNF</th>
+            <th class="right">Picks used</th>
+            <th class="right">Round score</th>
+          </tr>
+        </thead>
+        <tbody id="dnf-tips-body"></tbody>
+      </table>
+    </div>
   </div>
 
 </main>
@@ -2758,9 +2762,9 @@ const DNF_TIPS = [
     "round": 1,
     "raceName": "Melbourne",
     "actualDnfs": [
-      "ALO",
-      "BOT",
-      "HAD"
+      "Alonso",
+      "Bottas",
+      "Hadjar"
     ],
     "tips": [
       {
@@ -2784,8 +2788,8 @@ const DNF_TIPS = [
         "player": "Alex",
         "picks": [
           "Bortoleto",
-          "BOT",
-          "PER"
+          "Bottas",
+          "P\u00e9rez"
         ],
         "picksUsed": 3,
         "score": 15
@@ -2821,9 +2825,9 @@ const DNF_TIPS = [
     "round": 2,
     "raceName": "China",
     "actualDnfs": [
-      "VER",
-      "ALO",
-      "STR"
+      "Verstappen",
+      "Alonso",
+      "Stroll"
     ],
     "tips": [
       {
@@ -2831,7 +2835,7 @@ const DNF_TIPS = [
         "picks": [
           "Lawson",
           "Bortoleto",
-          "PER"
+          "P\u00e9rez"
         ],
         "picksUsed": 3,
         "score": 0
@@ -2841,7 +2845,7 @@ const DNF_TIPS = [
         "picks": [
           "Alonso",
           "Stroll",
-          "PER"
+          "P\u00e9rez"
         ],
         "picksUsed": 3,
         "score": 30
@@ -2849,7 +2853,7 @@ const DNF_TIPS = [
       {
         "player": "Rino",
         "picks": [
-          "BOT"
+          "Bottas"
         ],
         "picksUsed": 1,
         "score": 0
@@ -2883,7 +2887,7 @@ const DNF_TIPS = [
       {
         "player": "Josh",
         "picks": [
-          "BOT"
+          "Bottas"
         ],
         "picksUsed": 1,
         "score": 0
@@ -2924,6 +2928,7 @@ function showTab(name, el) {
   el.classList.add('active');
   $('view-' + name).classList.add('active');
   if (name === 'charts') renderCharts();
+  if (name === 'dnf') renderDnfTips();
 }
 
 /* ═══════════════════════════════════════════════════════════

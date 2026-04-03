@@ -21,16 +21,5 @@
     "HAD"
   ],
   "sprint_top3": null,
-  "championship_top10_before_race": [
-    "RUS",
-    "ANT",
-    "LEC",
-    "HAM",
-    "NOR",
-    "VER",
-    "BEA",
-    "LIN",
-    "BOR",
-    "GAS"
-  ]
+  "championship_top10_before_race": null
 }

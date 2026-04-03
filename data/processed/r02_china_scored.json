@@ -95,7 +95,7 @@
           "points": 0
         },
         {
-          "driver": "PER",
+          "driver": "P\u00e9rez",
           "dnfd": false,
           "points": 0
         }
@@ -181,7 +181,7 @@
           "points": 15
         },
         {
-          "driver": "PER",
+          "driver": "P\u00e9rez",
           "dnfd": false,
           "points": 0
         }
@@ -257,7 +257,7 @@
       ],
       "dnf_picks": [
         {
-          "driver": "BOT",
+          "driver": "Bottas",
           "dnfd": false,
           "points": 0
         }
@@ -781,7 +781,7 @@
       ],
       "dnf_picks": [
         {
-          "driver": "BOT",
+          "driver": "Bottas",
           "dnfd": false,
           "points": 0
         }

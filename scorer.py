@@ -17,7 +17,7 @@ from pathlib import Path
 from datetime import datetime
 
 from tips_parser import TipsParser
-from race_utils import clean_race_name
+from race_utils import clean_race_name, DRIVER_MAP
 
 
 class Scorer:
@@ -47,32 +47,6 @@ class Scorer:
 
     # ── Penalties ─────────────────────────────────────────────
     PENALTY_LATE_PER_SESSION = 5
-
-    # ── Driver code map ───────────────────────────────────────
-    DRIVER_MAP: dict[str, str] = {
-        "NOR": "Norris",
-        "PIA": "Piastri",
-        "LEC": "Leclerc",
-        "HAM": "Hamilton",
-        "RUS": "Russell",
-        "VER": "Verstappen",
-        "ANT": "Antonelli",
-        "HAD": "Hadjar",
-        "SAI": "Sainz",
-        "ALO": "Alonso",
-        "ALB": "Albon",
-        "GAS": "Gasly",
-        "OCO": "Ocon",
-        "STR": "Stroll",
-        "HUL": "Hulkenberg",
-        "TSU": "Tsunoda",
-        "LAW": "Lawson",
-        "BEA": "Bearman",
-        "BOR": "Bortoleto",
-        "LIN": "Lindblad",
-        "DOO": "Doohan",
-        "COL": "Colapinto",
-    }
 
     def __init__(
         self,

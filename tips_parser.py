@@ -54,34 +54,6 @@ class TipsParser:
         Defaults to data/raw/tips/.
     """
 
-    # ── Driver code → full surname ────────────────────────────
-    # 3-letter codes as returned by SurveyMars.
-    # Add new drivers / variants as you discover them.
-    DRIVER_MAP = {
-        "NOR": "Norris",
-        "PIA": "Piastri",
-        "LEC": "Leclerc",
-        "HAM": "Hamilton",
-        "RUS": "Russell",
-        "VER": "Verstappen",
-        "ANT": "Antonelli",
-        "HAD": "Hadjar",
-        "SAI": "Sainz",
-        "ALO": "Alonso",
-        "ALB": "Albon",
-        "GAS": "Gasly",
-        "OCO": "Ocon",
-        "STR": "Stroll",
-        "HUL": "Hulkenberg",
-        "TSU": "Tsunoda",
-        "LAW": "Lawson",
-        "BEA": "Bearman",
-        "BOR": "Bortoleto",
-        "LIN": "Lindblad",
-        "DOO": "Doohan",
-        "COL": "Colapinto",
-    }
-
     # ── Question index constants ──────────────────────────────
     # These match the question_index keys in SurveyMars responses.
     # Update if you restructure the survey.
