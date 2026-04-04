@@ -120,11 +120,21 @@ class SiteBuilder:
         return result
 
     def _build_rounds(self, scored_data: list[dict]) -> list[dict]:
-        """ROUNDS array for the HTML."""
+        """ROUNDS array for the HTML — includes main race + sprint scores."""
         rounds = []
         for data in scored_data:
+            # Start with main race scores
+            round_scores = dict(data.get("scores", {}))
+
+            # Add sprint scores if present
+            sprint_tips = data.get("sprint_tips") or []
+            for st in sprint_tips:
+                player = st["player"]
+                sprint_score = st.get("score", 0)
+                round_scores[player] = round_scores.get(player, 0) + sprint_score
+
             scores_sorted = dict(
-                sorted(data["scores"].items(), key=lambda x: x[1], reverse=True)
+                sorted(round_scores.items(), key=lambda x: x[1], reverse=True)
             )
 
             rounds.append({

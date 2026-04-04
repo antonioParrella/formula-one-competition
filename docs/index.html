@@ -648,10 +648,10 @@
       #view-leaderboard tbody td:nth-child(7) {
         display: none;
       }
-    }
 
-    /* DNF tracker: hide table, show cards */
-    #view-dnf .table-wrap { display: none; }
+      /* DNF tracker: hide table, show cards */
+      #view-dnf .table-wrap { display: none; }
+    }
 
     /* Extra narrow phones (<360px): hide gap too, keep only #, Player, Pts, DNF */
     @media (max-width: 360px) {
@@ -887,31 +887,55 @@
 */
 
 // DATA_START
-const PLAYERS = ["Dean", "Jake", "Barry", "Tara", "Veljko", "Luca", "Riki", "Rino", "Alex", "Antonio", "Josh"];
+const PLAYERS = ["Dean", "Jake", "Tara", "Antonio", "Barry", "Veljko", "Riki", "Rino", "Luca", "Josh", "Alex"];
 
 const STANDINGS = [
   {
     "name": "Dean",
-    "points": 98,
+    "points": 103,
     "lastRace": 17,
     "bestRound": 53,
     "games_played": 3,
     "roundScores": [
       28,
-      53,
+      58,
       17
     ]
   },
   {
     "name": "Jake",
-    "points": 78,
+    "points": 83,
     "lastRace": 18,
     "bestRound": 41,
     "games_played": 3,
     "roundScores": [
       19,
-      41,
+      46,
       18
+    ]
+  },
+  {
+    "name": "Tara",
+    "points": 68,
+    "lastRace": 20,
+    "bestRound": 36,
+    "games_played": 3,
+    "roundScores": [
+      7,
+      41,
+      20
+    ]
+  },
+  {
+    "name": "Antonio",
+    "points": 65,
+    "lastRace": 17,
+    "bestRound": 22,
+    "games_played": 3,
+    "roundScores": [
+      11,
+      37,
+      17
     ]
   },
   {
@@ -927,27 +951,39 @@ const STANDINGS = [
     ]
   },
   {
-    "name": "Tara",
-    "points": 63,
-    "lastRace": 20,
-    "bestRound": 36,
-    "games_played": 3,
-    "roundScores": [
-      7,
-      36,
-      20
-    ]
-  },
-  {
     "name": "Veljko",
-    "points": 57,
+    "points": 62,
     "lastRace": 13,
     "bestRound": 33,
     "games_played": 3,
     "roundScores": [
       11,
-      33,
+      38,
       13
+    ]
+  },
+  {
+    "name": "Riki",
+    "points": 57,
+    "lastRace": 28,
+    "bestRound": 28,
+    "games_played": 3,
+    "roundScores": [
+      8,
+      21,
+      28
+    ]
+  },
+  {
+    "name": "Rino",
+    "points": 56,
+    "lastRace": 16,
+    "bestRound": 23,
+    "games_played": 3,
+    "roundScores": [
+      23,
+      17,
+      16
     ]
   },
   {
@@ -963,27 +999,15 @@ const STANDINGS = [
     ]
   },
   {
-    "name": "Riki",
+    "name": "Josh",
     "points": 52,
-    "lastRace": 28,
-    "bestRound": 28,
+    "lastRace": 11,
+    "bestRound": 20,
     "games_played": 3,
     "roundScores": [
-      8,
       16,
-      28
-    ]
-  },
-  {
-    "name": "Rino",
-    "points": 51,
-    "lastRace": 16,
-    "bestRound": 23,
-    "games_played": 3,
-    "roundScores": [
-      23,
-      12,
-      16
+      25,
+      11
     ]
   },
   {
@@ -996,30 +1020,6 @@ const STANDINGS = [
       21,
       14,
       15
-    ]
-  },
-  {
-    "name": "Antonio",
-    "points": 50,
-    "lastRace": 17,
-    "bestRound": 22,
-    "games_played": 3,
-    "roundScores": [
-      11,
-      22,
-      17
-    ]
-  },
-  {
-    "name": "Josh",
-    "points": 47,
-    "lastRace": 11,
-    "bestRound": 20,
-    "games_played": 3,
-    "roundScores": [
-      16,
-      20,
-      11
     ]
   }
 ];
@@ -1054,17 +1054,17 @@ const ROUNDS = [
     "pole": "\u2014",
     "fastest": "\u2014",
     "scores": {
-      "Dean": 53,
+      "Dean": 58,
       "Barry": 47,
-      "Jake": 41,
-      "Tara": 36,
-      "Veljko": 33,
-      "Antonio": 22,
-      "Josh": 20,
-      "Riki": 16,
+      "Jake": 46,
+      "Tara": 41,
+      "Veljko": 38,
+      "Antonio": 37,
+      "Josh": 25,
+      "Riki": 21,
+      "Rino": 17,
       "Alex": 14,
-      "Luca": 14,
-      "Rino": 12
+      "Luca": 14
     }
   },
   {

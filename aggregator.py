@@ -78,15 +78,37 @@ class Aggregator:
                     }
 
                 p = players[name]
-                p["games_played"] += 1
-                p["points"] += score
-                p["lastRace"] = score
-                if p["bestRound"] is None or score > p["bestRound"]:
-                    p["bestRound"] = score
+                # Main race score
+                main_score = score
+                existing = p["roundScores"].get(str(round_num))
+                if existing:
+                    # Shouldn't happen but guard against double-counting
+                    main_score = score - existing["points"]
+                else:
+                    p["games_played"] += 1
+
+                p["points"] += main_score
+                p["lastRace"] = main_score
+                if p["bestRound"] is None or main_score > p["bestRound"]:
+                    p["bestRound"] = main_score
                 p["roundScores"][str(round_num)] = {
                     "race": race_name,
-                    "points": score,
+                    "points": main_score,
                 }
+
+            # Process sprint tips — add to same round's score
+            for sprint_tip in data.get("sprint_tips") or []:
+                name = sprint_tip["player"]
+                sprint_score = sprint_tip.get("score", 0)
+
+                if name not in players:
+                    continue
+
+                p = players[name]
+                round_key = str(round_num)
+                if round_key in p["roundScores"]:
+                    p["roundScores"][round_key]["points"] += sprint_score
+                p["points"] += sprint_score
 
         # Sort by points descending
         sorted_players = sorted(
@@ -96,15 +118,15 @@ class Aggregator:
         )
 
         standings_list = []
-        for rank, (name, data) in enumerate(sorted_players, start=1):
+        for rank, (name, pdata) in enumerate(sorted_players, start=1):
             entry = {
                 "name": name,
                 "rank": rank,
-                "games_played": data["games_played"],
-                "points": data["points"],
-                "lastRace": data["lastRace"],
-                "bestRound": data["bestRound"],
-                "roundScores": data["roundScores"],
+                "games_played": pdata["games_played"],
+                "points": pdata["points"],
+                "lastRace": pdata["lastRace"] or 0,
+                "bestRound": pdata["bestRound"] or 0,
+                "roundScores": pdata["roundScores"],
             }
             standings_list.append(entry)
 
