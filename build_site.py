@@ -210,17 +210,12 @@ class SiteBuilder:
         return tips_list
 
     def _build_dnf_tips(self, scored_data: list[dict]) -> list[dict]:
-        """DNF_TIPS array — only rounds where players made DNF picks."""
+        """DNF_TIPS array — includes all rounds, even when no one made DNF picks."""
         tips_list = []
         for data in scored_data:
-            # Check if any player has DNF picks
-            any_picks = any(
-                pt.get("dnf_picks") for pt in data["player_tips"]
-            )
-            if not any_picks:
-                continue
-
             actual_dnfs = _resolve_dnfs(data.get("race_dnfs") or [])
+            if not actual_dnfs:
+                continue
 
             tips = []
             for pt in data["player_tips"]:

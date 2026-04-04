@@ -37,7 +37,7 @@
     header {
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      justify-content: center;
       padding: 0 32px;
       height: 64px;
       background: var(--surface);
@@ -436,6 +436,83 @@
     /* Tips tables — transposed layout for main race (positions as rows) */
     .tips-table-scroll { overflow-x: auto; }
 
+    /* Mobile card layout — hidden on desktop */
+    .tips-cards { display: none; }
+
+    .tips-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin-bottom: 12px;
+      overflow: hidden;
+    }
+
+    .tips-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 16px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .tips-card-player {
+      font-family: var(--font-display);
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .tips-card-score {
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .tips-card-body {
+      padding: 0;
+    }
+
+    .tips-card-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 16px;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+    }
+
+    .tips-card-row:last-child { border-bottom: none; }
+
+    .tips-card-pos {
+      color: var(--muted);
+      font-size: 11px;
+      font-family: var(--font-display);
+      width: 28px;
+    }
+
+    .tips-card-pick {
+      flex: 1;
+      margin-left: 10px;
+      font-weight: 400;
+    }
+
+    .tips-card-badge {
+      font-size: 11px;
+      font-family: var(--font-display);
+    }
+
+    .tips-card-row.exact  { color: #4ade80; }
+    .tips-card-row.close  { color: #fbbf24; }
+    .tips-card-row.top10  { color: #38bdf8; }
+    .tips-card-row.miss   { color: var(--dim); }
+
+    /* Show cards / hide table on mobile */
+    @media (max-width: 600px) {
+      .tips-table-scroll { display: none; }
+      .tips-cards        { display: block; }
+    }
+
     /* Scoring cell colours
        exact   = correct position     (5 pts)  bright green
        close   = one position off     (3 pts)  amber
@@ -544,8 +621,7 @@
 <body>
 
 <header>
-  <div class="logo">F1 <span>Tipping</span> Comp</div>
-  <div class="season-badge">2025 Season</div>
+  <div class="logo">2026 Visa Cash App <span>F1 Tipping Competition</span></div>
 </header>
 
 <nav>
@@ -662,6 +738,7 @@
           </table>
         </div>
       </div>
+      <div class="tips-cards" id="main-tips-cards"></div>
     </div>
 
     <!-- ── Sprint sub-view ── -->
@@ -675,6 +752,7 @@
           </table>
         </div>
       </div>
+      <div class="tips-cards" id="sprint-tips-cards"></div>
     </div>
 
   </div>
@@ -2901,6 +2979,15 @@ const DNF_TIPS = [
         "score": 15
       }
     ]
+  },
+  {
+    "round": 3,
+    "raceName": "Japan",
+    "actualDnfs": [
+      "Stroll",
+      "Bearman"
+    ],
+    "tips": []
   }
 ];
 // DATA_END
@@ -3045,12 +3132,13 @@ function renderCharts() {
   const axisStyle = { grid: { color: '#2a2a3a' }, ticks: { color: '#888', font: { family: 'Barlow' } } };
   const legendStyle = { display: false }; // we use custom toggles instead
 
-  // Cumulative line chart
+  // Cumulative line chart — prepends a zero "Start" point
+  const startLabel = 'Start';
   const cumDatasets = STANDINGS.map((p, i) => {
     let cum = 0;
     return {
       label: p.name,
-      data: ROUNDS.map(r => { cum += (r.scores[p.name] || 0); return cum; }),
+      data: [0, ...ROUNDS.map(r => { cum += (r.scores[p.name] || 0); return cum; })],
       borderColor: PLAYER_COLORS[i],
       backgroundColor: 'transparent',
       tension: 0.35,
@@ -3062,7 +3150,7 @@ function renderCharts() {
 
   cumChart = new Chart($('chart-cumulative'), {
     type: 'line',
-    data: { labels, datasets: cumDatasets },
+    data: { labels: [startLabel, ...labels], datasets: cumDatasets },
     options: {
       responsive: true,
       plugins: { legend: legendStyle },
@@ -3077,8 +3165,8 @@ function renderCharts() {
     return `<button onclick="togglePlayer(${i}, this)"
       style="font-family:var(--font-display);font-size:12px;font-weight:600;
              letter-spacing:0.06em;text-transform:uppercase;cursor:pointer;
-             padding:4px 12px;border-radius:4px;border:1px solid ${col};
-             background:${col}33;color:${col};transition:all 0.15s;"
+             padding:4px 12px;border-radius:4px;border:1px solid #333;
+             background:var(--surface);color:${col};transition:all 0.15s;"
       data-active="true">${p.name}</button>`;
   }).join('');
 
@@ -3110,8 +3198,7 @@ function togglePlayer(index, btn) {
   cumChart.update();
   btn.dataset.active = active ? 'false' : 'true';
   const col = PLAYER_COLORS[index];
-  btn.style.background = active ? 'transparent' : col + '33';
-  btn.style.opacity = active ? '0.4' : '1';
+  btn.style.opacity = active ? '0.3' : '1';
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -3122,6 +3209,35 @@ function showSubTab(name, el) {
   document.querySelectorAll('.sub-view').forEach(v => v.classList.remove('active'));
   el.classList.add('active');
   $('sub-' + name).classList.add('active');
+}
+
+/* Shared helper: renders one player's tips as a mobile card */
+function renderTipsCard(tip, positions) {
+  const label = tip.score !== undefined ? tip.score.toFixed ? tip.score : tip.score : '0';
+  const rows = positions.map((_, pos) => {
+    const pick = tip.picks[pos];
+    if (!pick) return `<div class="tips-card-row miss">
+      <span class="tips-card-pos">P${pos+1}</span>
+      <span class="tips-card-pick" style="color:var(--dim)">—</span>
+    </div>`;
+    const driver   = typeof pick === 'object' ? pick.driver  : pick;
+    const result   = typeof pick === 'object' ? pick.result  : 'miss';
+    const underdog = typeof pick === 'object' ? pick.underdog : false;
+    const scored   = result && result !== 'miss';
+    const star     = underdog && scored ? `<span class="ud-star">★</span>` : '';
+    return `<div class="tips-card-row ${result}">
+      <span class="tips-card-pos">P${pos+1}</span>
+      <span class="tips-card-pick ${result}">${driver}${star}</span>
+    </div>`;
+  }).join('');
+
+  return `<div class="tips-card">
+    <div class="tips-card-header">
+      <span class="tips-card-player">${tip.player}</span>
+      <span class="tips-card-score">${tip.score}</span>
+    </div>
+    <div class="tips-card-body">${rows}</div>
+  </div>`;
 }
 
 /* ── Main race tips ─────────────────────────────────────── */
@@ -3159,7 +3275,8 @@ function showMainRound(round) {
       const driver  = typeof pick === 'object' ? pick.driver   : pick;
       const result  = typeof pick === 'object' ? pick.result   : (driver === posDriver ? 'exact' : (rnd.positions.includes(driver) ? 'top10' : 'miss'));
       const underdog = typeof pick === 'object' ? pick.underdog : false;
-      const star = underdog ? `<span class="ud-star">★</span>` : '';
+      const scored = result && result !== 'miss';
+      const star = underdog && scored ? `<span class="ud-star">★</span>` : '';
       return `<td class="right ${result}">${driver}${star}</td>`;
     }).join('');
     return `<tr>
@@ -3173,6 +3290,9 @@ function showMainRound(round) {
     <th style="text-align:center;padding-right:10px">Score</th>
     ${sorted.map(t => `<td class="right">${t.score}</td>`).join('')}
   </tr>`;
+
+  // ── Mobile card view (one card per player) ──
+  $('main-tips-cards').innerHTML = sorted.map(t => renderTipsCard(t, rnd.positions)).join('');
 }
 
 function renderMainTips() {
@@ -3181,6 +3301,7 @@ function renderMainTips() {
   else {
     $('main-tips-head').innerHTML = '';
     $('main-tips-body').innerHTML = `<tr><td colspan="12"><div class="empty">No main race tips yet</div></td></tr>`;
+    $('main-tips-cards').innerHTML = `<div class="empty" style="padding:40px 0">No main race tips yet</div>`;
   }
 }
 
@@ -3220,7 +3341,8 @@ function showSprintRound(round) {
       if (!pick) return `<td class="right miss">—</td>`;
       const driver   = typeof pick === 'object' ? pick.driver   : pick;
       const result   = typeof pick === 'object' ? pick.result   : (driver === posDriver ? 'exact' : 'miss');
-      const star = typeof pick === 'object' && pick.underdog ? `<span class="ud-star">★</span>` : '';
+      const scored = result && result !== 'miss';
+      const star = typeof pick === 'object' && pick.underdog && scored ? `<span class="ud-star">★</span>` : '';
       return `<td class="right ${result}">${driver}${star}</td>`;
     }).join('');
     return `<tr>
