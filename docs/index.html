@@ -513,6 +513,13 @@
       .tips-cards        { display: block; }
     }
 
+    /* DNF pips inside leaderboard table — centered in the right-aligned cell */
+    .lb-dnf-pips {
+      display: flex;
+      justify-content: center;
+      gap: 4px;
+    }
+
     /* Scoring cell colours
        exact   = correct position     (5 pts)  bright green
        close   = one position off     (3 pts)  amber
@@ -615,7 +622,38 @@
       nav { padding: 0 8px; overflow-x: auto; }
       .tab { padding: 14px 14px; font-size: 12px; }
       main { padding: 20px 12px; }
+
+      /* Leaderboard: hide Last race, Best round, Avg on mobile; keep #, Player, Pts, DNF */
+      #view-leaderboard thead th:nth-child(4),
+      #view-leaderboard tbody td:nth-child(4),
+      #view-leaderboard thead th:nth-child(5),
+      #view-leaderboard tbody td:nth-child(5),
+      #view-leaderboard thead th:nth-child(6),
+      #view-leaderboard tbody td:nth-child(6) {
+        display: none;
+      }
+
+      /* Charts: taller cumulative chart on mobile */
     }
+
+    /* Per-round cards — stacked vertically */
+    .perround-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+    .perround-card-title {
+      font-family: var(--font-display);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+  </style>
   </style>
 </head>
 <body>
@@ -674,6 +712,7 @@
             <th class="right">Last race</th>
             <th class="right">Best round</th>
             <th class="right">Avg / race</th>
+            <th style="text-align:center">DNF</th>
           </tr>
         </thead>
         <tbody id="leaderboard-body"></tbody>
@@ -703,7 +742,10 @@
     </div>
     <div class="chart-card">
       <div class="chart-title">Points per round</div>
+      <!-- Desktop: grouped bar chart -->
       <canvas id="chart-perround" height="100"></canvas>
+      <!-- Mobile: vertically stacked per-race individual charts -->
+      <div id="perround-mobile-container"></div>
     </div>
   </div>
 
@@ -3055,6 +3097,13 @@ function renderLeaderboard() {
     const gap = i > 0
       ? `<span style="color:var(--dim);font-size:12px;margin-left:6px">-${sorted[0].points - p.points}</span>`
       : '';
+    const used = dnfBudgetUsed(p.name);
+    const hits = dnfHits(p.name);
+    const pips = Array.from({length: DNF_BUDGET}, (_, j) => {
+      if (j < hits) return `<div class="dnf-pip hit" title="Hit"></div>`;
+      if (j < used) return `<div class="dnf-pip used" title="Used — miss"></div>`;
+      return `<div class="dnf-pip" title="Remaining"></div>`;
+    }).join('');
     return `<tr class="${i === 0 ? 'leader' : ''}">
       <td class="pos ${posClasses[i] || ''}">${i + 1}</td>
       <td><span class="player-name">${p.name}</span>${gap}</td>
@@ -3062,6 +3111,7 @@ function renderLeaderboard() {
       <td class="right">${p.lastRace !== undefined ? p.lastRace : '—'}</td>
       <td class="right">${p.bestRound || '—'}</td>
       <td class="right">${avg}</td>
+      <td><div class="lb-dnf-pips">${pips}</div></td>
     </tr>`;
   }).join('');
 }
@@ -3148,6 +3198,11 @@ function renderCharts() {
     };
   });
 
+  // Adjust canvas height for mobile before rendering
+  if (window.innerWidth <= 600) {
+    $('chart-cumulative').height = 350;
+  }
+
   cumChart = new Chart($('chart-cumulative'), {
     type: 'line',
     data: { labels: [startLabel, ...labels], datasets: cumDatasets },
@@ -3188,6 +3243,49 @@ function renderCharts() {
       plugins: { legend: { labels: { color: '#888', font: { family: 'Barlow', size: 11 }, boxWidth: 10 } } },
       scales: { x: axisStyle, y: axisStyle }
     }
+  });
+
+  // Mobile: render each race as its own stacked bar card
+  const mobileContainer = $('perround-mobile-container');
+  const isMobile = window.innerWidth <= 600;
+  $('chart-perround').style.display = isMobile ? 'none' : '';
+  mobileContainer.style.display = isMobile ? 'block' : 'none';
+
+  mobileContainer.innerHTML = '';
+  ROUNDS.forEach((rnd, ri) => {
+    mobileContainer.innerHTML += `<div class="perround-card">
+      <div class="perround-card-title">Round ${rnd.round} — ${rnd.name}</div>
+      <canvas id="perround-canvas-${ri}" height="180"></canvas>
+    </div>`;
+  });
+
+  ROUNDS.forEach((rnd, ri) => {
+    const datasets = STANDINGS.map((p, i) => ({
+      label: p.name,
+      data: [rnd.scores[p.name] || 0],
+      backgroundColor: PLAYER_COLORS[i] + 'bb',
+      borderColor: PLAYER_COLORS[i],
+      borderWidth: 1,
+      borderRadius: 3,
+    }));
+    new Chart($(`perround-canvas-${ri}`), {
+      type: 'bar',
+      data: { labels: ['Points'], datasets },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { labels: { color: '#888', font: { family: 'Barlow', size: 11 }, boxWidth: 10 } }
+        },
+        scales: { x: axisStyle, y: { ...axisStyle, beginAtZero: true } }
+      }
+    });
+  });
+
+  // Hide per-round cards at breakpoints based on CSS
+  const mq = window.matchMedia('(max-width: 600px)');
+  mq.addEventListener('change', e => {
+    $('chart-perround').style.display = e.matches ? 'none' : '';
+    mobileContainer.style.display = e.matches ? 'block' : 'none';
   });
 }
 
