@@ -685,20 +685,16 @@
         <div class="stat-value accent" id="stat-leader">—</div>
       </div>
       <div class="stat-card">
+        <div class="stat-label">Last round winner</div>
+        <div class="stat-value accent2" id="stat-last-winner">—</div>
+      </div>
+      <div class="stat-card">
         <div class="stat-label">Gap P1 → P2</div>
         <div class="stat-value" id="stat-gap">—</div>
       </div>
       <div class="stat-card">
-        <div class="stat-label">Players</div>
-        <div class="stat-value" id="stat-players">—</div>
-      </div>
-      <div class="stat-card">
         <div class="stat-label">Rounds played</div>
         <div class="stat-value" id="stat-rounds">0</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">Last round winner</div>
-        <div class="stat-value accent2" id="stat-last-winner">—</div>
       </div>
     </div>
 
@@ -3069,7 +3065,6 @@ function renderLeaderboard() {
 
   $('lb-round-count').textContent = roundsPlayed;
   $('stat-rounds').textContent = roundsPlayed;
-  $('stat-players').textContent = PLAYERS.length;
 
   if (sorted.length >= 1) {
     $('stat-leader').textContent = sorted[0].name;
