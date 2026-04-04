@@ -1,26 +1,284 @@
-## Prerequisites
+# F1 Tipping Competition
 
-Before running the setup scripts, ensure you have the following installed:
-- **Python 3.8 or higher**: [Download here](https://www.python.org/downloads/)
-- **pip**: Usually included with Python installations.[[2](https://www.google.com/url?sa=E&q=https%3A%2F%2Fvertexaisearch.cloud.google.com%2Fgrounding-api-redirect%2FAUZIYQFp9x0mMthHyamvsSO-SeEezBLMfCspkGUgyhcof6u4KwmjRkqs_9DSY0Uv1FDo6KVURn4a5_FMDlQG9qIQW6U7IASGHQYXFN9unweTpUpae44-8x82XyIPALcC88m8TTwQ678t0rK_u8UVs52YZxS_LVWoh4a6VD1nsLB_0-Zowl4O__eQB5V97E1WNrv_O6wQ1Jf89QIEs1YbhZG797o1eMphCJiHC6CoXAOc4FZHrZTjhj5av7ddHr767MIV)][[3](https://www.google.com/url?sa=E&q=https%3A%2F%2Fvertexaisearch.cloud.google.com%2Fgrounding-api-redirect%2FAUZIYQHD_-RTo6Xz_sGOU3WRIk-BWVQtrUIz9Gma0Z9bxkRhamCDrjQzi3jpK1kzrOC_NFtBEs77g7ulyrM3VduZxzHnzIvoUBVkCgMBnjgjUYnb68xp72662F6crZTkOamnPTBmsnc%3D)]
+A fully automated multiplayer F1 tipping competition. Players submit picks via SurveyMars before each race. A Python pipeline scores them against real results from the OpenF1 API and publishes a static leaderboard website to GitHub Pages — no manual work required each race weekend.
 
 ---
 
-## 🛠️ Installation & Setup
+## Table of Contents
 
-We have provided automated scripts to handle the environment creation and dependency installation for you.
+- [Prerequisites](#prerequisites)
+- [Setup](#setup)
+- [Configuration](#configuration)
+- [Running the Pipeline](#running-the-pipeline)
+- [Project Structure](#project-structure)
+- [Scoring Rules](#scoring-rules)
 
-### 🪟 Windows
-1. Locate the `setup.bat` file in the project folder.
-2. **Double-click** `setup.bat`.
-3. The script will:
-   - Create a virtual environment (`venv`).
-   - Upgrade `pip`.
-   - Install all requirements from `requirements.txt`.
-4. Keep the terminal window open to run the app.
+---
 
-### 🍎 macOS / Linux
-1. Open your **Terminal** and navigate to the project folder.
-2. Make the setup script executable (first time only):
-   ```bash
-   chmod +x setup.sh
+## Prerequisites
+
+- **Python 3.10 or higher** — [Download here](https://www.python.org/downloads/)
+- **Git** — [Download here](https://git-scm.com/downloads) (needed for committing changes)
+- No other tools are required.
+
+---
+
+## Setup
+
+We provide setup scripts for both platforms. If you have already run the setup scripts, skip to [Configuration](#configuration).
+
+### Quick Start (Automated)
+
+**Windows:**
+
+1. Double-click `setup.bat`
+2. Wait for the script to finish — it creates a virtual environment and installs dependencies
+
+**macOS / Linux:**
+
+```bash
+cd formula-one-competition  # enter project directory
+chmod +x setup.sh           # first time only
+./setup.sh
+```
+
+### Manual Setup
+
+```bash
+# 1. Clone the repository (if not already done)
+git clone <repo-url>
+cd formula-one-competition
+
+# 2. Create a virtual environment
+python -m venv venv
+
+# 3. Activate it
+# Windows:
+venv\Scripts\activate
+# macOS / Linux:
+source venv/bin/activate
+
+# 4. Install dependencies
+pip install -r requirements.txt
+```
+
+---
+
+## Configuration
+
+### 1. SurveyMars API Credentials
+
+The pipeline fetches tips via the SurveyMars API using OAuth2. You need your account ID and secret.
+
+Create a `.env` file in the project root:
+
+```bash
+# Copy the example file
+cp .env.example .env
+```
+
+Then edit `.env` with your credentials:
+
+```
+SURVEYMARS_ACCOUNT_ID=your_account_id_here
+SURVEYMARS_SECRET=your_secret_here
+```
+
+You can find these in your SurveyMars account settings under API credentials.
+
+### 2. GitHub Pages (optional)
+
+To publish the website automatically:
+
+1. Push the repo to GitHub (must be public for free hosting)
+2. Go to repo Settings → Pages → Source: **Deploy from branch** → `main` → `/docs`
+3. Add `.nojekyll` to `docs/` (already included)
+4. The site will be live at `https://{username}.github.io/{repo-name}`
+
+Add GitHub secrets (`SURVEYMARS_ACCOUNT_ID` and `SURVEYMARS_SECRET`) under repo Settings → Secrets → Actions so the CI workflow can use them.
+
+---
+
+## Running the Pipeline
+
+Activate your virtual environment first:
+
+```bash
+# Windows
+venv\Scripts\activate
+
+# macOS / Linux
+source venv/bin/activate
+```
+
+### Full Pipeline (all rounds)
+
+```bash
+python pipeline.py
+```
+
+This runs all 5 steps:
+
+1. **Fetch tips** — calls SurveyMars API to get all survey responses
+2. **Fetch results** — calls OpenF1 API to get race results for existing rounds
+3. **Score rounds** — applies scoring rules to each round
+4. **Aggregate standings** — builds season standings from all scored rounds
+5. **Build website** — injects data into `docs/index.html`
+
+### Single Round
+
+```bash
+python pipeline.py --round 4
+```
+
+Only processes round 4. Useful for re-running a specific round after fixing a bug or updating data.
+
+### Tips Only
+
+```bash
+python pipeline.py --round 5 --tip-only
+```
+
+Fetches and saves tips from SurveyMars but skips results fetching, scoring, and site building. Useful for collecting tips before the race when results aren't available yet.
+
+This is the typical workflow during race weekend:
+
+```bash
+# Before the race (Sunday or Monday) — just grab tips
+python pipeline.py --round 5 --tip-only
+
+# After the race — get results, score, build site
+python pipeline.py --round 5
+```
+
+### Force Re-fetch
+
+```bash
+python pipeline.py --round 3 --force
+```
+
+Re-fetches tips even if a file already exists. Useful when survey responses have changed or were corrected.
+
+### Manual Site Rebuild
+
+If you've already scored rounds and just want to regenerate the website:
+
+```bash
+python -c "from build_site import SiteBuilder; SiteBuilder().build_and_save()"
+```
+
+### Manual Standings Rebuild
+
+```bash
+python -c "from aggregator import Aggregator; Aggregator().build_and_save()"
+```
+
+### Individual Module Usage
+
+Each pipeline module is importable and can be run separately:
+
+```python
+from survey_mars import SurveyMarsClient
+from survey_index import SurveyIndex
+from tips_parser import TipsParser
+from scorer import Scorer
+from fetch_results import ResultsFetcher
+from aggregator import Aggregator
+from build_site import SiteBuilder
+
+# Scoring a specific round
+scorer = Scorer(round_num=3)
+scorer.score_and_save()
+
+# Fetching results for a specific round (2026 season)
+fetcher = ResultsFetcher(round_num=3, year=2026)
+fetcher.fetch_and_save()
+
+# Fetching the latest survey index
+client = SurveyMarsClient()
+client.authenticate()
+index = SurveyIndex(client).fetch()
+index.print_summary()
+```
+
+---
+
+## Data Flow
+
+```
+SurveyMars API ──→ data/raw/tips/ ──┐
+                                     ├──→ scorer.py ──→ data/processed/ ──→ aggregate.py
+OpenF1 API ──────→ data/raw/results/│                                    ↓
+                                     └───────────────────────────────── build_site.py
+                                                                        ↓
+                                                             docs/index.html
+                                                                        ↓
+                                                            GitHub Pages (live)
+```
+
+- `/data/raw/` is **write-once** — never edit these files manually
+- `/data/processed/` is **always derived** — delete and regenerate anytime by re-running the pipeline
+- `/data/overrides/` holds manual corrections (e.g. late submission penalties) — only created when needed
+
+---
+
+## Scoring Rules
+
+### Main Race
+
+| Result | Condition | Points |
+|---|---|---|
+| `exact` | Driver picked in correct position | 5 |
+| `close` | Driver one position away | 3 |
+| `top10` | Driver anywhere else in top 10 | 1 |
+| `miss` | Driver not in top 10 | 0 |
+| Underdog bonus | Driver outside championship top 10 (not round 1) | ×2 multiplier |
+
+### Sprint (on sprint weekends)
+
+- **5 points** for each correct sprint position (P1, P2, P3)
+- Scored separately but added to round total in standings
+
+### DNFs
+
+- **15 points** per tipped driver who actually DNFs
+- Driver must have **started** the race (DNS doesn't count)
+- **5 picks per season** total, allocatable to any round (0–5 per round)
+
+### Penalties
+
+- **-5 points** per missed practice session (late submission)
+- Submission after qualifying: **scores zero**
+- Total weekend points **cannot go negative** (floored at 0)
+
+---
+
+## Project Structure
+
+```
+├── pipeline.py        # Main entry point — runs all 5 steps
+├── survey_mars.py     # SurveyMarsClient — OAuth2 + API requests
+├── survey_index.py    # SurveyIndex — fetches & indexes surveys by publish date
+├── tips_parser.py     # TipsParser — fetches responses, saves raw tips
+├── fetch_results.py   # ResultsFetcher — gets OpenF1 race results
+├── scorer.py          # Scorer — applies scoring rules per round
+├── aggregator.py      # Aggregator — builds season standings
+├── build_site.py      # SiteBuilder — injects data into index.html
+├── race_utils.py      # clean_race_name(), DRIVER_MAP
+├── requirements.txt   # Python dependencies
+├── setup.bat          # Windows setup script
+├── setup.sh           # macOS/Linux setup script
+├── .env.example       # Environment variable template
+├── docs/
+│   ├── index.html     # Website — data injected by build_site.py
+│   └── .nojekyll      # Disables Jekyll on GitHub Pages
+├── data/
+│   ├── raw/           # Write-once source data (tips + results)
+│   ├── processed/     # Derived data (scored + standings)
+│   └── overrides/     # Manual corrections
+└── .github/
+    └── workflows/
+        └── score.yml  # GitHub Actions CI/CD pipeline
+```
+
+Each module has a docstring at the top with usage examples. See `ARCHITECTURE.md` for detailed module documentation.

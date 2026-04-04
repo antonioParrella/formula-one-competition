@@ -1,34 +1,42 @@
-#!/bin/zsh
+#!/bin/bash
+# Works on macOS (bash/zsh) and Linux
 
 echo ""
-echo "  Setting up F1 Leaderboard..."
+echo "========================================"
+echo "  F1 Tipping Competition -- Setup"
+echo "========================================"
 echo ""
 
 # Create venv only if it doesn't already exist
-# -d checks if the directory exists
 if [ ! -d "venv" ]; then
     echo "  Creating venv..."
-    python3 -m venv venv
+    # Try python3 first, fall back to python
+    if command -v python3 &> /dev/null; then
+        python3 -m venv venv
+    else
+        python -m venv venv
+    fi
 else
     echo "  Venv already exists, skipping creation..."
 fi
 
-# Activate only if not already active
-# -z checks if the variable is empty
+# Activate
 if [ -z "$VIRTUAL_ENV" ]; then
+    echo "  Activating venv..."
     source venv/bin/activate
 else
     echo "  Venv already active, skipping activation..."
 fi
 
-python3 -m pip install --quiet --upgrade pip
-python3 -m pip install -r requirements.txt
+python -m pip install --quiet --upgrade pip
+python -m pip install -r requirements.txt
 
 echo ""
-echo "  Done! Run the script with:"
-echo "    python3 f1_leaderboard.py --demo"
+echo "  Setup complete!"
 echo ""
-
-# This keeps the shell active in the virtual environment
-# equivalent to 'cmd /k'
-exec $SHELL
+echo "  Next steps:"
+echo "  1. Copy .env.example to .env and add your SurveyMars credentials"
+echo "  2. Run the full pipeline:"
+echo "       python pipeline.py"
+echo "  3. Or see README.md for more options"
+echo ""

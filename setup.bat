@@ -1,6 +1,8 @@
 @echo off
 echo.
-echo   Setting up F1 Leaderboard...
+echo ========================================
+echo   F1 Tipping Competition -- Setup
+echo ========================================
 echo.
 
 :: Create venv only if it doesn't already exist
@@ -22,7 +24,12 @@ python -m pip install --quiet --upgrade pip
 python -m pip install -r requirements.txt
 
 echo.
-echo   Done! Run the script with:
-echo     python f1_leaderboard.py --demo
+echo   Setup complete!
+echo.
+echo   Next steps:
+echo   1. Copy .env.example to .env and add your SurveyMars credentials
+echo   2. Run the full pipeline:
+echo        python pipeline.py
+echo   3. Or see README.md for more options
 echo.
 cmd /k
