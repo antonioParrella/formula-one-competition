@@ -442,5 +442,4 @@ Steps:
 | DNF budget tracked as running total across rounds | 5 picks per season, allocatable to any race in any quantity |
 
 ## To Do
-- Make the points gap on the leaderboard more clear, maybe similar to how an f1 time tower shows gaps. Both mobile and desktop
 - In the tips section on mobile I want the tables to show how many points each driver selection get them.

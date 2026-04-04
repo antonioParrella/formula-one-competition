@@ -505,6 +505,15 @@
       font-family: var(--font-display);
     }
 
+    .tips-card-pts {
+      font-family: var(--font-display);
+      font-size: 11px;
+      font-weight: 600;
+      color: #fff;
+      min-width: 20px;
+      text-align: right;
+    }
+
     .tips-card-row.exact  { color: #4ade80; }
     .tips-card-row.close  { color: #fbbf24; }
     .tips-card-row.top10  { color: #38bdf8; }
@@ -626,6 +635,10 @@
       .tab { padding: 14px 14px; font-size: 12px; }
       main { padding: 20px 12px; }
 
+      /* Leaderboard: tighter cells on mobile */
+      #view-leaderboard tbody td { padding: 10px 8px; font-size: 13px; }
+      #view-leaderboard thead th { padding: 8px; font-size: 10px; }
+
       /* Leaderboard: hide Last race, Best round, Avg on smaller phones */
       #view-leaderboard thead th:nth-child(5),
       #view-leaderboard tbody td:nth-child(5),
@@ -638,7 +651,7 @@
     }
 
     /* Extra narrow phones (<400px): hide gap too, keep only #, Player, Pts, DNF */
-    @media (max-width: 400px) {
+    @media (max-width: 360px) {
       #view-leaderboard thead th:nth-child(4),
       #view-leaderboard tbody td:nth-child(4) {
         display: none;
@@ -3315,21 +3328,25 @@ function showSubTab(name, el) {
 
 /* Shared helper: renders one player's tips as a mobile card */
 function renderTipsCard(tip, positions) {
-  const label = tip.score !== undefined ? tip.score.toFixed ? tip.score : tip.score : '0';
+  const ptsMap = { exact: 5, close: 3, top10: 1, miss: 0 };
   const rows = positions.map((_, pos) => {
     const pick = tip.picks[pos];
     if (!pick) return `<div class="tips-card-row miss">
       <span class="tips-card-pos">P${pos+1}</span>
       <span class="tips-card-pick" style="color:var(--dim)">—</span>
+      <span class="tips-card-pts">0</span>
     </div>`;
     const driver   = typeof pick === 'object' ? pick.driver  : pick;
     const result   = typeof pick === 'object' ? pick.result  : 'miss';
     const underdog = typeof pick === 'object' ? pick.underdog : false;
     const scored   = result && result !== 'miss';
     const star     = underdog && scored ? `<span class="ud-star">★</span>` : '';
+    let pts = ptsMap[result] || 0;
+    pts = underdog && scored ? pts * 2 : pts;
     return `<div class="tips-card-row ${result}">
       <span class="tips-card-pos">P${pos+1}</span>
       <span class="tips-card-pick ${result}">${driver}${star}</span>
+      <span class="tips-card-pts">${pts}</span>
     </div>`;
   }).join('');
 
