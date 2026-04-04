@@ -442,8 +442,5 @@ Steps:
 | DNF budget tracked as running total across rounds | 5 picks per season, allocatable to any race in any quantity |
 
 ## To Do
-- In the points per round section the charts are too squished, on mobile and desktop. They should be moved so they arfe vertically stacked. 
-- On mobile the cumulative points chart is not large enough vertically.
-- Remove the number of players box on the leaderboard tab and have the last round winner and the current winner boxes next to one other
 - Make the points gap on the leaderboard more clear, maybe similar to how an f1 time tower shows gaps. Both mobile and desktop
 - In the tips section on mobile I want the tables to show how many points each driver selection get them.
