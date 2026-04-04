@@ -3496,6 +3496,9 @@ function showSprintRound(round) {
     <th style="text-align:center;padding-right:10px">Score</th>
     ${sorted.map(t => `<td class="right">${t.score}</td>`).join('')}
   </tr>`;
+
+  // Mobile card view (reuses main race card helper)
+  $('sprint-tips-cards').innerHTML = sorted.map(t => renderTipsCard(t, rnd.positions)).join('');
 }
 
 function renderSprintTips() {
@@ -3504,6 +3507,7 @@ function renderSprintTips() {
   else {
     $('sprint-tips-head').innerHTML = '';
     $('sprint-tips-body').innerHTML = `<tr><td colspan="5"><div class="empty">No sprint rounds recorded yet</div></td></tr>`;
+    $('sprint-tips-cards').innerHTML = `<div class="empty" style="padding:40px 0">No sprint rounds recorded yet</div>`;
   }
 }
 
