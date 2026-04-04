@@ -338,6 +338,46 @@
       color: var(--accent2);
     }
 
+    .round-score-breakdown {
+      font-family: var(--font-display);
+      font-size: 13px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: 3px;
+      justify-content: flex-end;
+    }
+
+    .br-main  { color: var(--text); }
+    .br-dnf   { color: #4ade80; }
+    .br-spr   { color: #7c3aed; }
+    .br-op    { color: var(--dim); font-size: 12px; }
+    .br-total {
+      font-family: var(--font-display);
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--accent2);
+    }
+
+    .score-breakdown-legend {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 8px;
+      font-size: 11px;
+      font-family: var(--font-display);
+      color: var(--dim);
+      letter-spacing: 0.02em;
+    }
+    .legend-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 4px;
+    }
+
     .round-scores-toggle {
       font-family: var(--font-display);
       font-size: 11px;
@@ -1044,6 +1084,63 @@ const ROUNDS = [
       "Riki": 8,
       "Tara": 7,
       "Barry": 7
+    },
+    "breakdown": {
+      "Veljko": {
+        "main": 11,
+        "dnf": 0,
+        "sprint": 0
+      },
+      "Tara": {
+        "main": 7,
+        "dnf": 0,
+        "sprint": 0
+      },
+      "Riki": {
+        "main": 8,
+        "dnf": 0,
+        "sprint": 0
+      },
+      "Luca": {
+        "main": 13,
+        "dnf": 15,
+        "sprint": 0
+      },
+      "Jake": {
+        "main": 19,
+        "dnf": 0,
+        "sprint": 0
+      },
+      "Alex": {
+        "main": 6,
+        "dnf": 15,
+        "sprint": 0
+      },
+      "Dean": {
+        "main": 13,
+        "dnf": 15,
+        "sprint": 0
+      },
+      "Josh": {
+        "main": 16,
+        "dnf": 0,
+        "sprint": 0
+      },
+      "Barry": {
+        "main": 7,
+        "dnf": 0,
+        "sprint": 0
+      },
+      "Rino": {
+        "main": 23,
+        "dnf": 0,
+        "sprint": 0
+      },
+      "Antonio": {
+        "main": 11,
+        "dnf": 0,
+        "sprint": 0
+      }
     }
   },
   {
@@ -1065,6 +1162,63 @@ const ROUNDS = [
       "Rino": 17,
       "Alex": 14,
       "Luca": 14
+    },
+    "breakdown": {
+      "Alex": {
+        "main": 14,
+        "dnf": 0,
+        "sprint": 0
+      },
+      "Jake": {
+        "main": 11,
+        "dnf": 30,
+        "sprint": 5
+      },
+      "Rino": {
+        "main": 12,
+        "dnf": 0,
+        "sprint": 5
+      },
+      "Riki": {
+        "main": 16,
+        "dnf": 0,
+        "sprint": 5
+      },
+      "Dean": {
+        "main": 23,
+        "dnf": 30,
+        "sprint": 5
+      },
+      "Tara": {
+        "main": 21,
+        "dnf": 15,
+        "sprint": 5
+      },
+      "Antonio": {
+        "main": 22,
+        "dnf": 0,
+        "sprint": 15
+      },
+      "Veljko": {
+        "main": 18,
+        "dnf": 15,
+        "sprint": 5
+      },
+      "Luca": {
+        "main": 14,
+        "dnf": 0,
+        "sprint": 0
+      },
+      "Josh": {
+        "main": 20,
+        "dnf": 0,
+        "sprint": 5
+      },
+      "Barry": {
+        "main": 32,
+        "dnf": 15,
+        "sprint": 0
+      }
     }
   },
   {
@@ -1086,6 +1240,63 @@ const ROUNDS = [
       "Luca": 11,
       "Josh": 11,
       "Barry": 10
+    },
+    "breakdown": {
+      "Tara": {
+        "main": 20,
+        "dnf": 0,
+        "sprint": 0
+      },
+      "Antonio": {
+        "main": 17,
+        "dnf": 0,
+        "sprint": 0
+      },
+      "Rino": {
+        "main": 16,
+        "dnf": 0,
+        "sprint": 0
+      },
+      "Alex": {
+        "main": 15,
+        "dnf": 0,
+        "sprint": 0
+      },
+      "Luca": {
+        "main": 11,
+        "dnf": 0,
+        "sprint": 0
+      },
+      "Dean": {
+        "main": 17,
+        "dnf": 0,
+        "sprint": 0
+      },
+      "Josh": {
+        "main": 11,
+        "dnf": 0,
+        "sprint": 0
+      },
+      "Veljko": {
+        "main": 13,
+        "dnf": 0,
+        "sprint": 0
+      },
+      "Barry": {
+        "main": 10,
+        "dnf": 0,
+        "sprint": 0
+      },
+      "Jake": {
+        "main": 18,
+        "dnf": 0,
+        "sprint": 0
+      },
+      "Riki": {
+        "main": 28,
+        "dnf": 0,
+        "sprint": 0
+      }
     }
   }
 ];
@@ -3159,6 +3370,15 @@ function renderLeaderboard() {
    RACE RESULTS
    Shows top 3 scores on the card; "show all" expands the rest.
    ═══════════════════════════════════════════════════════════ */
+
+function renderBreakdown(bd, total) {
+  const parts = [];
+  if (bd.main)   parts.push(`<span class="br-main">${bd.main}</span>`);
+  if (bd.dnf)    parts.push(`<span class="br-dnf">${bd.dnf}</span>`);
+  if (bd.sprint) parts.push(`<span class="br-spr">${bd.sprint}</span>`);
+  if (parts.length <= 1) return '';
+  return parts.join(' <span class="br-op">+</span> ');
+}
 function renderRaces() {
   const grid = $('rounds-grid');
 
@@ -3172,10 +3392,22 @@ function renderRaces() {
     const rankClass = ['r1','r2','r3'];
 
     const scoreRows = allScores.map(([name, pts], i) => {
+      const hasBreakdown = r.breakdown && r.breakdown[name];
+      const bd = hasBreakdown ? r.breakdown[name] : null;
+      const isMulti = hasBreakdown && (
+        (bd.main && bd.dnf) || (bd.main && bd.sprint) ||
+        (bd.dnf && bd.sprint) || (bd.main && bd.dnf && bd.sprint)
+      );
+
+      // Show inline formula when multi-component, plain number otherwise
+      const scoreHtml = isMulti
+        ? `<span class="round-score-breakdown">${renderBreakdown(bd, pts)} <span class="br-op">=</span> <span class="br-total">${pts}</span></span>`
+        : `<span class="round-score-pts">${pts}</span>`;
+
       return `<div class="round-score-item">
         <span class="round-score-rank ${rankClass[i] || ''}">${i + 1}</span>
         <span class="round-score-name">${name}</span>
-        <span class="round-score-pts">${pts}</span>
+        ${scoreHtml}
       </div>`;
     }).join('');
 
@@ -3187,6 +3419,11 @@ function renderRaces() {
         <div class="round-num">R${r.round}</div>
       </div>
       <div class="round-body">
+        <div class="score-breakdown-legend">
+          <span><span class="legend-dot" style="background:var(--text)"></span>Main</span>
+          <span><span class="legend-dot" style="background:#4ade80"></span>DNF</span>
+          <span><span class="legend-dot" style="background:#7c3aed"></span>Sprint</span>
+        </div>
         <div class="round-scores">
           ${scoreRows}
           ${toggleBtn}

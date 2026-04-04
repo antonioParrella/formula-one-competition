@@ -120,31 +120,50 @@ class SiteBuilder:
         return result
 
     def _build_rounds(self, scored_data: list[dict]) -> list[dict]:
-        """ROUNDS array for the HTML — includes main race + sprint scores."""
+        """ROUNDS array for the HTML — includes score breakdown."""
         rounds = []
         for data in scored_data:
-            # Start with main race scores
-            round_scores = dict(data.get("scores", {}))
+            # Main race scores (includes DNF points — they're part of player_tips score)
+            # Extract per-player DNF scores from player_tips
+            dnf_scores = {}
+            for pt in data.get("player_tips", []):
+                dnf_pts = sum(d.get("points", 0) for d in pt.get("dnf_picks", []))
+                if dnf_pts > 0:
+                    dnf_scores[pt["player"]] = dnf_pts
 
-            # Add sprint scores if present
+            # Sprint scores
+            sprint_scores = {}
             sprint_tips = data.get("sprint_tips") or []
             for st in sprint_tips:
-                player = st["player"]
-                sprint_score = st.get("score", 0)
-                round_scores[player] = round_scores.get(player, 0) + sprint_score
+                sprint_scores[st["player"]] = st.get("score", 0)
+
+            # Combined scores for sorting
+            race_scores = dict(data.get("scores", {}))
+            total_scores = dict(race_scores)
+            for player, s_pt in sprint_scores.items():
+                total_scores[player] = total_scores.get(player, 0) + s_pt
+
+            # Per-player breakdown as structured data
+            breakdown = {}
+            for player in total_scores:
+                main = race_scores.get(player, 0) - dnf_scores.get(player, 0)
+                dnf = dnf_scores.get(player, 0)
+                spr = sprint_scores.get(player, 0)
+                breakdown[player] = {"main": main, "dnf": dnf, "sprint": spr}
 
             scores_sorted = dict(
-                sorted(round_scores.items(), key=lambda x: x[1], reverse=True)
+                sorted(total_scores.items(), key=lambda x: x[1], reverse=True)
             )
 
             rounds.append({
-                "round":  data["round"],
-                "name":   data["race_name"],
-                "date":   "—",
-                "winner": "—",
-                "pole":   "—",
-                "fastest": "—",
-                "scores": scores_sorted,
+                "round":     data["round"],
+                "name":      data["race_name"],
+                "date":      "—",
+                "winner":    "—",
+                "pole":      "—",
+                "fastest":   "—",
+                "scores":    scores_sorted,
+                "breakdown": breakdown,
             })
 
         return rounds
