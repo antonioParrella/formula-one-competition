@@ -650,7 +650,10 @@
       }
     }
 
-    /* Extra narrow phones (<400px): hide gap too, keep only #, Player, Pts, DNF */
+    /* DNF tracker: hide table, show cards */
+    #view-dnf .table-wrap { display: none; }
+
+    /* Extra narrow phones (<360px): hide gap too, keep only #, Player, Pts, DNF */
     @media (max-width: 360px) {
       #view-leaderboard thead th:nth-child(4),
       #view-leaderboard tbody td:nth-child(4) {
@@ -675,6 +678,24 @@
       color: var(--muted);
       margin-bottom: 8px;
     }
+
+    /* DNF card specific styling */
+    .dnf-card-drivers {
+      flex: 1;
+      margin-left: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .dnf-card-driver {
+      font-family: var(--font-display);
+      font-size: 12px;
+      font-weight: 500;
+      padding: 2px 6px;
+      border-radius: 3px;
+    }
+    .dnf-card-driver.hit { color: #4ade80; }
+    .dnf-card-driver.miss { color: var(--dim); }
   </style>
   </style>
 </head>
@@ -839,6 +860,7 @@
         <tbody id="dnf-tips-body"></tbody>
       </table>
     </div>
+    <div class="tips-cards" id="dnf-tips-cards"></div>
   </div>
 
 </main>
@@ -3572,6 +3594,59 @@ function showDnfRound(round) {
     </tr>`
   ).join('');
   body.innerHTML += noPickRows;
+
+  // Mobile card view — sorted by score desc
+  $('dnf-tips-cards').innerHTML = renderDnfCards(rnd);
+}
+
+function renderDnfCards(rnd) {
+  const sorted = [...rnd.tips].sort((a, b) => b.score - a.score);
+  const tippedPlayers = rnd.tips.map(t => t.player);
+  const noPickPlayers = PLAYERS.filter(p => !tippedPlayers.includes(p));
+
+  const cards = sorted.map(t => {
+    const budgetUsed = dnfBudgetUsed(t.player);
+    const remaining = DNF_BUDGET - budgetUsed;
+    const picksHtml = t.picks.map(d => {
+      const hit = rnd.actualDnfs.includes(d);
+      return `<span class="dnf-card-driver ${hit ? 'hit' : 'miss'}">${d}${hit ? ' ✓' : ''}</span>`;
+    }).join('');
+    return `<div class="tips-card dnf-card">
+      <div class="tips-card-header">
+        <span class="tips-card-player">${t.player}</span>
+        <span class="tips-card-score">${t.score}</span>
+      </div>
+      <div class="tips-card-body">
+        <div class="tips-card-row">
+          <span class="tips-card-pos" style="color:var(--muted)">Picks</span>
+          <div class="dnf-card-drivers">${picksHtml}</div>
+        </div>
+        <div class="tips-card-row">
+          <span class="tips-card-pos" style="color:var(--muted)">Used</span>
+          <span class="tips-card-pts">${budgetUsed}/${DNF_BUDGET} · ${remaining} left</span>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  const noPickCards = noPickPlayers.map(p => {
+    const budgetUsed = dnfBudgetUsed(p);
+    const remaining = DNF_BUDGET - budgetUsed;
+    return `<div class="tips-card dnf-card">
+      <div class="tips-card-header">
+        <span class="tips-card-player" style="color:var(--dim)">${p}</span>
+        <span class="tips-card-score" style="color:var(--dim)">—</span>
+      </div>
+      <div class="tips-card-body">
+        <div class="tips-card-row">
+          <span style="color:var(--dim)">No pick this round</span>
+          <span class="tips-card-pts" style="color:var(--muted)">${budgetUsed}/${DNF_BUDGET} used</span>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  return cards + noPickCards;
 }
 
 function renderDnfTips() {
