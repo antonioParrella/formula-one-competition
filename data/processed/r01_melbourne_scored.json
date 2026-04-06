@@ -9,7 +9,7 @@
     "Jake": 19,
     "Alex": 21,
     "Dean": 28,
-    "Josh": 16,
+    "Josh": 31,
     "Barry": 7,
     "Rino": 23,
     "Antonio": 11
@@ -553,7 +553,7 @@
       "player": "Josh",
       "response_id": 4,
       "submitted_at": "2026-03-04T15:48:02",
-      "score": 16,
+      "score": 31,
       "penalty": 0,
       "picks": [
         {
@@ -622,6 +622,11 @@
           "driver": "Stroll",
           "dnfd": false,
           "points": 0
+        },
+        {
+          "driver": "Alonso",
+          "dnfd": true,
+          "points": 15
         }
       ]
     },

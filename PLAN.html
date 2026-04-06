@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>Plan&colon; &quot;Other Picks&quot; &mdash; Binary&sol;Contrarian Picks</title>
+            <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only],
+.vscode-high-contrast:not(.vscode-high-contrast-light) img[src$=\#gh-light-mode-only],
+.vscode-high-contrast-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+            
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+<style>
+:root {
+  --color-note: #0969da;
+  --color-tip: #1a7f37;
+  --color-warning: #9a6700;
+  --color-severe: #bc4c00;
+  --color-caution: #d1242f;
+  --color-important: #8250df;
+}
+
+</style>
+<style>
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-note: #2f81f7;
+    --color-tip: #3fb950;
+    --color-warning: #d29922;
+    --color-severe: #db6d28;
+    --color-caution: #f85149;
+    --color-important: #a371f7;
+  }
+}
+
+</style>
+<style>
+.markdown-alert {
+  padding: 0.5rem 1rem;
+  margin-bottom: 16px;
+  color: inherit;
+  border-left: .25em solid #888;
+}
+
+.markdown-alert>:first-child {
+  margin-top: 0
+}
+
+.markdown-alert>:last-child {
+  margin-bottom: 0
+}
+
+.markdown-alert .markdown-alert-title {
+  display: flex;
+  font-weight: 500;
+  align-items: center;
+  line-height: 1
+}
+
+.markdown-alert .markdown-alert-title .octicon {
+  margin-right: 0.5rem;
+  display: inline-block;
+  overflow: visible !important;
+  vertical-align: text-bottom;
+  fill: currentColor;
+}
+
+.markdown-alert.markdown-alert-note {
+  border-left-color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-note .markdown-alert-title {
+  color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-important {
+  border-left-color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-important .markdown-alert-title {
+  color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-warning {
+  border-left-color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-warning .markdown-alert-title {
+  color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-tip {
+  border-left-color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-tip .markdown-alert-title {
+  color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-caution {
+  border-left-color: var(--color-caution);
+}
+
+.markdown-alert.markdown-alert-caution .markdown-alert-title {
+  color: var(--color-caution);
+}
+
+</style>
+        
+        </head>
+        <body class="vscode-body vscode-light">
+            <h1 id="plan-other-picks--binarycontrarian-picks">Plan: &quot;Other Picks&quot; — Binary/Contrarian Picks</h1>
+<h2 id="context">Context</h2>
+<p>Add a new category of picks alongside Main Race, Sprint, and DNFs. These are binary choices (e.g. &quot;who finishes higher: NOR or LEC?&quot; or &quot;over/under 2.5 safety cars&quot;) where points are weighted by how uncommon the correct answer was — getting the minority pick right scores more. Not every race will have these.</p>
+<hr>
+<h2 id="1-backend-design">1. Backend Design</h2>
+<h3 id="1a-surveymars-question-structure">1a. SurveyMars Question Structure</h3>
+<p><strong>Option A: Dedicated question indices (Recommended)</strong></p>
+<p>Reserve question index range <code>70001</code>–<code>70010</code> for binary picks:</p>
+<ul>
+<li><code>70001</code>, <code>70002</code> = option columns (e.g. <code>NOR</code> for pick, <code>LEC</code> for alternative, or <code>OVER</code>/<code>UNDER</code>)</li>
+<li><code>70001</code> = the player's selection</li>
+</ul>
+<p>Each binary pick is one &quot;question&quot; in SurveyMars with the player selecting one of two options.</p>
+<pre><code class="language-json"><span class="hljs-comment">// Raw tips format extension</span>
+<span class="hljs-punctuation">{</span>
+  <span class="hljs-attr">&quot;round&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">3</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;race_name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Japan&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;other_picks&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span>
+    <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;head_to_head_1&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;type&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;who_higher&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;optionA&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;NOR&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;optionB&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;LEC&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;player_picks&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span>
+        <span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;player&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Luca&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;pick&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;NOR&quot;</span> <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+        <span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;player&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Barry&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;pick&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;LEC&quot;</span> <span class="hljs-punctuation">}</span>
+      <span class="hljs-punctuation">]</span>
+    <span class="hljs-punctuation">}</span>
+  <span class="hljs-punctuation">]</span>
+<span class="hljs-punctuation">}</span>
+</code></pre>
+<p><strong>Pros:</strong> Each pick is a self-contained question + two options. Easy to parse.
+<strong>Cons:</strong> Requires specific survey question setup each race.</p>
+<p><strong>Option B: Single question with structured answer</strong></p>
+<p>One SurveyMars question <code>70000</code> where answers are strings like <code>NOR:HAM|OVER_2.5|UNDER_1.5</code>. Parse on our side.</p>
+<p><strong>Pros:</strong> Fewer survey questions to manage.
+<strong>Cons:</strong> Fragile parsing, manual string format, error-prone.</p>
+<p><strong>Recommendation: Option A</strong> — cleaner, more robust, better automation.</p>
+<h3 id="1b-scoring-logic">1b. Scoring Logic</h3>
+<p><strong>Crowd-weighted scoring formula:</strong></p>
+<pre><code class="language-python"><span class="hljs-keyword">def</span> <span class="hljs-title function_">score_binary</span>(<span class="hljs-params">pick, correct_option, all_picks_for_this_question</span>):
+    <span class="hljs-comment"># What fraction of players picked the CORRECT option</span>
+    correct_fraction = <span class="hljs-built_in">sum</span>(<span class="hljs-number">1</span> <span class="hljs-keyword">for</span> p <span class="hljs-keyword">in</span> all_picks <span class="hljs-keyword">if</span> p[<span class="hljs-string">&quot;pick&quot;</span>] == correct_option) / <span class="hljs-built_in">len</span>(all_picks)
+
+    <span class="hljs-keyword">if</span> pick != correct_option:
+        <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>  <span class="hljs-comment"># Wrong = 0</span>
+
+    <span class="hljs-comment"># Contrarian multiplier: the rarer the correct pick, the more it&#x27;s worth</span>
+    <span class="hljs-comment"># If 90% got it right → each gets 1pt</span>
+    <span class="hljs-comment"># If 10% got it right → each gets 9pts</span>
+    <span class="hljs-comment"># If 50/50 → each gets 2pts</span>
+    <span class="hljs-comment"># Formula: 1 / correct_fraction (capped at a max)</span>
+    base_points = <span class="hljs-number">1</span> / correct_fraction
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">min</span>(base_points, <span class="hljs-number">10</span>)  <span class="hljs-comment"># Cap at 10 to prevent runaway scores</span>
+</code></pre>
+<p><strong>Example:</strong> 10 players, question is &quot;who finishes higher: NOR or ALB?&quot;</p>
+<ul>
+<li>8 players pick NOR, 2 players pick ALB</li>
+<li>ALB actually finishes higher</li>
+<li>The 2 who picked ALB each get <code>1 / 0.2 = 5 points</code></li>
+<li>The 8 who picked NOR get 0</li>
+</ul>
+<p><strong>Total points for a round = sum of all <code>other_picks</code> scores for that player.</strong></p>
+<h3 id="1c-data-flow">1c. Data Flow</h3>
+<pre><code>SurveyMars API (question 70001-70010)
+    ↓
+TipsParser: detect &quot;other_picks&quot; question indices
+    ↓  save to data/raw/tips/r{round}_{slug}_tips.json (extend existing file)
+    ↓
+Score round: read correct answers from results (or override file)
+    ↓  calculate crowd-weighted scores
+    ↓
+Extend scored file format:
+    data/processed/r{round}_{slug}_scored.json
+    → add &quot;other_picks&quot; section with per-player scores + breakdown
+
+Extend standings:
+    → &quot;other_picks&quot; becomes part of total race score
+
+Extend build_site.py:
+    → _build_other_tips() → OTHER_TIPS JS array
+</code></pre>
+<h3 id="1d-providing-correct-answers">1d. Providing Correct Answers</h3>
+<p>Since these can't be auto-resolved from OpenF1 (they're arbitrary questions), correct answers come from <strong>the override file</strong>:</p>
+<pre><code class="language-json"><span class="hljs-comment">// data/overrides/r03_japan_overrides.json</span>
+<span class="hljs-punctuation">{</span>
+  <span class="hljs-attr">&quot;round&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">3</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;note&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Japan GP other picks results&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;other_picks_results&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span>
+    <span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;head_to_head_1&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;correct&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;LEC&quot;</span> <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;over_under_1&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;correct&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;OVER&quot;</span> <span class="hljs-punctuation">}</span>
+  <span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;overrides&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span> ... <span class="hljs-punctuation">]</span>
+<span class="hljs-punctuation">}</span>
+</code></pre>
+<p>This keeps it manual but <strong>very fast</strong> — just one JSON edit after the race, and the rest of the pipeline auto-scores.</p>
+<h3 id="1e-sprintweekend-variability">1e. Sprint/Weekend Variability</h3>
+<p>Not every weekend will have other picks. <code>TipsParser._has_other_picks()</code> checks for question index <code>70001</code> presence. If absent, the section is simply omitted from that round's data.</p>
+<hr>
+<h2 id="2-new-data-structures">2. New Data Structures</h2>
+<h3 id="raw-tips-extension-in-existing-tips-json">Raw Tips Extension (in existing tips JSON)</h3>
+<pre><code class="language-json"><span class="hljs-attr">&quot;other_picks&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span>
+  <span class="hljs-punctuation">{</span>
+    <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;h2h_1&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;type&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;who_higher&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;optionA&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;NOR&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;optionB&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;LEC&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;player_picks&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span>
+      <span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;player&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Luca&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;pick&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;NOR&quot;</span> <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+      ...
+    <span class="hljs-punctuation">]</span>
+  <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">]</span>
+</code></pre>
+<h3 id="processed-scored-extension">Processed Scored Extension</h3>
+<pre><code class="language-json"><span class="hljs-attr">&quot;other_picks&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span>
+  <span class="hljs-punctuation">{</span>
+    <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;h2h_1&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;optionA&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;NOR&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;optionB&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;LEC&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;correct&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;LEC&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;player_scores&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span>
+      <span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;player&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Luca&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;pick&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;NOR&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;correct&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-keyword">false</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;points&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">0</span> <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-punctuation">{</span> <span class="hljs-attr">&quot;player&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Barry&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;pick&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;LEC&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;correct&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-keyword">true</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;points&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">5</span> <span class="hljs-punctuation">}</span>
+    <span class="hljs-punctuation">]</span>
+  <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">]</span>
+</code></pre>
+<h3 id="javascript-other_tips-array">JavaScript OTHER_TIPS Array</h3>
+<pre><code class="language-js">{
+  <span class="hljs-attr">round</span>: <span class="hljs-number">3</span>,
+  <span class="hljs-attr">raceName</span>: <span class="hljs-string">&quot;Japan&quot;</span>,
+  <span class="hljs-attr">picks</span>: [
+    {
+      <span class="hljs-attr">id</span>: <span class="hljs-string">&quot;h2h_1&quot;</span>,
+      <span class="hljs-attr">type</span>: <span class="hljs-string">&quot;who_higher&quot;</span>,
+      <span class="hljs-attr">optionA</span>: <span class="hljs-string">&quot;NOR&quot;</span>,
+      <span class="hljs-attr">optionB</span>: <span class="hljs-string">&quot;LEC&quot;</span>,
+      <span class="hljs-attr">correct</span>: <span class="hljs-string">&quot;LEC&quot;</span>,
+      <span class="hljs-attr">results</span>: [
+        { <span class="hljs-attr">player</span>: <span class="hljs-string">&quot;Luca&quot;</span>, <span class="hljs-attr">pick</span>: <span class="hljs-string">&quot;NOR&quot;</span>, <span class="hljs-attr">correct</span>: <span class="hljs-literal">false</span>, <span class="hljs-attr">points</span>: <span class="hljs-number">0</span> },
+        { <span class="hljs-attr">player</span>: <span class="hljs-string">&quot;Barry&quot;</span>, <span class="hljs-attr">pick</span>: <span class="hljs-string">&quot;LEC&quot;</span>, <span class="hljs-attr">correct</span>: <span class="hljs-literal">true</span>, <span class="hljs-attr">points</span>: <span class="hljs-number">5</span> }
+      ]
+    }
+  ]
+}
+</code></pre>
+<hr>
+<h2 id="3-frontend--ui-design">3. Frontend / UI Design</h2>
+<h3 id="challenge-mobile-tabs-are-already-cramped">Challenge: Mobile tabs are already cramped</h3>
+<p><strong>Current tabs:</strong> Main Race | Sprint | DNFs | ???</p>
+<p><strong>Option A: Dropdown selector instead of tab bar</strong> (Recommended)</p>
+<p>Replace the sub-tab bar with a dropdown/segmented control that doesn't scale horizontally:</p>
+<pre><code>┌──────────────────────────┐
+│ ▼ Main Race              │  ← single dropdown
+│   Sprint                 │
+│   DNFs                   │
+│   Other Picks            │
+└──────────────────────────┘
+</code></pre>
+<p>On desktop: keep tabs. On mobile: replace with dropdown. This removes horizontal scaling entirely.</p>
+<p><strong>Option B: Overflow scroll on mobile</strong></p>
+<p>Keep tabs but make them horizontally scrollable with snap:</p>
+<pre><code>← swipe → [Main Race] [Sprint] [DNFs] [Other]
+</code></pre>
+<p><strong>Pros:</strong> Minimal HTML/CSS change.
+<strong>Cons:</strong> Still feels cramped on small screens, hidden options require swipe.</p>
+<p><strong>Option C: Merge &quot;Other&quot; into an existing tab</strong></p>
+<p>Put Other Picks inside the DNF tab as a second section below the DNF table (since both are &quot;special&quot; picks that don't happen every week).</p>
+<p><strong>Pros:</strong> No new tab needed.
+<strong>Cons:</strong> Merges conceptually different things.</p>
+<p><strong>Recommendation: Option A with dropdown</strong> — cleanest on mobile, tabs stay on desktop.</p>
+<h3 id="cool-ui-for-other-picks">Cool UI for Other Picks</h3>
+<p><strong>Design: &quot;Split vote&quot; visualization</strong></p>
+<p>For each binary question, show:</p>
+<pre><code>┌─────────────────────────────────────────┐
+│ Who finishes higher?  NOR vs LEC        │
+│ Winner: LEC ✓                           │
+│                                         │
+│ ━━━━━━━━━━░░░░░░░░                     │
+│ NOR 80%     LEC 20%                      │
+│ (8 players) (2 players)                  │
+│   → 0 pts      → 5 pts each              │
+│                                         │
+│ Players who got it right: Barry, Luca    │
+└─────────────────────────────────────────┘
+</code></pre>
+<p>Visual elements:</p>
+<ul>
+<li><strong>Split bar</strong>: A horizontal bar divided proportionally — shows the crowd distribution at a glance. Option A colored one way, Option B another. The correct side gets a checkmark.</li>
+<li><strong>Point multiplier badge</strong>: Shows the contrarian multiplier (e.g. &quot;×5&quot;)</li>
+<li><strong>Player list</strong>: Who picked what, color-coded (green = correct, red = wrong)</li>
+</ul>
+<p><strong>Chart.js integration (optional):</strong>
+If you want to go further, add an &quot;Other Picks&quot; chart tab showing cumulative other-picks points per player over the season — reuse the existing chart infrastructure.</p>
+<h3 id="desktop-view">Desktop View</h3>
+<pre><code>Question                    │ Option A │ Option B │ Players who got it right
+────────────────────────────┼──────────┼──────────┼──────────────────────────
+Who finishes higher?        │ 80% ❌    │ 20% ✓    │ Barry, Luca
+  NOR vs LEC                │ 0 pts     │ 5 pts    │
+
+Over/under 2.5 safety cars  │ 40% ✓     │ 60% ❌    │ Antonio, Sarah
+  Over vs Under             │ 2.5 pts   │ 0 pts    │
+</code></pre>
+<hr>
+<h2 id="4-files-to-modify">4. Files to Modify</h2>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Change</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tips_parser.py</code></td>
+<td>Add <code>_has_other_picks()</code>, parse question indices 70001–70010</td>
+</tr>
+<tr>
+<td><code>score_round.py</code></td>
+<td>Add <code>_score_other_picks()</code> with crowd-weighted logic, merge into totals</td>
+</tr>
+<tr>
+<td><code>aggregate.py</code></td>
+<td>Include other_picks scores in standings</td>
+</tr>
+<tr>
+<td><code>build_site.py</code></td>
+<td>Add <code>_build_other_tips()</code>, inject <code>OTHER_TIPS</code> into HTML</td>
+</tr>
+<tr>
+<td><code>docs/index.html</code></td>
+<td>New sub-tab/dropdown, render function for Other Picks, split bar CSS</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="5-implementation-phases">5. Implementation Phases</h2>
+<p><strong>Phase 1: Data foundation</strong></p>
+<ul>
+<li>Extend raw tips format in <code>TipsParser</code> to detect and save other_picks</li>
+<li>Manual override file format for providing correct answers</li>
+<li>Test: parse a mock other_picks survey, verify raw JSON</li>
+</ul>
+<p><strong>Phase 2: Scoring</strong></p>
+<ul>
+<li>Crowd-weighted scoring logic in scorer</li>
+<li>Merge into existing scored files and standings</li>
+<li>Test: verify scoring math with known inputs</li>
+</ul>
+<p><strong>Phase 3: Website build</strong></p>
+<ul>
+<li><code>_build_other_tips()</code> in <code>build_site.py</code></li>
+<li>Inject <code>OTHER_TIPS</code> data</li>
+</ul>
+<p><strong>Phase 4: Frontend UI</strong></p>
+<ul>
+<li>Mobile dropdown selector (replace cramped tab bar)</li>
+<li>Split bar visualization for crowd distribution</li>
+<li>Per-player result display on desktop and mobile</li>
+</ul>
+<hr>
+<h2 id="6-open-questions">6. Open Questions</h2>
+<ol>
+<li><strong>Do you want the dropdown UI on mobile even on desktop?</strong> (I recommend keeping tabs on desktop, dropdown only on mobile)</li>
+<li><strong>Should there be a max cap on contrarian points?</strong> (Proposed: 10x max to prevent one question from dominating)</li>
+<li><strong>Do you want cumulative &quot;Other Picks&quot; in the points chart?</strong> Or a separate chart?</li>
+<li><strong>What binary pick types do you envision for the first race?</strong> (head-to-head, over/under, or others?)</li>
+<li><strong>Should incorrect picks lose points or just score 0?</strong> (Proposed: 0, not negative)</li>
+</ol>
+
+            
+            
+        </body>
+        </html>

@@ -442,4 +442,9 @@ Steps:
 | DNF budget tracked as running total across rounds | 5 picks per season, allocatable to any race in any quantity |
 
 ## To Do
-- In the tips section on mobile I want the tables to show how many points each driver selection get them.
+### Other picks 
+We want to set up a way of of having changing binary picks i.e. who will finish higher driver x or driver y or an under over on a certain  statistic. The way we want this to work is the points are distributed based on how common the answer was i.e. getting an answer correct that very few people selected should be worth more. Also we want a cool way of showing what people picked and how the points were distributed on the UI. Key considerations:
+- Ideally we want to keep this as automated as possible and are happy to constrain the score if this means better automation.
+- Currently, the tabs on the mobile version are too wide so adding an extra one will be difficult.
+- This may or may not be every week.
+Go through options of how to deal with both the front end and backend challenges present here.

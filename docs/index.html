@@ -554,9 +554,9 @@
       text-align: right;
     }
 
-    .tips-card-row.exact  { color: #4ade80; }
-    .tips-card-row.close  { color: #fbbf24; }
-    .tips-card-row.top10  { color: #38bdf8; }
+    .tips-card-row.exact  { color: #FF00FF; }
+    .tips-card-row.close  { color: #00FF00; }
+    .tips-card-row.top10  { color: #FFFF00; }
     .tips-card-row.miss   { color: var(--dim); }
 
     /* Show cards / hide table on mobile */
@@ -927,7 +927,7 @@
 */
 
 // DATA_START
-const PLAYERS = ["Dean", "Jake", "Tara", "Antonio", "Barry", "Veljko", "Riki", "Rino", "Luca", "Josh", "Alex"];
+const PLAYERS = ["Dean", "Jake", "Tara", "Josh", "Antonio", "Barry", "Veljko", "Riki", "Rino", "Luca", "Alex"];
 
 const STANDINGS = [
   {
@@ -964,6 +964,18 @@ const STANDINGS = [
       7,
       41,
       20
+    ]
+  },
+  {
+    "name": "Josh",
+    "points": 67,
+    "lastRace": 11,
+    "bestRound": 31,
+    "games_played": 3,
+    "roundScores": [
+      31,
+      25,
+      11
     ]
   },
   {
@@ -1039,18 +1051,6 @@ const STANDINGS = [
     ]
   },
   {
-    "name": "Josh",
-    "points": 52,
-    "lastRace": 11,
-    "bestRound": 20,
-    "games_played": 3,
-    "roundScores": [
-      16,
-      25,
-      11
-    ]
-  },
-  {
     "name": "Alex",
     "points": 50,
     "lastRace": 15,
@@ -1073,12 +1073,12 @@ const ROUNDS = [
     "pole": "\u2014",
     "fastest": "\u2014",
     "scores": {
+      "Josh": 31,
       "Luca": 28,
       "Dean": 28,
       "Rino": 23,
       "Alex": 21,
       "Jake": 19,
-      "Josh": 16,
       "Veljko": 11,
       "Antonio": 11,
       "Riki": 8,
@@ -1123,7 +1123,7 @@ const ROUNDS = [
       },
       "Josh": {
         "main": 16,
-        "dnf": 0,
+        "dnf": 15,
         "sprint": 0
       },
       "Barry": {
@@ -1642,7 +1642,7 @@ const MAIN_TIPS = [
       },
       {
         "player": "Josh",
-        "score": 16,
+        "score": 31,
         "picks": [
           {
             "driver": "Verstappen",
@@ -3178,10 +3178,11 @@ const DNF_TIPS = [
       {
         "player": "Josh",
         "picks": [
-          "Stroll"
+          "Stroll",
+          "Alonso"
         ],
-        "picksUsed": 1,
-        "score": 0
+        "picksUsed": 2,
+        "score": 15
       },
       {
         "player": "Barry",

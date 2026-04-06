@@ -208,7 +208,7 @@ class Scorer:
                 })
                 continue
 
-            surname = self.DRIVER_MAP.get(code, code)
+            surname = DRIVER_MAP.get(code, code)
             actual_idx = position_map.get(code)
 
             if actual_idx is None:
@@ -258,7 +258,7 @@ class Scorer:
             for idx, code in enumerate(sprint_picks):
                 if not code:
                     continue
-                surname = self.DRIVER_MAP.get(code, code)
+                surname = DRIVER_MAP.get(code, code)
                 if position_map.get(code) == idx:
                     picks.append({
                         "driver": surname,
@@ -288,7 +288,7 @@ class Scorer:
         picks = []
         total = 0
         for code in submission.get("dnf_picks") or []:
-            surname = self.DRIVER_MAP.get(code, code)
+            surname = DRIVER_MAP.get(code, code)
             dnfd = code in dnf_set
             points = self.POINTS_DNF if dnfd else 0
             total += points

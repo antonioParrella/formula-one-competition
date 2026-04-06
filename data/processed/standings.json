@@ -67,8 +67,30 @@
       }
     },
     {
-      "name": "Antonio",
+      "name": "Josh",
       "rank": 4,
+      "games_played": 3,
+      "points": 67,
+      "lastRace": 11,
+      "bestRound": 31,
+      "roundScores": {
+        "1": {
+          "race": "Melbourne",
+          "points": 31
+        },
+        "2": {
+          "race": "China",
+          "points": 25
+        },
+        "3": {
+          "race": "Japan",
+          "points": 11
+        }
+      }
+    },
+    {
+      "name": "Antonio",
+      "rank": 5,
       "games_played": 3,
       "points": 65,
       "lastRace": 17,
@@ -90,7 +112,7 @@
     },
     {
       "name": "Barry",
-      "rank": 5,
+      "rank": 6,
       "games_played": 3,
       "points": 64,
       "lastRace": 10,
@@ -112,7 +134,7 @@
     },
     {
       "name": "Veljko",
-      "rank": 6,
+      "rank": 7,
       "games_played": 3,
       "points": 62,
       "lastRace": 13,
@@ -134,7 +156,7 @@
     },
     {
       "name": "Riki",
-      "rank": 7,
+      "rank": 8,
       "games_played": 3,
       "points": 57,
       "lastRace": 28,
@@ -156,7 +178,7 @@
     },
     {
       "name": "Rino",
-      "rank": 8,
+      "rank": 9,
       "games_played": 3,
       "points": 56,
       "lastRace": 16,
@@ -178,7 +200,7 @@
     },
     {
       "name": "Luca",
-      "rank": 9,
+      "rank": 10,
       "games_played": 3,
       "points": 53,
       "lastRace": 11,
@@ -191,28 +213,6 @@
         "2": {
           "race": "China",
           "points": 14
-        },
-        "3": {
-          "race": "Japan",
-          "points": 11
-        }
-      }
-    },
-    {
-      "name": "Josh",
-      "rank": 10,
-      "games_played": 3,
-      "points": 52,
-      "lastRace": 11,
-      "bestRound": 20,
-      "roundScores": {
-        "1": {
-          "race": "Melbourne",
-          "points": 16
-        },
-        "2": {
-          "race": "China",
-          "points": 25
         },
         "3": {
           "race": "Japan",
