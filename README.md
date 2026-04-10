@@ -86,7 +86,19 @@ SURVEYMARS_SECRET=your_secret_here
 
 You can find these in your SurveyMars account settings under API credentials.
 
-### 2. GitHub Pages (optional)
+### 2. Survey Link
+
+The survey link displayed on the website is stored in `docs/survey_config.json`. Edit this file to update the link:
+
+```json
+{
+  "surveyUrl": "https://surveymars.com/q/your-survey-id"
+}
+```
+
+Get the link from your SurveyMars survey URL or share link.
+
+### 3. GitHub Pages (optional)
 
 To publish the website automatically:
 
