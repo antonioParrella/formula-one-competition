@@ -71,13 +71,32 @@
     }
 
     /* ── Tab nav ── */
-    nav {
-      display: flex;
-      gap: 0;
-      padding: 0 32px;
-      background: var(--surface);
-      border-bottom: 1px solid var(--border);
-    }
+nav {
+    display: flex;
+    gap: 0;
+    padding: 0 32px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto; /* allow scroll when tabs overflow */
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* hide scrollbar on Firefox */
+    position: relative; /* for pseudo-element hint */
+  }
+
+  /* Hide scrollbar on WebKit browsers */
+  nav::-webkit-scrollbar { display: none; }
+
+  /* Subtle scroll hint on the right edge */
+  nav::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 40px;
+    height: 100%;
+    pointer-events: none;
+    background: linear-gradient(to right, rgba(0,0,0,0), var(--surface));
+  }
 
     .tab {
       font-family: var(--font-display);
@@ -94,6 +113,8 @@
       transition: color 0.15s, border-color 0.15s;
       position: relative;
       top: 1px;
+      flex: 0 0 auto; /* keep tabs from shrinking */
+      white-space: nowrap; /* prevent wrap */
     }
 
     .tab:hover { color: var(--text); }
