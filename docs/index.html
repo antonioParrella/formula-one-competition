@@ -756,6 +756,7 @@
   <button class="tab" onclick="showTab('charts', this)">Charts</button>
   <button class="tab" onclick="showTab('tips', this)">Tips</button>
   <button class="tab" onclick="showTab('dnf', this)">DNF Tracker</button>
+  <button class="tab" onclick="showTab('survey', this)">Survey</button>
 </nav>
 
 <main>
@@ -906,6 +907,13 @@
       </table>
     </div>
     <div class="tips-cards" id="dnf-tips-cards"></div>
+  </div>
+  <div class="view" id="view-survey">
+    <div class="section-title">Survey</div>
+    <div class="section-sub">Submit your tips directly from here</div>
+    <div id="survey-container" style="width:100%; min-height:800px;">
+      <p>Loading survey…</p>
+    </div>
   </div>
 
 </main>
@@ -3316,6 +3324,7 @@ function showTab(name, el) {
   $('view-' + name).classList.add('active');
   if (name === 'charts') renderCharts();
   if (name === 'dnf') renderDnfTips();
+  if (name === 'survey') renderSurvey();
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -3901,6 +3910,30 @@ function renderDnfTips() {
   renderDnfSelector();
   if (DNF_TIPS.length > 0) showDnfRound(DNF_TIPS[DNF_TIPS.length - 1].round);
   else $('dnf-tips-body').innerHTML = `<tr><td colspan="4"><div class="empty">No DNF tips recorded yet</div></td></tr>`;
+}
+
+// Render Survey tab – loads survey_config.json and injects iframe
+function renderSurvey() {
+  // Load config (relative to site root)
+  fetch('survey_config.json')
+    .then(resp => resp.json())
+    .then(cfg => {
+      const container = $('survey-container');
+      if (!container) return;
+      // Clear any placeholder text
+      container.innerHTML = '';
+      const iframe = document.createElement('iframe');
+      iframe.src = cfg.surveyUrl;
+      iframe.style.border = '0';
+      iframe.style.width = '100%';
+      iframe.style.height = '800px';
+      container.appendChild(iframe);
+    })
+    .catch(err => {
+      const container = $('survey-container');
+      if (container) container.innerHTML = `<div class="empty">Failed to load survey configuration</div>`;
+      console.error('Failed to load survey config', err);
+    });
 }
 
 /* ═══════════════════════════════════════════════════════════
