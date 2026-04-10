@@ -1,6 +1,8 @@
 from urllib.request import urlopen
+from urllib.error import URLError
 import pandas as pd
 import json
+import time
 
 
 class ResultAggregator:
@@ -12,7 +14,6 @@ class ResultAggregator:
         self.race_calendar = self._build_race_calendar()
         self.meeting_key, self.race_session_key, self.sprint_session_key = self._find_meeting_keys()
         self.race_results = self._fetch("session_result", session_key=self.race_session_key)
-        self.drivers = self._fetch("drivers", )
         if self.sprint_session_key is None:
             self.championship_standings = self._fetch("championship_drivers", session_key=self.race_session_key)
             self.drivers = self._fetch("drivers", session_key=self.race_session_key)
@@ -26,9 +27,22 @@ class ResultAggregator:
         query = "&".join(f"{k}={v}" for k, v in params.items())
         url = f"{self.BASE_URL}/{endpoint}?{query}"
         print(f"Fetching data from: {url}")
-        response = urlopen(url)
-        data = json.loads(response.read().decode("utf-8"))
-        return pd.DataFrame(data)
+        
+        max_retries = 5
+        retry_delay = 2
+        for attempt in range(max_retries):
+            try:
+                response = urlopen(url, timeout=30)
+                data = json.loads(response.read().decode("utf-8"))
+                return pd.DataFrame(data)
+            except (URLError, OSError) as e:
+                print(f"Attempt {attempt + 1}/{max_retries} failed: {e}")
+                if attempt < max_retries - 1:
+                    print(f"Retrying in {retry_delay}s...")
+                    time.sleep(retry_delay)
+                    retry_delay *= 2
+                else:
+                    raise
     
     def _build_race_calendar(self) -> pd.DataFrame:
         sessions = self._fetch("sessions", year=self.year)
