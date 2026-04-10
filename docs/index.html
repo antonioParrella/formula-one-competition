@@ -81,22 +81,14 @@ nav {
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none; /* hide scrollbar on Firefox */
     position: relative; /* for pseudo-element hint */
+    box-shadow: inset -8px 0 8px -8px rgba(0,0,0,0.2); /* subtle overflow hint */
   }
 
   /* Hide scrollbar on WebKit browsers */
   nav::-webkit-scrollbar { display: none; }
 
   /* Subtle scroll hint on the right edge */
-  nav::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 40px;
-    height: 100%;
-    pointer-events: none;
-    background: linear-gradient(to right, rgba(0,0,0,0), var(--surface));
-  }
+  
 
     .tab {
       font-family: var(--font-display);
