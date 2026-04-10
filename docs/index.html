@@ -490,6 +490,7 @@ nav {
     .sub-tab.sprint { }
     .sub-tab.sprint.active { border-bottom-color: #7c3aed; }
     .sub-tab.dnf.active { border-bottom-color: var(--accent2); }
+    .sub-tab.charts.active { border-bottom-color: var(--accent); }
 
     .sub-view { display: none; }
     .sub-view.active { display: block; }
@@ -707,8 +708,9 @@ nav {
         display: none;
       }
 
-      /* DNF tracker: hide table, show cards */
-      #view-dnf .table-wrap { display: none; }
+      /* DNF sub-view: hide table, show cards */
+      #sub-dnf .tips-table-scroll { display: none; }
+      #sub-dnf .tips-cards { display: block; }
     }
 
     /* Extra narrow phones (<360px): hide gap too, keep only #, Player, Pts, DNF */
@@ -766,9 +768,7 @@ nav {
 <nav>
   <button class="tab active" onclick="showTab('leaderboard', this)">Leaderboard</button>
   <button class="tab" onclick="showTab('races', this)">Race Results</button>
-  <button class="tab" onclick="showTab('charts', this)">Charts</button>
   <button class="tab" onclick="showTab('tips', this)">Tips</button>
-  <button class="tab" onclick="showTab('dnf', this)">DNF Tracker</button>
   <button class="tab" onclick="showTab('survey', this)">Survey</button>
 </nav>
 
@@ -825,26 +825,30 @@ nav {
   <div class="view" id="view-races">
     <div class="section-title">Race Results</div>
     <div class="section-sub">Round by round breakdown</div>
-    <div class="rounds-grid" id="rounds-grid"></div>
-  </div>
 
-  <!-- ══════════════════════════════════════════
-       CHARTS
-  ══════════════════════════════════════════ -->
-  <div class="view" id="view-charts">
-    <div class="section-title">Charts</div>
-    <div class="section-sub">Points over the season</div>
-    <div class="chart-card">
-      <div class="chart-title">Cumulative points — all players</div>
-      <div id="chart-player-toggles" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;"></div>
-      <canvas id="chart-cumulative" height="100"></canvas>
+    <!-- Sub-tab bar -->
+    <div class="sub-tabs">
+      <button class="sub-tab active" onclick="showSubTab('results', this)">Results</button>
+      <button class="sub-tab" onclick="showSubTab('charts', this)">Charts</button>
     </div>
-    <div class="chart-card">
-      <div class="chart-title">Points per round</div>
-      <!-- Desktop: grouped bar chart -->
-      <canvas id="chart-perround" height="100"></canvas>
-      <!-- Mobile: vertically stacked per-race individual charts -->
-      <div id="perround-mobile-container"></div>
+
+    <!-- ── Results sub-view ── -->
+    <div class="sub-view active" id="sub-results">
+      <div class="rounds-grid" id="rounds-grid"></div>
+    </div>
+
+    <!-- ── Charts sub-view ── -->
+    <div class="sub-view" id="sub-charts">
+      <div class="chart-card">
+        <div class="chart-title">Cumulative points — all players</div>
+        <div id="chart-player-toggles" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;"></div>
+        <canvas id="chart-cumulative" height="100"></canvas>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Points per round</div>
+        <canvas id="chart-perround" height="100"></canvas>
+        <div id="perround-mobile-container"></div>
+      </div>
     </div>
   </div>
 
@@ -859,6 +863,7 @@ nav {
     <div class="sub-tabs">
       <button class="sub-tab active" onclick="showSubTab('main', this)">Main Race</button>
       <button class="sub-tab sprint" onclick="showSubTab('sprint', this)">Sprint</button>
+      <button class="sub-tab dnf" onclick="showSubTab('dnf', this)">DNFs</button>
     </div>
 
     <!-- ── Main race sub-view ── -->
@@ -896,30 +901,28 @@ nav {
       <div class="tips-cards" id="sprint-tips-cards"></div>
     </div>
 
-  </div>
-
-  <!-- ══════════════════════════════════════════
-       DNF TRACKER
-  ══════════════════════════════════════════ -->
-  <div class="view" id="view-dnf">
-    <div class="section-title">DNF Tracker</div>
-    <div class="section-sub">Who tipped the DNFs and how the 5-pick season budget is tracking</div>
-    <div class="dnf-budget-grid" id="dnf-budget-grid"></div>
-    <div class="tips-race-selector" id="dnf-race-selector"></div>
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>Player</th>
-            <th>Drivers tipped to DNF</th>
-            <th class="right">Picks used</th>
-            <th class="right">Round score</th>
-          </tr>
-        </thead>
-        <tbody id="dnf-tips-body"></tbody>
-      </table>
+    <!-- ── DNF sub-view ── -->
+    <div class="sub-view" id="sub-dnf">
+      <div class="dnf-budget-grid" id="dnf-budget-grid"></div>
+      <div class="tips-race-selector" id="dnf-race-selector"></div>
+      <div class="tips-table-scroll">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Player</th>
+                <th>Drivers tipped to DNF</th>
+                <th class="right">Picks used</th>
+                <th class="right">Round score</th>
+              </tr>
+            </thead>
+            <tbody id="dnf-tips-body"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="tips-cards" id="dnf-tips-cards"></div>
     </div>
-    <div class="tips-cards" id="dnf-tips-cards"></div>
+
   </div>
   <div class="view" id="view-survey">
     <div class="section-title">Survey</div>
@@ -3335,8 +3338,10 @@ function showTab(name, el) {
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
   el.classList.add('active');
   $('view-' + name).classList.add('active');
-  if (name === 'charts') renderCharts();
-  if (name === 'dnf') renderDnfTips();
+  if (name === 'races') renderCharts(); // charts are now a sub-tab under Race Results
+  if (name === 'tips') {
+    // DNF sub-tab is inside Tips, render on first Tips view load
+  }
   if (name === 'survey') renderSurvey();
 }
 
@@ -3604,13 +3609,18 @@ function togglePlayer(index, btn) {
 }
 
 /* ═══════════════════════════════════════════════════════════
-   TIPS — SUB-TAB SWITCHING
-   ═══════════════════════════════════════════════════════════ */
+   SUB-TAB SWITCHING (scoped to parent view)
+ ═══════════════════════════════════════════════════════════════════ */
 function showSubTab(name, el) {
-  document.querySelectorAll('.sub-tab').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.sub-view').forEach(v => v.classList.remove('active'));
+  // Only toggle sub-tabs and sub-views within the clicked button's parent view
+  const view = el.closest('.view');
+  view.querySelectorAll('.sub-tab').forEach(t => t.classList.remove('active'));
+  view.querySelectorAll('.sub-view').forEach(v => v.classList.remove('active'));
   el.classList.add('active');
-  $('sub-' + name).classList.add('active');
+  view.querySelector('#sub-' + name).classList.add('active');
+
+  // Render charts when charts sub-tab is clicked
+  if (name === 'charts') renderCharts();
 }
 
 /* Shared helper: renders one player's tips as a mobile card */
