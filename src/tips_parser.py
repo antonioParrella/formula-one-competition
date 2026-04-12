@@ -125,6 +125,7 @@ class TipsParser:
             print("  Sprint weekend detected via survey questions")
 
         submissions = [self._parse_response(r, is_sprint) for r in raw_responses]
+        submissions = self._deduplicate_submissions(submissions)
         self._warn_unknown_players(submissions)
 
         has_predictions = self._has_championship_predictions(raw_responses)
@@ -148,7 +149,7 @@ class TipsParser:
 
         out_path.parent.mkdir(parents=True, exist_ok=True)
         out_path.write_text(json.dumps(payload, indent=2))
-        print(f"Saved {len(submissions)} submissions → {out_path}")
+        print(f"Saved {len(submissions)} submissions -> {out_path}")
 
         self._print_preview(submissions)
         return out_path
@@ -236,7 +237,7 @@ class TipsParser:
         out_path = self.output_dir / "championship_predictions.json"
         out_path.parent.mkdir(parents=True, exist_ok=True)
         out_path.write_text(json.dumps(payload, indent=2))
-        print(f"Saved {len(payload['predictions'])} championship predictions → {out_path}")
+        print(f"Saved {len(payload['predictions'])} championship predictions -> {out_path}")
         return out_path
 
     # ─────────────────────────────────────────────────────────
@@ -357,11 +358,27 @@ class TipsParser:
         if unknown:
             print(f"WARNING: {len(unknown)} submission(s) had no player name")
 
+    def _deduplicate_submissions(self, submissions: list[dict]) -> list[dict]:
+        """Keep only the latest submission per player (by submitted_at timestamp)."""
+        latest_by_player: dict[str, dict] = {}
+        for s in submissions:
+            player = s.get("player", "Unknown")
+            existing = latest_by_player.get(player)
+            if existing is None or s.get("submitted_at", "") > existing.get("submitted_at", ""):
+                latest_by_player[player] = s
+
+        deduped = list(latest_by_player.values())
+        removed_count = len(submissions) - len(deduped)
+        if removed_count > 0:
+            print(f"  Removed {removed_count} duplicate submission(s) — kept latest")
+
+        return deduped
+
     def _print_preview(self, submissions: list[dict]) -> None:
         print(f"\n{'Player':<12} {'Main race top 3':<38} {'Sprint':<22} {'DNFs'}")
         print("─" * 85)
         for s in submissions:
-            top3   = " → ".join(str(d) for d in s["main_race"][:3])
-            sprint = " → ".join(str(d) for d in s["sprint"]) if s["sprint"] else "—"
+            top3   = " -> ".join(str(d) for d in s["main_race"][:3])
+            sprint = " -> ".join(str(d) for d in s["sprint"]) if s["sprint"] else "-"
             dnfs   = ", ".join(s["dnf_picks"]) if s["dnf_picks"] else "—"
             print(f"{s['player']:<12} {top3:<38} {sprint:<22} {dnfs}")

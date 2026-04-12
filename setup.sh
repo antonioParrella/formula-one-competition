@@ -29,7 +29,7 @@ else
 fi
 
 python -m pip install --quiet --upgrade pip
-python -m pip install -r requirements.txt
+python -m pip install -r config/requirements.txt
 
 echo ""
 echo "  Setup complete!"

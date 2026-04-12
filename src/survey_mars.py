@@ -2,12 +2,11 @@ import os
 import requests
 import uuid
 import time
+from pathlib import Path
+from dotenv import load_dotenv
 
-try:
-    from dotenv import load_dotenv
-    load_dotenv()
-except ImportError:
-    pass
+env_path = Path(__file__).parent.parent / "config" / ".env"
+load_dotenv(env_path)
 
 class SurveyMarsClient:
     def __init__(self, account_id=None, secret=None):

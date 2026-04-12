@@ -81,7 +81,7 @@ class Scorer:
         slug = race_name.lower().replace(" ", "_")
         out_path = self.output_dir / f"r{self.round_num:02d}_{slug}_scored.json"
         out_path.write_text(json.dumps(scored, indent=2))
-        print(f"Saved scored results ({self.round_num}): {race_name} → {out_path}")
+        print(f"Saved scored results ({self.round_num}): {race_name} -> {out_path}")
 
         return out_path
 

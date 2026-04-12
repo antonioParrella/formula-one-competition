@@ -1,0 +1,35 @@
+name: Score Competition
+
+on:
+  schedule:
+    - cron: "0 22 * * 6"  # Saturday 10pm UTC (after race weekend)
+  workflow_dispatch:
+
+jobs:
+  score:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          pip install -r config/requirements.txt
+
+      - name: Run pipeline
+        env:
+          SURVEYMARS_ACCOUNT_ID: ${{ secrets.SURVEYMARS_ACCOUNT_ID }}
+          SURVEYMARS_SECRET: ${{ secrets.SURVEYMARS_SECRET }}
+        run: python scripts/pipeline.py
+
+      - name: Commit and push
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add -A
+          git diff --staged --quiet || git commit -m "Update competition results"
+          git push

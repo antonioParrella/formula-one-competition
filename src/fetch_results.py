@@ -78,7 +78,7 @@ class ResultsFetcher:
         slug = self.race_name.lower().replace(" ", "_")
         out_path = self.output_dir / f"r{self.round_num:02d}_{slug}_result.json"
         out_path.write_text(json.dumps(results, indent=2))
-        print(f"Saved results ({self.round_num}): {self.race_name} → {out_path}")
+        print(f"Saved results ({self.round_num}): {self.race_name} -> {out_path}")
 
         return out_path
 

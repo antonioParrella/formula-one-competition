@@ -47,7 +47,7 @@ class Aggregator:
 
         self.output_file.parent.mkdir(parents=True, exist_ok=True)
         self.output_file.write_text(json.dumps(standings, indent=2))
-        print(f"Saved standings → {self.output_file}")
+        print(f"Saved standings -> {self.output_file}")
 
         return self.output_file
 

@@ -127,7 +127,7 @@ class SurveyIndex:
         out = Path(path)
         out.parent.mkdir(parents=True, exist_ok=True)
         out.write_text(json.dumps(self._surveys, indent=2))
-        print(f"Saved {len(self._surveys)} surveys → {out}")
+        print(f"Saved {len(self._surveys)} surveys -> {out}")
         return out
 
     def save_all_tips(self, parser) -> list[Path]:

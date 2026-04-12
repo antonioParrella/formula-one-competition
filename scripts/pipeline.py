@@ -1,6 +1,6 @@
 """
 pipeline.py
-─────────────────────────────────────────────────────────────
+────────────────────────────────────────────────────────────
 Runs the full F1 tipping competition pipeline end-to-end.
 
 Usage:
@@ -11,6 +11,8 @@ Usage:
 
 import os
 import sys
+
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
 from survey_mars import SurveyMarsClient
 from survey_index import SurveyIndex

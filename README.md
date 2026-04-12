@@ -59,7 +59,7 @@ venv\Scripts\activate
 source venv/bin/activate
 
 # 4. Install dependencies
-pip install -r requirements.txt
+pip install -r config/requirements.txt
 ```
 
 ---
@@ -70,14 +70,7 @@ pip install -r requirements.txt
 
 The pipeline fetches tips via the SurveyMars API using OAuth2. You need your account ID and secret.
 
-Create a `.env` file in the project root:
-
-```bash
-# Copy the example file
-cp .env.example .env
-```
-
-Then edit `.env` with your credentials:
+The credentials file is already in the repo at `config/.env`. Edit it with your credentials:
 
 ```
 SURVEYMARS_ACCOUNT_ID=your_account_id_here
@@ -85,6 +78,8 @@ SURVEYMARS_SECRET=your_secret_here
 ```
 
 You can find these in your SurveyMars account settings under API credentials.
+
+> **Note:** The `.env` file is in `config/` folder (not project root) so it works on both Mac and Windows.
 
 ### 2. Survey Link
 
@@ -126,7 +121,7 @@ source venv/bin/activate
 ### Full Pipeline (all rounds)
 
 ```bash
-python pipeline.py
+python scripts/pipeline.py
 ```
 
 This runs all 5 steps:
@@ -140,7 +135,7 @@ This runs all 5 steps:
 ### Single Round
 
 ```bash
-python pipeline.py --round 4
+python scripts/pipeline.py --round 4
 ```
 
 Only processes round 4. Useful for re-running a specific round after fixing a bug or updating data.
@@ -148,7 +143,7 @@ Only processes round 4. Useful for re-running a specific round after fixing a bu
 ### Tips Only
 
 ```bash
-python pipeline.py --round 5 --tip-only
+python scripts/pipeline.py --round 5 --tip-only
 ```
 
 Fetches and saves tips from SurveyMars but skips results fetching, scoring, and site building. Useful for collecting tips before the race when results aren't available yet.
@@ -157,16 +152,16 @@ This is the typical workflow during race weekend:
 
 ```bash
 # Before the race (Sunday or Monday) — just grab tips
-python pipeline.py --round 5 --tip-only
+python scripts/pipeline.py --round 5 --tip-only
 
 # After the race — get results, score, build site
-python pipeline.py --round 5
+python scripts/pipeline.py --round 5
 ```
 
 ### Force Re-fetch
 
 ```bash
-python pipeline.py --round 3 --force
+python scripts/pipeline.py --round 3 --force
 ```
 
 Re-fetches tips even if a file already exists. Useful when survey responses have changed or were corrected.
@@ -176,13 +171,13 @@ Re-fetches tips even if a file already exists. Useful when survey responses have
 If you've already scored rounds and just want to regenerate the website:
 
 ```bash
-python -c "from build_site import SiteBuilder; SiteBuilder().build_and_save()"
+python -c "import sys; sys.path.insert(0, 'src'); from build_site import SiteBuilder; SiteBuilder().build_and_save()"
 ```
 
 ### Manual Standings Rebuild
 
 ```bash
-python -c "from aggregator import Aggregator; Aggregator().build_and_save()"
+python -c "import sys; sys.path.insert(0, 'src'); from aggregator import Aggregator; Aggregator().build_and_save()"
 ```
 
 ### Individual Module Usage
@@ -190,6 +185,9 @@ python -c "from aggregator import Aggregator; Aggregator().build_and_save()"
 Each pipeline module is importable and can be run separately:
 
 ```python
+import sys
+sys.path.insert(0, 'src')
+
 from survey_mars import SurveyMarsClient
 from survey_index import SurveyIndex
 from tips_parser import TipsParser
@@ -268,29 +266,39 @@ OpenF1 API ──────→ data/raw/results/│                           
 ## Project Structure
 
 ```
-├── pipeline.py        # Main entry point — runs all 5 steps
-├── survey_mars.py     # SurveyMarsClient — OAuth2 + API requests
-├── survey_index.py    # SurveyIndex — fetches & indexes surveys by publish date
-├── tips_parser.py     # TipsParser — fetches responses, saves raw tips
-├── fetch_results.py   # ResultsFetcher — gets OpenF1 race results
-├── scorer.py          # Scorer — applies scoring rules per round
-├── aggregator.py      # Aggregator — builds season standings
-├── build_site.py      # SiteBuilder — injects data into index.html
-├── race_utils.py      # clean_race_name(), DRIVER_MAP
-├── requirements.txt   # Python dependencies
-├── setup.bat          # Windows setup script
-├── setup.sh           # macOS/Linux setup script
-├── .env.example       # Environment variable template
+├── scripts/
+│   └── pipeline.py        # Main entry point — runs all 5 steps
+├── src/
+│   ├── survey_mars.py     # SurveyMarsClient — OAuth2 + API requests
+│   ├── survey_index.py    # SurveyIndex — fetches & indexes surveys by publish date
+│   ├── tips_parser.py     # TipsParser — fetches responses, saves raw tips
+│   ├── fetch_results.py   # ResultsFetcher — gets OpenF1 race results
+│   ├── scorer.py          # Scorer — applies scoring rules per round
+│   ├── aggregator.py     # Aggregator — builds season standings
+│   ├── build_site.py      # SiteBuilder — injects data into index.html
+│   ├── race_utils.py     # clean_race_name(), DRIVER_MAP
+│   ├── leaderboard.py    # ResultAggregator — OpenF1 data wrapper
+│   └── tips_reader.py    # Reads previously saved tips
+├── config/
+│   ├── requirements.txt   # Python dependencies
+│   ├── .env.example       # Environment variable template
+│   ├── .gitignore
+│   └── .env               # Local environment variables
+├── setup.bat              # Windows setup script
+├── setup.sh               # macOS/Linux setup script
 ├── docs/
-│   ├── index.html     # Website — data injected by build_site.py
-│   └── .nojekyll      # Disables Jekyll on GitHub Pages
+│   ├── index.html         # Website — data injected by build_site.py
+│   ├── .nojekyll          # Disables Jekyll on GitHub Pages
+│   └── survey_config.json # Survey configuration
 ├── data/
-│   ├── raw/           # Write-once source data (tips + results)
-│   ├── processed/     # Derived data (scored + standings)
-│   └── overrides/     # Manual corrections
+│   ├── raw/               # Write-once source data (tips + results)
+│   ├── processed/         # Derived data (scored + standings)
+│   └── overrides/         # Manual corrections
+├── notebooks/             # Jupyter notebooks for exploration
+├── tests/                 # Test files
 └── .github/
     └── workflows/
-        └── score.yml  # GitHub Actions CI/CD pipeline
+        └── score.yml      # GitHub Actions CI/CD pipeline
 ```
 
 Each module has a docstring at the top with usage examples. See `ARCHITECTURE.md` for detailed module documentation.
