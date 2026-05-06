@@ -3,6 +3,7 @@ from urllib.error import URLError
 import pandas as pd
 import json
 import time
+from pathlib import Path
 
 
 class ResultAggregator:
@@ -11,6 +12,7 @@ class ResultAggregator:
     def __init__(self, round_number: int , year: int = 2026):
         self.round_number = round_number
         self.year = year
+        self.cancelled_rounds = self._load_cancelled_rounds()
         self.race_calendar = self._build_race_calendar()
         self.meeting_key, self.race_session_key, self.sprint_session_key = self._find_meeting_keys()
         self.race_results = self._fetch("session_result", session_key=self.race_session_key)
@@ -43,16 +45,46 @@ class ResultAggregator:
                     retry_delay *= 2
                 else:
                     raise
+
+    def _load_cancelled_rounds(self) -> set[int]:
+        """Load cancelled rounds from config file."""
+        config_path = Path("config/cancelled_rounds.json")
+        if not config_path.exists():
+            return set()
+        
+        with open(config_path) as f:
+            config = json.load(f)
+        
+        if config.get("year") != self.year:
+            return set()
+        
+        return set(config.get("cancelled_rounds", []))
     
     def _build_race_calendar(self) -> pd.DataFrame:
         sessions = self._fetch("sessions", year=self.year)
         competitive_sessions = sessions[
             (sessions.session_name == "Race") | (sessions.session_name == "Sprint")
         ]
-        round_number_key = competitive_sessions[(competitive_sessions.session_name == "Race")].reset_index(drop=True).reset_index(names="round_number")[["meeting_key","round_number"]]
-
-        round_number_key["round_number"] = round_number_key["round_number"] + 1
-        race_calendar = competitive_sessions.merge(round_number_key, on="meeting_key", how="left")[[
+        
+        races = competitive_sessions[competitive_sessions.session_name == "Race"].copy()
+        
+        races = races[~races["is_cancelled"]]
+        
+        races = races.reset_index(drop=True)
+        races["round_number"] = range(1, len(races) + 1)
+        
+        round_map = dict(zip(races["meeting_key"], races["round_number"]))
+        
+        meeting_keys = races["meeting_key"].tolist()
+        sprints = competitive_sessions[
+            (competitive_sessions.session_name == "Sprint") &
+            (competitive_sessions.meeting_key.isin(meeting_keys))
+        ].copy()
+        sprints["round_number"] = sprints["meeting_key"].map(round_map)
+        
+        race_calendar = pd.concat([races, sprints], ignore_index=True)
+        
+        race_calendar = race_calendar[[
             "round_number",
             "circuit_short_name",
             "session_name",

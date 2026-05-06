@@ -1,0 +1,41 @@
+{
+  "round": 4,
+  "race_name": "Miami",
+  "year": 2026,
+  "is_sprint_weekend": true,
+  "top10": [
+    "ANT",
+    "NOR",
+    "PIA",
+    "RUS",
+    "VER",
+    "HAM",
+    "COL",
+    "LEC",
+    "SAI",
+    "ALB"
+  ],
+  "dnfs": [
+    "HUL",
+    "LAW",
+    "GAS",
+    "HAD"
+  ],
+  "sprint_top3": [
+    "NOR",
+    "PIA",
+    "LEC"
+  ],
+  "championship_top10_before_race": [
+    "ANT",
+    "RUS",
+    "LEC",
+    "HAM",
+    "NOR",
+    "PIA",
+    "BEA",
+    "GAS",
+    "VER",
+    "LAW"
+  ]
+}
