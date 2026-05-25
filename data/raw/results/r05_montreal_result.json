@@ -1,0 +1,42 @@
+{
+  "round": 5,
+  "race_name": "Montreal",
+  "year": 2026,
+  "is_sprint_weekend": true,
+  "top10": [
+    "ANT",
+    "HAM",
+    "VER",
+    "LEC",
+    "HAD",
+    "COL",
+    "LAW",
+    "GAS",
+    "SAI",
+    "BEA"
+  ],
+  "dnfs": [
+    "PER",
+    "NOR",
+    "RUS",
+    "ALO",
+    "ALB"
+  ],
+  "sprint_top3": [
+    "RUS",
+    "NOR",
+    "ANT"
+  ],
+  "championship_top10_before_race": [
+    "ANT",
+    "RUS",
+    "LEC",
+    "NOR",
+    "HAM",
+    "PIA",
+    "VER",
+    "BEA",
+    "GAS",
+    "LAW"
+  ]
+}
