@@ -1,71 +1,11 @@
 {
   "players": [
     {
-      "name": "Jake",
-      "rank": 1,
-      "games_played": 5,
-      "points": 141,
-      "lastRace": 17,
-      "bestRound": 41,
-      "roundScores": {
-        "1": {
-          "race": "Melbourne",
-          "points": 19
-        },
-        "2": {
-          "race": "China",
-          "points": 46
-        },
-        "3": {
-          "race": "Japan",
-          "points": 18
-        },
-        "4": {
-          "race": "Miami",
-          "points": 36
-        },
-        "5": {
-          "race": "Canada",
-          "points": 22
-        }
-      }
-    },
-    {
-      "name": "Dean",
-      "rank": 2,
-      "games_played": 5,
-      "points": 140,
-      "lastRace": 18,
-      "bestRound": 53,
-      "roundScores": {
-        "1": {
-          "race": "Melbourne",
-          "points": 28
-        },
-        "2": {
-          "race": "China",
-          "points": 58
-        },
-        "3": {
-          "race": "Japan",
-          "points": 17
-        },
-        "4": {
-          "race": "Miami",
-          "points": 19
-        },
-        "5": {
-          "race": "Canada",
-          "points": 18
-        }
-      }
-    },
-    {
       "name": "Rino",
-      "rank": 3,
-      "games_played": 5,
-      "points": 133,
-      "lastRace": 49,
+      "rank": 1,
+      "games_played": 6,
+      "points": 157,
+      "lastRace": 24,
       "bestRound": 49,
       "roundScores": {
         "1": {
@@ -87,45 +27,87 @@
         "5": {
           "race": "Canada",
           "points": 54
+        },
+        "6": {
+          "race": "Monaco",
+          "points": 24
         }
       }
     },
     {
-      "name": "Barry",
-      "rank": 4,
-      "games_played": 5,
-      "points": 111,
-      "lastRace": 19,
-      "bestRound": 47,
+      "name": "Jake",
+      "rank": 2,
+      "games_played": 6,
+      "points": 153,
+      "lastRace": 12,
+      "bestRound": 41,
       "roundScores": {
         "1": {
           "race": "Melbourne",
-          "points": 7
+          "points": 19
         },
         "2": {
           "race": "China",
-          "points": 47
+          "points": 46
         },
         "3": {
           "race": "Japan",
-          "points": 10
+          "points": 18
         },
         "4": {
           "race": "Miami",
-          "points": 28
+          "points": 36
         },
         "5": {
           "race": "Canada",
+          "points": 22
+        },
+        "6": {
+          "race": "Monaco",
+          "points": 12
+        }
+      }
+    },
+    {
+      "name": "Dean",
+      "rank": 3,
+      "games_played": 6,
+      "points": 149,
+      "lastRace": 9,
+      "bestRound": 53,
+      "roundScores": {
+        "1": {
+          "race": "Melbourne",
+          "points": 28
+        },
+        "2": {
+          "race": "China",
+          "points": 58
+        },
+        "3": {
+          "race": "Japan",
+          "points": 17
+        },
+        "4": {
+          "race": "Miami",
           "points": 19
+        },
+        "5": {
+          "race": "Canada",
+          "points": 18
+        },
+        "6": {
+          "race": "Monaco",
+          "points": 9
         }
       }
     },
     {
       "name": "Tara",
-      "rank": 5,
-      "games_played": 5,
-      "points": 109,
-      "lastRace": 11,
+      "rank": 4,
+      "games_played": 6,
+      "points": 132,
+      "lastRace": 23,
       "bestRound": 36,
       "roundScores": {
         "1": {
@@ -147,45 +129,19 @@
         "5": {
           "race": "Canada",
           "points": 26
-        }
-      }
-    },
-    {
-      "name": "Antonio",
-      "rank": 6,
-      "games_played": 5,
-      "points": 106,
-      "lastRace": 20,
-      "bestRound": 22,
-      "roundScores": {
-        "1": {
-          "race": "Melbourne",
-          "points": 11
         },
-        "2": {
-          "race": "China",
-          "points": 37
-        },
-        "3": {
-          "race": "Japan",
-          "points": 17
-        },
-        "4": {
-          "race": "Miami",
-          "points": 16
-        },
-        "5": {
-          "race": "Canada",
-          "points": 25
+        "6": {
+          "race": "Monaco",
+          "points": 23
         }
       }
     },
     {
       "name": "Veljko",
-      "rank": 7,
-      "games_played": 5,
-      "points": 104,
-      "lastRace": 30,
+      "rank": 5,
+      "games_played": 6,
+      "points": 128,
+      "lastRace": 24,
       "bestRound": 33,
       "roundScores": {
         "1": {
@@ -207,75 +163,19 @@
         "5": {
           "race": "Canada",
           "points": 30
-        }
-      }
-    },
-    {
-      "name": "Luca",
-      "rank": 8,
-      "games_played": 5,
-      "points": 103,
-      "lastRace": 25,
-      "bestRound": 28,
-      "roundScores": {
-        "1": {
-          "race": "Melbourne",
-          "points": 28
         },
-        "2": {
-          "race": "China",
-          "points": 14
-        },
-        "3": {
-          "race": "Japan",
-          "points": 11
-        },
-        "4": {
-          "race": "Miami",
-          "points": 20
-        },
-        "5": {
-          "race": "Canada",
-          "points": 30
-        }
-      }
-    },
-    {
-      "name": "Riki",
-      "rank": 9,
-      "games_played": 5,
-      "points": 101,
-      "lastRace": 27,
-      "bestRound": 28,
-      "roundScores": {
-        "1": {
-          "race": "Melbourne",
-          "points": 8
-        },
-        "2": {
-          "race": "China",
-          "points": 21
-        },
-        "3": {
-          "race": "Japan",
-          "points": 28
-        },
-        "4": {
-          "race": "Miami",
-          "points": 17
-        },
-        "5": {
-          "race": "Canada",
-          "points": 27
+        "6": {
+          "race": "Monaco",
+          "points": 24
         }
       }
     },
     {
       "name": "Alex",
-      "rank": 10,
-      "games_played": 5,
-      "points": 98,
-      "lastRace": 20,
+      "rank": 6,
+      "games_played": 6,
+      "points": 116,
+      "lastRace": 18,
       "bestRound": 23,
       "roundScores": {
         "1": {
@@ -297,15 +197,155 @@
         "5": {
           "race": "Canada",
           "points": 20
+        },
+        "6": {
+          "race": "Monaco",
+          "points": 18
+        }
+      }
+    },
+    {
+      "name": "Barry",
+      "rank": 7,
+      "games_played": 6,
+      "points": 116,
+      "lastRace": 5,
+      "bestRound": 47,
+      "roundScores": {
+        "1": {
+          "race": "Melbourne",
+          "points": 7
+        },
+        "2": {
+          "race": "China",
+          "points": 47
+        },
+        "3": {
+          "race": "Japan",
+          "points": 10
+        },
+        "4": {
+          "race": "Miami",
+          "points": 28
+        },
+        "5": {
+          "race": "Canada",
+          "points": 19
+        },
+        "6": {
+          "race": "Monaco",
+          "points": 5
+        }
+      }
+    },
+    {
+      "name": "Riki",
+      "rank": 8,
+      "games_played": 6,
+      "points": 113,
+      "lastRace": 12,
+      "bestRound": 28,
+      "roundScores": {
+        "1": {
+          "race": "Melbourne",
+          "points": 8
+        },
+        "2": {
+          "race": "China",
+          "points": 21
+        },
+        "3": {
+          "race": "Japan",
+          "points": 28
+        },
+        "4": {
+          "race": "Miami",
+          "points": 17
+        },
+        "5": {
+          "race": "Canada",
+          "points": 27
+        },
+        "6": {
+          "race": "Monaco",
+          "points": 12
+        }
+      }
+    },
+    {
+      "name": "Antonio",
+      "rank": 9,
+      "games_played": 6,
+      "points": 112,
+      "lastRace": 6,
+      "bestRound": 22,
+      "roundScores": {
+        "1": {
+          "race": "Melbourne",
+          "points": 11
+        },
+        "2": {
+          "race": "China",
+          "points": 37
+        },
+        "3": {
+          "race": "Japan",
+          "points": 17
+        },
+        "4": {
+          "race": "Miami",
+          "points": 16
+        },
+        "5": {
+          "race": "Canada",
+          "points": 25
+        },
+        "6": {
+          "race": "Monaco",
+          "points": 6
+        }
+      }
+    },
+    {
+      "name": "Luca",
+      "rank": 10,
+      "games_played": 6,
+      "points": 111,
+      "lastRace": 8,
+      "bestRound": 28,
+      "roundScores": {
+        "1": {
+          "race": "Melbourne",
+          "points": 28
+        },
+        "2": {
+          "race": "China",
+          "points": 14
+        },
+        "3": {
+          "race": "Japan",
+          "points": 11
+        },
+        "4": {
+          "race": "Miami",
+          "points": 20
+        },
+        "5": {
+          "race": "Canada",
+          "points": 30
+        },
+        "6": {
+          "race": "Monaco",
+          "points": 8
         }
       }
     },
     {
       "name": "Josh",
       "rank": 11,
-      "games_played": 5,
-      "points": 92,
-      "lastRace": 15,
+      "games_played": 6,
+      "points": 104,
+      "lastRace": 12,
       "bestRound": 31,
       "roundScores": {
         "1": {
@@ -327,9 +367,13 @@
         "5": {
           "race": "Canada",
           "points": 15
+        },
+        "6": {
+          "race": "Monaco",
+          "points": 12
         }
       }
     }
   ],
-  "total_rounds": 5
+  "total_rounds": 6
 }

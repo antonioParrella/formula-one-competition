@@ -1,0 +1,40 @@
+{
+  "round": 6,
+  "race_name": "Monte Carlo",
+  "year": 2026,
+  "is_sprint_weekend": false,
+  "top10": [
+    "ANT",
+    "HAM",
+    "HAD",
+    "PIA",
+    "LAW",
+    "LIN",
+    "GAS",
+    "ALB",
+    "OCO",
+    "ALO"
+  ],
+  "dnfs": [
+    "SAI",
+    "LEC",
+    "STR",
+    "NOR",
+    "BEA",
+    "BOT",
+    "VER"
+  ],
+  "sprint_top3": null,
+  "championship_top10_before_race": [
+    "ANT",
+    "HAM",
+    "RUS",
+    "LEC",
+    "PIA",
+    "NOR",
+    "VER",
+    "HAD",
+    "LAW",
+    "GAS"
+  ]
+}
