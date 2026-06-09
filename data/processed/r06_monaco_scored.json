@@ -3,7 +3,7 @@
   "race_name": "Monaco",
   "scores": {
     "Alex": 18,
-    "Veljko": 24,
+    "Veljko": 9,
     "Antonio": 6,
     "Dean": 9,
     "Rino": 24,
@@ -89,7 +89,7 @@
       "player": "Veljko",
       "response_id": 13,
       "submitted_at": "2026-06-05T22:05:00",
-      "score": 24,
+      "score": 9,
       "penalty": 0,
       "picks": [
         {
@@ -153,13 +153,7 @@
           "points": 1
         }
       ],
-      "dnf_picks": [
-        {
-          "driver": "Stroll",
-          "dnfd": true,
-          "points": 15
-        }
-      ]
+      "dnf_picks": []
     },
     {
       "player": "Antonio",
