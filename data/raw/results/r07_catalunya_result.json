@@ -1,28 +1,28 @@
 {
-  "round": 6,
-  "race_name": "Monte Carlo",
+  "round": 7,
+  "race_name": "Catalunya",
   "year": 2026,
   "is_sprint_weekend": false,
   "top10": [
-    "ANT",
     "HAM",
-    "GAS",
-    "HAD",
+    "RUS",
+    "NOR",
+    "VER",
     "PIA",
+    "HAD",
+    "GAS",
     "LAW",
     "LIN",
-    "ALB",
-    "OCO",
-    "ALO"
+    "COL"
   ],
   "dnfs": [
-    "SAI",
     "LEC",
-    "STR",
-    "NOR",
+    "ANT",
     "BEA",
+    "ALO",
+    "HUL",
     "BOT",
-    "VER"
+    "STR"
   ],
   "sprint_top3": null,
   "championship_top10_before_race": [
@@ -30,8 +30,8 @@
     "HAM",
     "RUS",
     "LEC",
-    "PIA",
     "NOR",
+    "PIA",
     "VER",
     "GAS",
     "HAD",
