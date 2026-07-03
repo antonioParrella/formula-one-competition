@@ -1,0 +1,87 @@
+# F1 Tipping Optimiser configuration.
+# Everything random is seeded from here; change `seed` for a different sim set.
+
+race:
+  # Update these before each fetch — used to find the Betfair event and to
+  # name snapshot files. Round drives the underdog rule (no bonus in round 1).
+  name: "Silverstone"
+  year: 2026
+  round: 8
+  include_sprint_markets: false   # sprint weekends list separate markets — keep GP only
+
+betfair:
+  credentials_path: "~/.betfair/credentials.yaml"   # username, password, app_key, certs_path
+  event_type_id: "27"                               # Motor Sport
+  # Market name fragments searched in listMarketCatalogue output, priority order.
+  market_names:
+    win:   ["Race Winner", "Winner"]
+    top10: ["Points Finish", "Top 10 Finish", "Top 10"]
+    top6:  ["Top 6 Finish", "Top 6"]
+    top3:  ["Podium Finish", "Top 3 Finish", "Top 3", "Podium"]
+  fetch_h2h: true                                   # markets with ' v ' in the name
+
+devig:
+  win_method: proportional      # proportional | power
+  # Top-N markets sum to N. Power keeps near-certain favourites pinned and
+  # removes the vig from the longshots, where it actually sits; proportional
+  # drags favourites below their win/top-6 prices.
+  topn_method: power            # power | proportional
+
+model:
+  n_sims: 100000                # Monte Carlo races for optimisation/validation
+  fit_sims: 4000                # fixed draws used inside the fitting objective
+  fit_tau: 0.15                 # soft-rank temperature for the differentiable fit
+  seed: 20260703
+  dnf:
+    default_prob: 0.10          # season-average retirement prior
+    per_driver: {}              # e.g. { STR: 0.18, GAS: 0.14 }
+
+underdogs:
+  # Championship top-10 before the race: picks OUTSIDE this set score double
+  # (Scorer.MULTIPLIER_UNDERDOG) from round 2 onwards.
+  source: openf1                # openf1 | manual
+  # Fallback / manual list. Snapshot is standings BEFORE round 7 (Barcelona) —
+  # refresh before relying on it.
+  manual_top10: [ANT, HAM, RUS, LEC, NOR, PIA, VER, GAS, HAD, LAW]
+
+optimise:
+  n_restarts: 20
+  max_iters: 200                # hill-climb steps per restart
+  n_runner_ups: 5
+  # Current comp scoring is additive per pick, so candidate EVs come from the
+  # per-(driver, slot) expected-points matrix (exact, fast). Set false if
+  # scoring/rules.py is rewritten with cross-pick interactions.
+  assume_additive: true
+
+drivers:
+  # Betfair runner name -> 3-letter code. Codes must exist in
+  # src/race_utils.DRIVER_MAP (single source of truth). Runners not matched
+  # here fall back to a surname match against DRIVER_MAP, else are skipped
+  # with a warning.
+  betfair_names:
+    "Max Verstappen": VER
+    "Lando Norris": NOR
+    "Oscar Piastri": PIA
+    "Charles Leclerc": LEC
+    "Lewis Hamilton": HAM
+    "George Russell": RUS
+    "Kimi Antonelli": ANT
+    "Andrea Kimi Antonelli": ANT
+    "Isack Hadjar": HAD
+    "Carlos Sainz": SAI
+    "Fernando Alonso": ALO
+    "Alexander Albon": ALB
+    "Alex Albon": ALB
+    "Pierre Gasly": GAS
+    "Esteban Ocon": OCO
+    "Lance Stroll": STR
+    "Nico Hulkenberg": HUL
+    "Yuki Tsunoda": TSU
+    "Liam Lawson": LAW
+    "Oliver Bearman": BEA
+    "Gabriel Bortoleto": BOR
+    "Arvid Lindblad": LIN
+    "Jack Doohan": DOO
+    "Franco Colapinto": COL
+    "Valtteri Bottas": BOT
+    "Sergio Perez": PER

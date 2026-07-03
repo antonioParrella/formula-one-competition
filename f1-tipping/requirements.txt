@@ -1,0 +1,8 @@
+# Optimiser deps (on top of the parent repo's config/requirements.txt,
+# whose requests/python-dotenv are pulled in transitively by src/scorer.py).
+numpy>=1.26
+scipy>=1.11
+pyyaml>=6.0
+pytest>=7.0
+# Only needed for the live Betfair fetch path; manual_input.py works without it.
+betfairlightweight>=2.19

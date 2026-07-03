@@ -1,0 +1,9 @@
+# Run artifacts — snapshots, fits, and reports are per-session caches.
+data/*
+!data/.gitkeep
+
+# Never commit credentials or certs (they live in ~/.betfair anyway).
+*.pem
+*.crt
+*.key
+credentials.yaml
