@@ -370,6 +370,7 @@ nav {
     .br-main  { color: var(--text); }
     .br-dnf   { color: #4ade80; }
     .br-spr   { color: #7c3aed; }
+    .br-pen   { color: #ef4444; }
     .br-op    { color: var(--dim); font-size: 12px; }
     .br-total {
       font-family: var(--font-display);
@@ -955,7 +956,7 @@ nav {
 */
 
 // DATA_START
-const PLAYERS = ["Jake", "Rino", "Luca", "Dean", "Tara", "Antonio", "Riki", "Josh", "Veljko", "Barry", "Alex"];
+const PLAYERS = ["Jake", "Rino", "Luca", "Dean", "Josh", "Tara", "Riki", "Barry", "Antonio", "Veljko", "Alex"];
 
 const STANDINGS = [
   {
@@ -1011,8 +1012,8 @@ const STANDINGS = [
   },
   {
     "name": "Dean",
-    "points": 186,
-    "lastRace": 14,
+    "points": 181,
+    "lastRace": 9,
     "bestRound": 53,
     "games_played": 8,
     "roundScores": [
@@ -1023,58 +1024,7 @@ const STANDINGS = [
       18,
       9,
       23,
-      14
-    ]
-  },
-  {
-    "name": "Tara",
-    "points": 159,
-    "lastRace": 9,
-    "bestRound": 36,
-    "games_played": 8,
-    "roundScores": [
-      7,
-      41,
-      20,
-      15,
-      26,
-      23,
-      18,
       9
-    ]
-  },
-  {
-    "name": "Antonio",
-    "points": 159,
-    "lastRace": 21,
-    "bestRound": 24,
-    "games_played": 8,
-    "roundScores": [
-      11,
-      37,
-      17,
-      16,
-      25,
-      8,
-      24,
-      21
-    ]
-  },
-  {
-    "name": "Riki",
-    "points": 154,
-    "lastRace": 30,
-    "bestRound": 30,
-    "games_played": 8,
-    "roundScores": [
-      8,
-      21,
-      28,
-      17,
-      27,
-      14,
-      9,
-      30
     ]
   },
   {
@@ -1095,20 +1045,37 @@ const STANDINGS = [
     ]
   },
   {
-    "name": "Veljko",
-    "points": 145,
-    "lastRace": 20,
-    "bestRound": 33,
+    "name": "Tara",
+    "points": 150,
+    "lastRace": 0,
+    "bestRound": 36,
     "games_played": 8,
     "roundScores": [
-      11,
-      38,
-      13,
-      12,
-      30,
-      9,
-      12,
-      20
+      7,
+      41,
+      20,
+      15,
+      26,
+      23,
+      18,
+      0
+    ]
+  },
+  {
+    "name": "Riki",
+    "points": 145,
+    "lastRace": 30,
+    "bestRound": 30,
+    "games_played": 8,
+    "roundScores": [
+      8,
+      21,
+      28,
+      17,
+      27,
+      14,
+      0,
+      30
     ]
   },
   {
@@ -1129,20 +1096,54 @@ const STANDINGS = [
     ]
   },
   {
+    "name": "Antonio",
+    "points": 144,
+    "lastRace": 11,
+    "bestRound": 24,
+    "games_played": 8,
+    "roundScores": [
+      11,
+      37,
+      17,
+      16,
+      25,
+      3,
+      24,
+      11
+    ]
+  },
+  {
+    "name": "Veljko",
+    "points": 125,
+    "lastRace": 20,
+    "bestRound": 33,
+    "games_played": 8,
+    "roundScores": [
+      1,
+      38,
+      13,
+      12,
+      25,
+      4,
+      12,
+      20
+    ]
+  },
+  {
     "name": "Alex",
-    "points": 140,
-    "lastRace": 12,
+    "points": 120,
+    "lastRace": 2,
     "bestRound": 23,
     "games_played": 8,
     "roundScores": [
       21,
-      14,
+      9,
       15,
       28,
       20,
-      16,
+      11,
       14,
-      12
+      2
     ]
   }
 ];
@@ -1162,17 +1163,18 @@ const ROUNDS = [
       "Rino": 23,
       "Alex": 21,
       "Jake": 19,
-      "Veljko": 11,
       "Antonio": 11,
       "Riki": 8,
       "Tara": 7,
-      "Barry": 7
+      "Barry": 7,
+      "Veljko": 1
     },
     "breakdown": {
       "Veljko": {
         "main": 11,
         "dnf": 0,
-        "sprint": 0
+        "sprint": 0,
+        "penalty": 10
       },
       "Tara": {
         "main": 7,
@@ -1243,14 +1245,15 @@ const ROUNDS = [
       "Josh": 25,
       "Riki": 21,
       "Rino": 17,
-      "Alex": 14,
-      "Luca": 14
+      "Luca": 14,
+      "Alex": 9
     },
     "breakdown": {
       "Alex": {
         "main": 14,
         "dnf": 0,
-        "sprint": 0
+        "sprint": 0,
+        "penalty": 5
       },
       "Jake": {
         "main": 11,
@@ -1469,10 +1472,10 @@ const ROUNDS = [
     "fastest": "\u2014",
     "scores": {
       "Rino": 54,
-      "Veljko": 30,
       "Luca": 30,
       "Riki": 27,
       "Tara": 26,
+      "Veljko": 25,
       "Antonio": 25,
       "Jake": 22,
       "Alex": 20,
@@ -1484,7 +1487,8 @@ const ROUNDS = [
       "Veljko": {
         "main": 30,
         "dnf": 0,
-        "sprint": 0
+        "sprint": 0,
+        "penalty": 5
       },
       "Antonio": {
         "main": 20,
@@ -1548,31 +1552,34 @@ const ROUNDS = [
     "scores": {
       "Rino": 26,
       "Tara": 23,
-      "Alex": 16,
       "Riki": 14,
       "Josh": 14,
       "Jake": 14,
-      "Veljko": 9,
+      "Alex": 11,
       "Dean": 9,
-      "Antonio": 8,
       "Barry": 7,
-      "Luca": 6
+      "Luca": 6,
+      "Veljko": 4,
+      "Antonio": 3
     },
     "breakdown": {
       "Alex": {
         "main": 16,
         "dnf": 0,
-        "sprint": 0
+        "sprint": 0,
+        "penalty": 5
       },
       "Veljko": {
         "main": 9,
         "dnf": 0,
-        "sprint": 0
+        "sprint": 0,
+        "penalty": 5
       },
       "Antonio": {
         "main": 8,
         "dnf": 0,
-        "sprint": 0
+        "sprint": 0,
+        "penalty": 5
       },
       "Dean": {
         "main": 9,
@@ -1634,13 +1641,14 @@ const ROUNDS = [
       "Veljko": 12,
       "Josh": 11,
       "Barry": 11,
-      "Riki": 9
+      "Riki": 0
     },
     "breakdown": {
       "Riki": {
         "main": 9,
         "dnf": 0,
-        "sprint": 0
+        "sprint": 0,
+        "penalty": 9
       },
       "Alex": {
         "main": 14,
@@ -1705,35 +1713,39 @@ const ROUNDS = [
       "Luca": 59,
       "Josh": 35,
       "Riki": 30,
-      "Antonio": 21,
       "Veljko": 20,
       "Jake": 19,
       "Rino": 17,
       "Barry": 15,
-      "Dean": 14,
-      "Alex": 12,
-      "Tara": 9
+      "Antonio": 11,
+      "Dean": 9,
+      "Alex": 2,
+      "Tara": 0
     },
     "breakdown": {
       "Tara": {
         "main": 9,
         "dnf": 0,
-        "sprint": 0
+        "sprint": 0,
+        "penalty": 9
       },
       "Alex": {
         "main": 12,
         "dnf": 0,
-        "sprint": 0
+        "sprint": 0,
+        "penalty": 10
       },
       "Antonio": {
         "main": 21,
         "dnf": 0,
-        "sprint": 0
+        "sprint": 0,
+        "penalty": 10
       },
       "Dean": {
         "main": 14,
         "dnf": 0,
-        "sprint": 0
+        "sprint": 0,
+        "penalty": 5
       },
       "Riki": {
         "main": 15,
@@ -1793,7 +1805,7 @@ const MAIN_TIPS = [
     "tips": [
       {
         "player": "Veljko",
-        "score": 11,
+        "score": 1,
         "picks": [
           {
             "driver": "Piastri",
@@ -2317,7 +2329,7 @@ const MAIN_TIPS = [
     "tips": [
       {
         "player": "Alex",
-        "score": 14,
+        "score": 9,
         "picks": [
           {
             "driver": "Verstappen",
@@ -3953,7 +3965,7 @@ const MAIN_TIPS = [
     "tips": [
       {
         "player": "Veljko",
-        "score": 30,
+        "score": 25,
         "picks": [
           {
             "driver": "Hamilton",
@@ -4501,7 +4513,7 @@ const MAIN_TIPS = [
     "tips": [
       {
         "player": "Alex",
-        "score": 16,
+        "score": 11,
         "picks": [
           {
             "driver": "Verstappen",
@@ -4549,7 +4561,7 @@ const MAIN_TIPS = [
       },
       {
         "player": "Veljko",
-        "score": 9,
+        "score": 4,
         "picks": [
           {
             "driver": "Hamilton",
@@ -4596,7 +4608,7 @@ const MAIN_TIPS = [
       },
       {
         "player": "Antonio",
-        "score": 8,
+        "score": 3,
         "picks": [
           {
             "driver": "Leclerc",
@@ -5043,7 +5055,7 @@ const MAIN_TIPS = [
     "tips": [
       {
         "player": "Riki",
-        "score": 9,
+        "score": 0,
         "picks": [
           {
             "driver": "Antonelli",
@@ -5583,7 +5595,7 @@ const MAIN_TIPS = [
     "tips": [
       {
         "player": "Tara",
-        "score": 9,
+        "score": 0,
         "picks": [
           {
             "driver": "Antonelli",
@@ -5631,7 +5643,7 @@ const MAIN_TIPS = [
       },
       {
         "player": "Alex",
-        "score": 12,
+        "score": 2,
         "picks": [
           {
             "driver": "Hamilton",
@@ -5679,7 +5691,7 @@ const MAIN_TIPS = [
       },
       {
         "player": "Antonio",
-        "score": 21,
+        "score": 11,
         "picks": [
           {
             "driver": "Antonelli",
@@ -5728,7 +5740,7 @@ const MAIN_TIPS = [
       },
       {
         "player": "Dean",
-        "score": 14,
+        "score": 9,
         "picks": [
           {
             "driver": "Antonelli",
@@ -7176,8 +7188,11 @@ function renderBreakdown(bd, total) {
   if (bd.main)   parts.push(`<span class="br-main">${bd.main}</span>`);
   if (bd.dnf)    parts.push(`<span class="br-dnf">${bd.dnf}</span>`);
   if (bd.sprint) parts.push(`<span class="br-spr">${bd.sprint}</span>`);
-  if (parts.length <= 1) return '';
-  return parts.join(' <span class="br-op">+</span> ');
+  let html = parts.join(' <span class="br-op">+</span> ');
+  if (bd.penalty) {
+    html += ` <span class="br-op">−</span> <span class="br-pen">${bd.penalty}</span>`;
+  }
+  return html;
 }
 function renderRaces() {
   const grid = $('rounds-grid');
@@ -7194,10 +7209,10 @@ function renderRaces() {
     const scoreRows = allScores.map(([name, pts], i) => {
       const hasBreakdown = r.breakdown && r.breakdown[name];
       const bd = hasBreakdown ? r.breakdown[name] : null;
-      const isMulti = hasBreakdown && (
-        (bd.main && bd.dnf) || (bd.main && bd.sprint) ||
-        (bd.dnf && bd.sprint) || (bd.main && bd.dnf && bd.sprint)
-      );
+      const compCount = hasBreakdown
+        ? ['main', 'dnf', 'sprint', 'penalty'].filter(k => bd[k]).length
+        : 0;
+      const isMulti = compCount >= 2;
 
       // Show inline formula when multi-component, plain number otherwise
       const scoreHtml = isMulti
@@ -7223,6 +7238,7 @@ function renderRaces() {
           <span><span class="legend-dot" style="background:var(--text)"></span>Main</span>
           <span><span class="legend-dot" style="background:#4ade80"></span>DNF</span>
           <span><span class="legend-dot" style="background:#7c3aed"></span>Sprint</span>
+          <span><span class="legend-dot" style="background:#ef4444"></span>Penalty</span>
         </div>
         <div class="round-scores">
           ${scoreRows}

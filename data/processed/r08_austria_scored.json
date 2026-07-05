@@ -2,10 +2,10 @@
   "round": 8,
   "race_name": "Austria",
   "scores": {
-    "Tara": 9,
-    "Alex": 12,
-    "Antonio": 21,
-    "Dean": 14,
+    "Tara": 0,
+    "Alex": 2,
+    "Antonio": 11,
+    "Dean": 9,
     "Riki": 30,
     "Rino": 17,
     "Luca": 59,
@@ -19,8 +19,15 @@
       "player": "Tara",
       "response_id": 12,
       "submitted_at": "2026-06-27T16:41:16",
-      "score": 9,
-      "penalty": 0,
+      "score": 0,
+      "penalty": 10,
+      "auto_penalty": 10,
+      "override_penalty": 0,
+      "late_sessions": [
+        "Practice 1",
+        "Practice 2"
+      ],
+      "zeroed": false,
       "picks": [
         {
           "driver": "Antonelli",
@@ -89,8 +96,15 @@
       "player": "Alex",
       "response_id": 10,
       "submitted_at": "2026-06-27T09:29:03",
-      "score": 12,
-      "penalty": 0,
+      "score": 2,
+      "penalty": 10,
+      "auto_penalty": 10,
+      "override_penalty": 0,
+      "late_sessions": [
+        "Practice 1",
+        "Practice 2"
+      ],
+      "zeroed": false,
       "picks": [
         {
           "driver": "Hamilton",
@@ -159,8 +173,15 @@
       "player": "Antonio",
       "response_id": 9,
       "submitted_at": "2026-06-27T06:23:57",
-      "score": 21,
-      "penalty": 0,
+      "score": 11,
+      "penalty": 10,
+      "auto_penalty": 10,
+      "override_penalty": 0,
+      "late_sessions": [
+        "Practice 1",
+        "Practice 2"
+      ],
+      "zeroed": false,
       "picks": [
         {
           "driver": "Antonelli",
@@ -229,8 +250,14 @@
       "player": "Dean",
       "response_id": 8,
       "submitted_at": "2026-06-26T23:25:29",
-      "score": 14,
-      "penalty": 0,
+      "score": 9,
+      "penalty": 5,
+      "auto_penalty": 5,
+      "override_penalty": 0,
+      "late_sessions": [
+        "Practice 1"
+      ],
+      "zeroed": false,
       "picks": [
         {
           "driver": "Antonelli",
@@ -307,6 +334,10 @@
       "submitted_at": "2026-06-26T09:25:41",
       "score": 30,
       "penalty": 0,
+      "auto_penalty": 0,
+      "override_penalty": 0,
+      "late_sessions": [],
+      "zeroed": false,
       "picks": [
         {
           "driver": "Russell",
@@ -403,6 +434,10 @@
       "submitted_at": "2026-06-26T08:41:45",
       "score": 17,
       "penalty": 0,
+      "auto_penalty": 0,
+      "override_penalty": 0,
+      "late_sessions": [],
+      "zeroed": false,
       "picks": [
         {
           "driver": "Antonelli",
@@ -473,6 +508,10 @@
       "submitted_at": "2026-06-26T07:50:10",
       "score": 59,
       "penalty": 0,
+      "auto_penalty": 0,
+      "override_penalty": 0,
+      "late_sessions": [],
+      "zeroed": false,
       "picks": [
         {
           "driver": "Russell",
@@ -554,6 +593,10 @@
       "submitted_at": "2026-06-25T22:14:52",
       "score": 15,
       "penalty": 0,
+      "auto_penalty": 0,
+      "override_penalty": 0,
+      "late_sessions": [],
+      "zeroed": false,
       "picks": [
         {
           "driver": "Antonelli",
@@ -624,6 +667,10 @@
       "submitted_at": "2026-06-24T23:08:21",
       "score": 20,
       "penalty": 0,
+      "auto_penalty": 0,
+      "override_penalty": 0,
+      "late_sessions": [],
+      "zeroed": false,
       "picks": [
         {
           "driver": "Verstappen",
@@ -694,6 +741,10 @@
       "submitted_at": "2026-06-22T21:53:27",
       "score": 35,
       "penalty": 0,
+      "auto_penalty": 0,
+      "override_penalty": 0,
+      "late_sessions": [],
+      "zeroed": false,
       "picks": [
         {
           "driver": "Verstappen",
@@ -764,6 +815,10 @@
       "submitted_at": "2026-06-22T19:46:07",
       "score": 19,
       "penalty": 0,
+      "auto_penalty": 0,
+      "override_penalty": 0,
+      "late_sessions": [],
+      "zeroed": false,
       "picks": [
         {
           "driver": "Russell",

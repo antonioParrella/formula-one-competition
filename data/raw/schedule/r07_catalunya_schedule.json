@@ -1,0 +1,50 @@
+{
+  "round": 7,
+  "race_name": "Catalunya",
+  "year": 2026,
+  "meeting_key": 1287,
+  "is_sprint_weekend": false,
+  "fetched_at": "2026-07-05T15:10:35.273158",
+  "sessions": [
+    {
+      "session_name": "Practice 1",
+      "session_key": 11300,
+      "date_start": "2026-06-12T11:30:00+00:00",
+      "date_end": "2026-06-12T12:30:00+00:00",
+      "gmt_offset": "02:00:00",
+      "is_cancelled": false
+    },
+    {
+      "session_name": "Practice 2",
+      "session_key": 11301,
+      "date_start": "2026-06-12T15:00:00+00:00",
+      "date_end": "2026-06-12T16:00:00+00:00",
+      "gmt_offset": "02:00:00",
+      "is_cancelled": false
+    },
+    {
+      "session_name": "Practice 3",
+      "session_key": 11302,
+      "date_start": "2026-06-13T10:30:00+00:00",
+      "date_end": "2026-06-13T11:30:00+00:00",
+      "gmt_offset": "02:00:00",
+      "is_cancelled": false
+    },
+    {
+      "session_name": "Qualifying",
+      "session_key": 11303,
+      "date_start": "2026-06-13T14:00:00+00:00",
+      "date_end": "2026-06-13T15:00:00+00:00",
+      "gmt_offset": "02:00:00",
+      "is_cancelled": false
+    },
+    {
+      "session_name": "Race",
+      "session_key": 11307,
+      "date_start": "2026-06-14T13:00:00+00:00",
+      "date_end": "2026-06-14T15:00:00+00:00",
+      "gmt_offset": "02:00:00",
+      "is_cancelled": false
+    }
+  ]
+}

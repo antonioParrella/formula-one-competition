@@ -21,6 +21,10 @@
       "submitted_at": "2026-03-27T12:40:10",
       "score": 20,
       "penalty": 0,
+      "auto_penalty": 0,
+      "override_penalty": 0,
+      "late_sessions": [],
+      "zeroed": false,
       "picks": [
         {
           "driver": "Russell",
@@ -91,6 +95,10 @@
       "submitted_at": "2026-03-27T12:39:40",
       "score": 17,
       "penalty": 0,
+      "auto_penalty": 0,
+      "override_penalty": 0,
+      "late_sessions": [],
+      "zeroed": false,
       "picks": [
         {
           "driver": "Russell",
@@ -161,6 +169,10 @@
       "submitted_at": "2026-03-27T05:51:52",
       "score": 16,
       "penalty": 0,
+      "auto_penalty": 0,
+      "override_penalty": 0,
+      "late_sessions": [],
+      "zeroed": false,
       "picks": [
         {
           "driver": "Russell",
@@ -231,6 +243,10 @@
       "submitted_at": "2026-03-26T22:36:44",
       "score": 15,
       "penalty": 0,
+      "auto_penalty": 0,
+      "override_penalty": 0,
+      "late_sessions": [],
+      "zeroed": false,
       "picks": [
         {
           "driver": "Leclerc",
@@ -301,6 +317,10 @@
       "submitted_at": "2026-03-26T22:32:33",
       "score": 11,
       "penalty": 0,
+      "auto_penalty": 0,
+      "override_penalty": 0,
+      "late_sessions": [],
+      "zeroed": false,
       "picks": [
         {
           "driver": "Russell",
@@ -371,6 +391,10 @@
       "submitted_at": "2026-03-26T20:28:12",
       "score": 17,
       "penalty": 0,
+      "auto_penalty": 0,
+      "override_penalty": 0,
+      "late_sessions": [],
+      "zeroed": false,
       "picks": [
         {
           "driver": "Russell",
@@ -441,6 +465,10 @@
       "submitted_at": "2026-03-26T17:10:42",
       "score": 11,
       "penalty": 0,
+      "auto_penalty": 0,
+      "override_penalty": 0,
+      "late_sessions": [],
+      "zeroed": false,
       "picks": [
         {
           "driver": "Hamilton",
@@ -511,6 +539,10 @@
       "submitted_at": "2026-03-26T10:46:20",
       "score": 13,
       "penalty": 0,
+      "auto_penalty": 0,
+      "override_penalty": 0,
+      "late_sessions": [],
+      "zeroed": false,
       "picks": [
         {
           "driver": "Russell",
@@ -581,6 +613,10 @@
       "submitted_at": "2026-03-26T09:44:52",
       "score": 10,
       "penalty": 0,
+      "auto_penalty": 0,
+      "override_penalty": 0,
+      "late_sessions": [],
+      "zeroed": false,
       "picks": [
         {
           "driver": "Russell",
@@ -651,6 +687,10 @@
       "submitted_at": "2026-03-25T16:12:31",
       "score": 18,
       "penalty": 0,
+      "auto_penalty": 0,
+      "override_penalty": 0,
+      "late_sessions": [],
+      "zeroed": false,
       "picks": [
         {
           "driver": "Russell",
@@ -721,6 +761,10 @@
       "submitted_at": "2026-03-25T11:51:49",
       "score": 28,
       "penalty": 0,
+      "auto_penalty": 0,
+      "override_penalty": 0,
+      "late_sessions": [],
+      "zeroed": false,
       "picks": [
         {
           "driver": "Russell",

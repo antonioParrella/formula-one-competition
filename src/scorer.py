@@ -18,6 +18,7 @@ from datetime import datetime
 
 from tips_parser import TipsParser
 from race_utils import clean_race_name, DRIVER_MAP
+from penalties import assess_lateness
 
 
 class Scorer:
@@ -54,12 +55,14 @@ class Scorer:
         tips_dir: str = "data/raw/tips",
         results_dir: str = "data/raw/results",
         overrides_dir: str = "data/overrides",
+        schedule_dir: str = "data/raw/schedule",
         output_dir: str = "data/processed",
     ):
         self.round_num = round_num
         self.tips_dir = Path(tips_dir)
         self.results_dir = Path(results_dir)
         self.overrides_dir = Path(overrides_dir)
+        self.schedule_dir = Path(schedule_dir)
         self.output_dir = Path(output_dir)
 
     # ─────────────────────────────────────────────────────────
@@ -74,7 +77,8 @@ class Scorer:
         tips = self._load_tips()
         results = self._load_results()
         overrides = self._load_overrides()
-        scored = self._build_scored(tips, results, overrides)
+        schedule = self._load_schedule()
+        scored = self._build_scored(tips, results, overrides, schedule)
 
         self.output_dir.mkdir(parents=True, exist_ok=True)
         race_name = tips["race_name"]
@@ -107,6 +111,12 @@ class Scorer:
         matches = list(self.overrides_dir.glob(pattern))
         return matches[0] if matches else None
 
+    def _find_schedule_file(self) -> Path | None:
+        """Locate the session schedule file for this round."""
+        pattern = f"r{self.round_num:02d}_*_schedule.json"
+        matches = list(self.schedule_dir.glob(pattern))
+        return matches[0] if matches else None
+
     def _load_tips(self) -> dict:
         path = self._find_tips_file()
         if path is None:
@@ -129,11 +139,22 @@ class Scorer:
             return {}
         return json.loads(path.read_text())
 
+    def _load_schedule(self) -> dict:
+        path = self._find_schedule_file()
+        if path is None:
+            raise FileNotFoundError(
+                f"No schedule file found for round {self.round_num} — "
+                f"run the pipeline schedule stage (ScheduleFetcher) first"
+            )
+        return json.loads(path.read_text())
+
     # ─────────────────────────────────────────────────────────
     # Building scored file
     # ─────────────────────────────────────────────────────────
 
-    def _build_scored(self, tips: dict, results: dict, overrides: dict) -> dict:
+    def _build_scored(
+        self, tips: dict, results: dict, overrides: dict, schedule: dict
+    ) -> dict:
         """Assemble the complete scored payload."""
         top10_codes = results["top10"]
         actual_dnfs = results.get("dnfs") or []
@@ -150,14 +171,27 @@ class Scorer:
 
         player_scores: dict = {}
         player_tips: list = []
+        late_players: set = set()
 
         for submission in tips["submissions"]:
             picks = self._score_main_race(submission, position_map, champ_set)
             dnf_result = self._score_dnfs(submission, dnf_set)
-            penalty = penalty_map.get(submission["player"], 0)
 
-            total = sum(p["points"] for p in picks) + dnf_result["score"] - penalty
-            total = max(0, total)
+            # Automatic late-submission penalty from the session schedule,
+            # stacked on top of any manual override penalty.
+            late_info = assess_lateness(
+                submission.get("submitted_at"), schedule,
+                self.PENALTY_LATE_PER_SESSION,
+            )
+            override_penalty = penalty_map.get(submission["player"], 0)
+            penalty = late_info["auto_penalty"] + override_penalty
+            if late_info["late"]:
+                late_players.add(submission["player"])
+
+            raw_total = sum(p["points"] for p in picks) + dnf_result["score"]
+            # Submissions after the cutoff (Qualifying / Sprint) score zero;
+            # otherwise deduct the penalty and floor the weekend total at 0.
+            total = 0 if late_info["zeroed"] else max(0, raw_total - penalty)
 
             player_scores[submission["player"]] = total
 
@@ -167,15 +201,20 @@ class Scorer:
                 "submitted_at": submission.get("submitted_at"),
                 "score": total,
                 "penalty": penalty,
+                "auto_penalty": late_info["auto_penalty"],
+                "override_penalty": override_penalty,
+                "late_sessions": late_info["late_sessions"],
+                "zeroed": late_info["zeroed"],
                 "picks": picks,
                 "dnf_picks": dnf_result["picks"],
             })
 
-        # Sprint scoring (if applicable — scored separately for display)
+        # Sprint scoring (if applicable — scored separately for display).
+        # Late submissions cannot earn sprint points.
         sprint_player_tips = None
         if is_sprint and results.get("sprint_top3"):
             sprint_player_tips = self._score_sprint(
-                tips["submissions"], results["sprint_top3"]
+                tips["submissions"], results["sprint_top3"], late_players
             )
 
         return {
@@ -247,12 +286,19 @@ class Scorer:
         self,
         submissions: list[dict],
         sprint_top3: list[str],
+        late_players: set | None = None,
     ) -> list[dict]:
-        """Score sprint picks (5 pts each for P1, P2, P3 correct)."""
+        """Score sprint picks (5 pts each for P1, P2, P3 correct).
+
+        Players who submitted late earn zero sprint points; their picks
+        are still shown (with truthful results) but scored 0.
+        """
         position_map = self._position_map(sprint_top3)
+        late_players = late_players or set()
 
         results = []
         for submission in submissions:
+            is_late = submission["player"] in late_players
             sprint_picks = submission.get("sprint") or []
             picks = []
             for idx, code in enumerate(sprint_picks):
@@ -263,7 +309,7 @@ class Scorer:
                     picks.append({
                         "driver": surname,
                         "result": "exact",
-                        "points": 5,
+                        "points": 0 if is_late else 5,
                     })
                 else:
                     picks.append({
@@ -275,6 +321,7 @@ class Scorer:
                 "player": submission["player"],
                 "picks": picks,
                 "score": sum(p["points"] for p in picks),
+                "zeroed": is_late,
             })
 
         return results

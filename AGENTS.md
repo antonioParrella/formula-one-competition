@@ -27,6 +27,8 @@ Fully automate a multiplayer F1 tipping competition. Players submit tips via Sur
 │   │   ├── tips/              # One JSON per race — write once, never modify
 │   │   │   ├── r01_melbourne_tips.json
 │   │   │   └── championship_predictions.json
+│   │   ├── schedule/          # One JSON per race — session start times (OpenF1)
+│   │   │   └── r01_melbourne_schedule.json
 │   │   └── results/           # One JSON per race from OpenF1
 │   │       └── r01_melbourne_result.json
 │   ├── processed/             # Always regenerated — never edit directly
@@ -45,7 +47,9 @@ Fully automate a multiplayer F1 tipping competition. Players submit tips via Sur
 │   ├── survey_mars.py         # SurveyMarsClient — OAuth2 + API requests
 │   ├── survey_index.py        # SurveyIndex — fetches & indexes surveys
 │   ├── tips_parser.py         # TipsParser — fetches, parses, saves tips
+│   ├── fetch_schedule.py      # ScheduleFetcher — fetches OpenF1 session times
 │   ├── fetch_results.py       # ResultsFetcher — fetches OpenF1 results
+│   ├── penalties.py           # assess_lateness() — automatic late penalties
 │   ├── scorer.py              # Scorer — applies scoring rules
 │   ├── aggregator.py          # Aggregator — builds standings
 │   ├── leaderboard.py         # ResultAggregator — OpenF1 data wrapper
@@ -75,14 +79,30 @@ This means if the points system changes, or a bug is found in scoring logic, you
 - **1 point** — driver picked anywhere else in the top 10 (top10)
 - **0 points** — driver not in the top 10 (miss)
 - **Underdog bonus** — any driver outside the championship top 10 before the race scores **double points** (excluding round 1)
-- Late submission penalty: **-5 points per missed practice session**
-- Submission after qualifying: **scores zero**
+- Late submission penalty: **-5 points per practice session that has started**
+- Submission after qualifying **has started**: **scores zero** (main + DNF)
 - Total points for a race weekend **cannot go negative**
+
+### Late Penalties (automatic)
+Penalties are detected automatically by comparing each submission's
+`submitted_at` timestamp against real session start times from OpenF1
+(saved in `data/raw/schedule/`). See `src/penalties.py`.
+
+- **Counting basis = session start.** The deadline is the start of Practice 1.
+  Every penalty session whose start time has passed at submission time
+  deducts 5 points.
+- `submitted_at` timestamps are timezone-naive **Australia/Melbourne** local
+  time; session `date_start` values are UTC. Comparison is done in UTC.
+- **Normal weekend:** penalty sessions = Practice 1, 2, 3; cutoff = Qualifying.
+- **Sprint weekend:** penalty sessions = Practice 1 + Sprint Qualifying;
+  cutoff = **Sprint start** (the sprint takes the place of qualifying).
+- Automatic penalties **stack on top of** any manual override penalty.
 
 ### Sprint
 - **5 points** for each driver selected in the correct position (P1, P2, P3)
 - Only scored on sprint weekends
-- Late submissions on a sprint weekend **cannot earn sprint points**; the sprint takes the place of qualifying for penalty purposes
+- Late submissions on a sprint weekend **cannot earn sprint points** (any
+  submission after Practice 1 has started earns zero sprint points)
 
 ### DNFs
 - **15 points** if a tipped driver actually DNFs in that specific race
@@ -213,6 +233,41 @@ Saved to `data/raw/results/r{round:02d}_{race_slug}_result.json`:
 
 ---
 
+## Session Schedule — OpenF1
+
+### Raw Schedule File Format
+Saved to `data/raw/schedule/r{round:02d}_{race_slug}_schedule.json`. Holds
+every session for the round (with UTC `date_start`) so late-submission
+penalties can be computed offline during scoring. Write-once like results.
+
+```json
+{
+  "round": 9,
+  "race_name": "Silverstone",
+  "year": 2026,
+  "meeting_key": 1289,
+  "is_sprint_weekend": true,
+  "fetched_at": "2026-07-05T03:10:00",
+  "sessions": [
+    {"session_name": "Practice 1",        "session_key": 9993, "date_start": "2026-07-03T11:30:00+00:00", "date_end": "...", "gmt_offset": "01:00:00", "is_cancelled": false},
+    {"session_name": "Sprint Qualifying", "session_key": 9994, "date_start": "2026-07-03T15:30:00+00:00", "...": "..."},
+    {"session_name": "Sprint",            "session_key": 9995, "date_start": "2026-07-04T11:00:00+00:00", "...": "..."},
+    {"session_name": "Qualifying",        "session_key": 9996, "date_start": "2026-07-04T15:00:00+00:00", "...": "..."},
+    {"session_name": "Race",              "session_key": 9997, "date_start": "2026-07-05T14:00:00+00:00", "...": "..."}
+  ]
+}
+```
+
+### `ScheduleFetcher` (`fetch_schedule.py`)
+- `__init__(round_num, year, output_dir)` — no network in the constructor
+- `fetch_and_save(force=False)` — fetch-if-missing (skips network when the file
+  already exists); resolves the round's `meeting_key` via `get_race_calendar`
+  (the same cancellation-aware renumbering used everywhere) and saves all of
+  that meeting's sessions
+- `fetch_schedule.py` is **import-only** — no CLI entry point
+
+---
+
 ## Processed Scored File Format
 Saved to `data/processed/r{round:02d}_{race_slug}_scored.json`:
 
@@ -229,6 +284,10 @@ Saved to `data/processed/r{round:02d}_{race_slug}_scored.json`:
       "player": "Luca",
       "score": 28,
       "penalty": 0,
+      "auto_penalty": 0,
+      "override_penalty": 0,
+      "late_sessions": [],
+      "zeroed": false,
       "picks": [
         {"driver": "Russell",  "result": "exact", "underdog": false, "points": 5},
         {"driver": "Leclerc",  "result": "close", "underdog": false, "points": 3}
@@ -244,20 +303,31 @@ Saved to `data/processed/r{round:02d}_{race_slug}_scored.json`:
 
 The `result` field on each pick is one of: `"exact"`, `"close"`, `"top10"`, `"miss"`.
 
+Penalty fields per player: `penalty` is the total deducted (`auto_penalty +
+override_penalty`); `late_sessions` lists the started penalty sessions;
+`zeroed` is true when the submission was after the cutoff (Qualifying / Sprint).
+Pick-level and DNF-level `points` are always the raw earned values — the
+deduction is applied to the weekend `score`, which is floored at 0.
+Sprint entries in `sprint_tips` gain a `zeroed` flag and score 0 when late.
+
 ---
 
 ## Override File Format
-Only created when a manual correction is needed. Saved to `data/overrides/r{round:02d}_{race_slug}_overrides.json`:
+Late penalties are now applied **automatically** (see Late Penalties above), so
+overrides are only needed for corrections the automatic detection can't make
+(e.g. a schedule anomaly, or an agreed exception). Override penalties **stack on
+top of** the automatic penalty for that player. Saved to
+`data/overrides/r{round:02d}_{race_slug}_overrides.json`:
 
 ```json
 {
   "round": 3,
-  "note": "Luca submitted after FP2 — penalise 1 session",
+  "note": "Manual adjustment on top of any automatic penalty",
   "overrides": [
     {
       "player": "Luca",
       "penalty_points": 5,
-      "reason": "late_submission_1_session"
+      "reason": "manual_correction"
     }
   ]
 }
@@ -414,11 +484,12 @@ Triggers:
 
 Steps:
 1. Fetch tips (`SurveyIndex` + `TipsParser`)
-2. Fetch results (OpenF1)
-3. Score round
-4. Aggregate standings
-5. Build site
-6. Commit updated files and push
+2. Fetch session schedules (`ScheduleFetcher`, OpenF1)
+3. Fetch results (OpenF1)
+4. Score round
+5. Aggregate standings
+6. Build site
+7. Commit updated files and push
 
 ### Secrets Required
 | Secret | Description |
@@ -454,6 +525,8 @@ Steps:
 | Sprint question indices `60001`–`60003` | Confirmed from real China GP sprint response data |
 | Underdog bonus snapshotted at race time | Ensures re-scoring always uses the correct championship standings |
 | DNF budget tracked as running total across rounds | 5 picks per season, allocatable to any race in any quantity |
+| Late penalties detected automatically from OpenF1 session start times | No manual timing calls; re-scoreable; deadline = FP1 start; timestamps read as Australia/Melbourne local time |
+| Deduplication keeps the latest submission per player | Your active submission is your last one — a late resubmission replaces an on-time one and is penalised accordingly (intended) |
 
 ## To Do
 ### Other picks 

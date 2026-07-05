@@ -2,7 +2,7 @@
   "round": 5,
   "race_name": "Canada",
   "scores": {
-    "Veljko": 30,
+    "Veljko": 25,
     "Antonio": 20,
     "Tara": 11,
     "Dean": 18,
@@ -19,8 +19,14 @@
       "player": "Veljko",
       "response_id": 11,
       "submitted_at": "2026-05-23T02:33:21",
-      "score": 30,
-      "penalty": 0,
+      "score": 25,
+      "penalty": 5,
+      "auto_penalty": 5,
+      "override_penalty": 0,
+      "late_sessions": [
+        "Practice 1"
+      ],
+      "zeroed": false,
       "picks": [
         {
           "driver": "Hamilton",
@@ -97,6 +103,10 @@
       "submitted_at": "2026-05-23T00:04:05",
       "score": 20,
       "penalty": 0,
+      "auto_penalty": 0,
+      "override_penalty": 0,
+      "late_sessions": [],
+      "zeroed": false,
       "picks": [
         {
           "driver": "Antonelli",
@@ -167,6 +177,10 @@
       "submitted_at": "2026-05-22T23:00:09",
       "score": 11,
       "penalty": 0,
+      "auto_penalty": 0,
+      "override_penalty": 0,
+      "late_sessions": [],
+      "zeroed": false,
       "picks": [
         {
           "driver": "Antonelli",
@@ -237,6 +251,10 @@
       "submitted_at": "2026-05-22T21:13:03",
       "score": 18,
       "penalty": 0,
+      "auto_penalty": 0,
+      "override_penalty": 0,
+      "late_sessions": [],
+      "zeroed": false,
       "picks": [
         {
           "driver": "Antonelli",
@@ -307,6 +325,10 @@
       "submitted_at": "2026-05-22T20:56:59",
       "score": 25,
       "penalty": 0,
+      "auto_penalty": 0,
+      "override_penalty": 0,
+      "late_sessions": [],
+      "zeroed": false,
       "picks": [
         {
           "driver": "Antonelli",
@@ -377,6 +399,10 @@
       "submitted_at": "2026-05-22T20:56:13",
       "score": 20,
       "penalty": 0,
+      "auto_penalty": 0,
+      "override_penalty": 0,
+      "late_sessions": [],
+      "zeroed": false,
       "picks": [
         {
           "driver": "Leclerc",
@@ -447,6 +473,10 @@
       "submitted_at": "2026-05-22T11:23:15",
       "score": 27,
       "penalty": 0,
+      "auto_penalty": 0,
+      "override_penalty": 0,
+      "late_sessions": [],
+      "zeroed": false,
       "picks": [
         {
           "driver": "Antonelli",
@@ -517,6 +547,10 @@
       "submitted_at": "2026-05-21T18:38:42",
       "score": 49,
       "penalty": 0,
+      "auto_penalty": 0,
+      "override_penalty": 0,
+      "late_sessions": [],
+      "zeroed": false,
       "picks": [
         {
           "driver": "Antonelli",
@@ -603,6 +637,10 @@
       "submitted_at": "2026-05-21T16:28:43",
       "score": 15,
       "penalty": 0,
+      "auto_penalty": 0,
+      "override_penalty": 0,
+      "late_sessions": [],
+      "zeroed": false,
       "picks": [
         {
           "driver": "Russell",
@@ -673,6 +711,10 @@
       "submitted_at": "2026-05-20T22:14:24",
       "score": 17,
       "penalty": 0,
+      "auto_penalty": 0,
+      "override_penalty": 0,
+      "late_sessions": [],
+      "zeroed": false,
       "picks": [
         {
           "driver": "Russell",
@@ -743,6 +785,10 @@
       "submitted_at": "2026-05-20T20:10:05",
       "score": 19,
       "penalty": 0,
+      "auto_penalty": 0,
+      "override_penalty": 0,
+      "late_sessions": [],
+      "zeroed": false,
       "picks": [
         {
           "driver": "Piastri",
@@ -828,7 +874,8 @@
           "points": 0
         }
       ],
-      "score": 0
+      "score": 0,
+      "zeroed": true
     },
     {
       "player": "Antonio",
@@ -849,7 +896,8 @@
           "points": 0
         }
       ],
-      "score": 5
+      "score": 5,
+      "zeroed": false
     },
     {
       "player": "Tara",
@@ -870,7 +918,8 @@
           "points": 5
         }
       ],
-      "score": 15
+      "score": 15,
+      "zeroed": false
     },
     {
       "player": "Dean",
@@ -891,7 +940,8 @@
           "points": 0
         }
       ],
-      "score": 0
+      "score": 0,
+      "zeroed": false
     },
     {
       "player": "Luca",
@@ -912,7 +962,8 @@
           "points": 0
         }
       ],
-      "score": 5
+      "score": 5,
+      "zeroed": false
     },
     {
       "player": "Alex",
@@ -933,7 +984,8 @@
           "points": 0
         }
       ],
-      "score": 0
+      "score": 0,
+      "zeroed": false
     },
     {
       "player": "Riki",
@@ -954,7 +1006,8 @@
           "points": 0
         }
       ],
-      "score": 0
+      "score": 0,
+      "zeroed": false
     },
     {
       "player": "Rino",
@@ -975,7 +1028,8 @@
           "points": 0
         }
       ],
-      "score": 5
+      "score": 5,
+      "zeroed": false
     },
     {
       "player": "Josh",
@@ -996,7 +1050,8 @@
           "points": 0
         }
       ],
-      "score": 0
+      "score": 0,
+      "zeroed": false
     },
     {
       "player": "Jake",
@@ -1017,7 +1072,8 @@
           "points": 0
         }
       ],
-      "score": 5
+      "score": 5,
+      "zeroed": false
     },
     {
       "player": "Barry",
@@ -1038,7 +1094,8 @@
           "points": 0
         }
       ],
-      "score": 0
+      "score": 0,
+      "zeroed": false
     }
   ]
 }

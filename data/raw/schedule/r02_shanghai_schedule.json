@@ -1,0 +1,50 @@
+{
+  "round": 2,
+  "race_name": "Shanghai",
+  "year": 2026,
+  "meeting_key": 1280,
+  "is_sprint_weekend": true,
+  "fetched_at": "2026-07-05T15:10:25.020260",
+  "sessions": [
+    {
+      "session_name": "Practice 1",
+      "session_key": 11235,
+      "date_start": "2026-03-13T03:30:00+00:00",
+      "date_end": "2026-03-13T04:30:00+00:00",
+      "gmt_offset": "08:00:00",
+      "is_cancelled": false
+    },
+    {
+      "session_name": "Sprint Qualifying",
+      "session_key": 11236,
+      "date_start": "2026-03-13T07:30:00+00:00",
+      "date_end": "2026-03-13T08:14:00+00:00",
+      "gmt_offset": "08:00:00",
+      "is_cancelled": false
+    },
+    {
+      "session_name": "Sprint",
+      "session_key": 11240,
+      "date_start": "2026-03-14T03:00:00+00:00",
+      "date_end": "2026-03-14T04:00:00+00:00",
+      "gmt_offset": "08:00:00",
+      "is_cancelled": false
+    },
+    {
+      "session_name": "Qualifying",
+      "session_key": 11241,
+      "date_start": "2026-03-14T07:00:00+00:00",
+      "date_end": "2026-03-14T08:00:00+00:00",
+      "gmt_offset": "08:00:00",
+      "is_cancelled": false
+    },
+    {
+      "session_name": "Race",
+      "session_key": 11245,
+      "date_start": "2026-03-15T07:00:00+00:00",
+      "date_end": "2026-03-15T09:00:00+00:00",
+      "gmt_offset": "08:00:00",
+      "is_cancelled": false
+    }
+  ]
+}

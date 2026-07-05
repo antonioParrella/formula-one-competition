@@ -17,6 +17,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 from survey_mars import SurveyMarsClient
 from survey_index import SurveyIndex
 from tips_parser import TipsParser
+from fetch_schedule import ScheduleFetcher
 from fetch_results import ResultsFetcher
 from scorer import Scorer
 from aggregator import Aggregator
@@ -40,7 +41,7 @@ def run_pipeline(round_filter=None, tip_only=False, force_rebuild=False):
     print("=" * 60)
 
     # ── 1. Fetch tips ─────────────────────────────────────
-    print("\n[1/5] Fetching tips from SurveyMars...")
+    print("\n[1/6] Fetching tips from SurveyMars...")
     client = SurveyMarsClient()
     client.authenticate()
 
@@ -68,9 +69,20 @@ def run_pipeline(round_filter=None, tip_only=False, force_rebuild=False):
         print("\nTip-only mode — stopping after tips fetch.")
         return
 
-    # ── 2. Fetch results ───────────────────────────────────
-    print("\n[2/5] Fetching results from OpenF1...")
     year = 2026
+
+    # ── 2. Fetch session schedules ─────────────────────────
+    print("\n[2/6] Fetching session schedules from OpenF1...")
+    for survey in surveys:
+        try:
+            ScheduleFetcher(round_num=survey["round_num"], year=year).fetch_and_save(
+                force=force_rebuild
+            )
+        except Exception as e:
+            print(f"  WARNING: Failed to fetch schedule for round {survey['round_num']}: {e}")
+
+    # ── 3. Fetch results ───────────────────────────────────
+    print("\n[3/6] Fetching results from OpenF1...")
     for survey in surveys:
         try:
             fetcher = ResultsFetcher(round_num=survey["round_num"], year=year)
@@ -78,8 +90,8 @@ def run_pipeline(round_filter=None, tip_only=False, force_rebuild=False):
         except Exception as e:
             print(f"  WARNING: Failed to fetch results for round {survey['round_num']}: {e}")
 
-    # ── 3. Score rounds ────────────────────────────────────
-    print("\n[3/5] Scoring rounds...")
+    # ── 4. Score rounds ────────────────────────────────────
+    print("\n[4/6] Scoring rounds...")
     for survey in surveys:
         try:
             scorer = Scorer(round_num=survey["round_num"])
@@ -87,13 +99,13 @@ def run_pipeline(round_filter=None, tip_only=False, force_rebuild=False):
         except Exception as e:
             print(f"  WARNING: Failed to score round {survey['round_num']}: {e}")
 
-    # ── 4. Aggregate standings ─────────────────────────────
-    print("\n[4/5] Aggregating standings...")
+    # ── 5. Aggregate standings ─────────────────────────────
+    print("\n[5/6] Aggregating standings...")
     agg = Aggregator()
     agg.build_and_save()
 
-    # ── 5. Build site ──────────────────────────────────────
-    print("\n[5/5] Building website...")
+    # ── 6. Build site ──────────────────────────────────────
+    print("\n[6/6] Building website...")
     builder = SiteBuilder()
     builder.build_and_save()
 
