@@ -2,7 +2,7 @@
   "round": 7,
   "race_name": "Barcelona",
   "scores": {
-    "Riki": 9,
+    "Riki": 0,
     "Alex": 14,
     "Tara": 18,
     "Antonio": 24,
@@ -19,8 +19,15 @@
       "player": "Riki",
       "response_id": 11,
       "submitted_at": "2026-06-13T13:04:55",
-      "score": 9,
-      "penalty": 0,
+      "score": 0,
+      "penalty": 10,
+      "auto_penalty": 10,
+      "override_penalty": 0,
+      "late_sessions": [
+        "Practice 1",
+        "Practice 2"
+      ],
+      "zeroed": false,
       "picks": [
         {
           "driver": "Antonelli",
@@ -97,6 +104,10 @@
       "submitted_at": "2026-06-12T21:13:45",
       "score": 14,
       "penalty": 0,
+      "auto_penalty": 0,
+      "override_penalty": 0,
+      "late_sessions": [],
+      "zeroed": false,
       "picks": [
         {
           "driver": "Leclerc",
@@ -167,6 +178,10 @@
       "submitted_at": "2026-06-12T20:59:06",
       "score": 18,
       "penalty": 0,
+      "auto_penalty": 0,
+      "override_penalty": 0,
+      "late_sessions": [],
+      "zeroed": false,
       "picks": [
         {
           "driver": "Antonelli",
@@ -237,6 +252,10 @@
       "submitted_at": "2026-06-12T20:58:44",
       "score": 24,
       "penalty": 0,
+      "auto_penalty": 0,
+      "override_penalty": 0,
+      "late_sessions": [],
+      "zeroed": false,
       "picks": [
         {
           "driver": "Antonelli",
@@ -307,6 +326,10 @@
       "submitted_at": "2026-06-12T20:23:21",
       "score": 23,
       "penalty": 0,
+      "auto_penalty": 0,
+      "override_penalty": 0,
+      "late_sessions": [],
+      "zeroed": false,
       "picks": [
         {
           "driver": "Antonelli",
@@ -377,6 +400,10 @@
       "submitted_at": "2026-06-12T18:57:03",
       "score": 11,
       "penalty": 0,
+      "auto_penalty": 0,
+      "override_penalty": 0,
+      "late_sessions": [],
+      "zeroed": false,
       "picks": [
         {
           "driver": "Antonelli",
@@ -447,6 +474,10 @@
       "submitted_at": "2026-06-12T17:36:30",
       "score": 21,
       "penalty": 0,
+      "auto_penalty": 0,
+      "override_penalty": 0,
+      "late_sessions": [],
+      "zeroed": false,
       "picks": [
         {
           "driver": "Antonelli",
@@ -517,6 +548,10 @@
       "submitted_at": "2026-06-12T07:59:37",
       "score": 16,
       "penalty": 0,
+      "auto_penalty": 0,
+      "override_penalty": 0,
+      "late_sessions": [],
+      "zeroed": false,
       "picks": [
         {
           "driver": "Antonelli",
@@ -587,6 +622,10 @@
       "submitted_at": "2026-06-12T06:22:07",
       "score": 12,
       "penalty": 0,
+      "auto_penalty": 0,
+      "override_penalty": 0,
+      "late_sessions": [],
+      "zeroed": false,
       "picks": [
         {
           "driver": "Russell",
@@ -663,6 +702,10 @@
       "submitted_at": "2026-06-11T22:14:23",
       "score": 23,
       "penalty": 0,
+      "auto_penalty": 0,
+      "override_penalty": 0,
+      "late_sessions": [],
+      "zeroed": false,
       "picks": [
         {
           "driver": "Russell",
@@ -733,6 +776,10 @@
       "submitted_at": "2026-06-11T18:34:13",
       "score": 11,
       "penalty": 0,
+      "auto_penalty": 0,
+      "override_penalty": 0,
+      "late_sessions": [],
+      "zeroed": false,
       "picks": [
         {
           "driver": "Antonelli",

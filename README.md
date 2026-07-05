@@ -124,13 +124,14 @@ source venv/bin/activate
 python scripts/pipeline.py
 ```
 
-This runs all 5 steps:
+This runs all 6 steps:
 
 1. **Fetch tips** — calls SurveyMars API to get all survey responses
-2. **Fetch results** — calls OpenF1 API to get race results for existing rounds
-3. **Score rounds** — applies scoring rules to each round
-4. **Aggregate standings** — builds season standings from all scored rounds
-5. **Build website** — injects data into `docs/index.html`
+2. **Fetch schedules** — calls OpenF1 API to get session start times (for late penalties)
+3. **Fetch results** — calls OpenF1 API to get race results for existing rounds
+4. **Score rounds** — applies scoring rules to each round
+5. **Aggregate standings** — builds season standings from all scored rounds
+6. **Build website** — injects data into `docs/index.html`
 
 ### Single Round
 
@@ -227,8 +228,9 @@ OpenF1 API ──────→ data/raw/results/│                           
 ```
 
 - `/data/raw/` is **write-once** — never edit these files manually
+  - `tips/` player submissions, `schedule/` session start times (for late penalties), `results/` race results
 - `/data/processed/` is **always derived** — delete and regenerate anytime by re-running the pipeline
-- `/data/overrides/` holds manual corrections (e.g. late submission penalties) — only created when needed
+- `/data/overrides/` holds manual corrections (stacked on top of automatic penalties) — only created when needed
 
 ---
 
@@ -255,11 +257,19 @@ OpenF1 API ──────→ data/raw/results/│                           
 - Driver must have **started** the race (DNS doesn't count)
 - **5 picks per season** total, allocatable to any round (0–5 per round)
 
-### Penalties
+### Penalties (automatic)
 
-- **-5 points** per missed practice session (late submission)
-- Submission after qualifying: **scores zero**
+Detected automatically by comparing each submission's timestamp against real
+session start times from OpenF1 (`data/raw/schedule/`). Timestamps are read as
+Australia/Melbourne local time.
+
+- **-5 points** per practice session that has **started** before submission
+  (deadline = Practice 1 start)
+- Submission after qualifying starts: **scores zero** (sprint weekends: after the
+  Sprint starts, with Practice 1 + Sprint Qualifying as the penalty sessions)
+- Late submissions **earn no sprint points**
 - Total weekend points **cannot go negative** (floored at 0)
+- Manual overrides stack on top of the automatic penalty
 
 ---
 
@@ -267,12 +277,14 @@ OpenF1 API ──────→ data/raw/results/│                           
 
 ```
 ├── scripts/
-│   └── pipeline.py        # Main entry point — runs all 5 steps
+│   └── pipeline.py        # Main entry point — runs all 6 steps
 ├── src/
 │   ├── survey_mars.py     # SurveyMarsClient — OAuth2 + API requests
 │   ├── survey_index.py    # SurveyIndex — fetches & indexes surveys by publish date
 │   ├── tips_parser.py     # TipsParser — fetches responses, saves raw tips
+│   ├── fetch_schedule.py  # ScheduleFetcher — gets OpenF1 session start times
 │   ├── fetch_results.py   # ResultsFetcher — gets OpenF1 race results
+│   ├── penalties.py       # assess_lateness() — automatic late penalties
 │   ├── scorer.py          # Scorer — applies scoring rules per round
 │   ├── aggregator.py     # Aggregator — builds season standings
 │   ├── build_site.py      # SiteBuilder — injects data into index.html
@@ -291,7 +303,7 @@ OpenF1 API ──────→ data/raw/results/│                           
 │   ├── .nojekyll          # Disables Jekyll on GitHub Pages
 │   └── survey_config.json # Survey configuration
 ├── data/
-│   ├── raw/               # Write-once source data (tips + results)
+│   ├── raw/               # Write-once source data (tips + schedule + results)
 │   ├── processed/         # Derived data (scored + standings)
 │   └── overrides/         # Manual corrections
 ├── notebooks/             # Jupyter notebooks for exploration

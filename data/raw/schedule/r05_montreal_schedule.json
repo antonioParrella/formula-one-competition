@@ -1,0 +1,50 @@
+{
+  "round": 5,
+  "race_name": "Montreal",
+  "year": 2026,
+  "meeting_key": 1285,
+  "is_sprint_weekend": true,
+  "fetched_at": "2026-07-05T15:10:31.147442",
+  "sessions": [
+    {
+      "session_name": "Practice 1",
+      "session_key": 11281,
+      "date_start": "2026-05-22T16:30:00+00:00",
+      "date_end": "2026-05-22T17:30:00+00:00",
+      "gmt_offset": "-04:00:00",
+      "is_cancelled": false
+    },
+    {
+      "session_name": "Sprint Qualifying",
+      "session_key": 11282,
+      "date_start": "2026-05-22T20:30:00+00:00",
+      "date_end": "2026-05-22T21:14:00+00:00",
+      "gmt_offset": "-04:00:00",
+      "is_cancelled": false
+    },
+    {
+      "session_name": "Sprint",
+      "session_key": 11286,
+      "date_start": "2026-05-23T16:00:00+00:00",
+      "date_end": "2026-05-23T17:00:00+00:00",
+      "gmt_offset": "-04:00:00",
+      "is_cancelled": false
+    },
+    {
+      "session_name": "Qualifying",
+      "session_key": 11287,
+      "date_start": "2026-05-23T20:00:00+00:00",
+      "date_end": "2026-05-23T21:00:00+00:00",
+      "gmt_offset": "-04:00:00",
+      "is_cancelled": false
+    },
+    {
+      "session_name": "Race",
+      "session_key": 11291,
+      "date_start": "2026-05-24T20:00:00+00:00",
+      "date_end": "2026-05-24T22:00:00+00:00",
+      "gmt_offset": "-04:00:00",
+      "is_cancelled": false
+    }
+  ]
+}

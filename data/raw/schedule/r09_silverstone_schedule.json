@@ -1,0 +1,50 @@
+{
+  "round": 9,
+  "race_name": "Silverstone",
+  "year": 2026,
+  "meeting_key": 1289,
+  "is_sprint_weekend": true,
+  "fetched_at": "2026-07-05T15:09:29.767583",
+  "sessions": [
+    {
+      "session_name": "Practice 1",
+      "session_key": 11316,
+      "date_start": "2026-07-03T11:30:00+00:00",
+      "date_end": "2026-07-03T12:30:00+00:00",
+      "gmt_offset": "01:00:00",
+      "is_cancelled": false
+    },
+    {
+      "session_name": "Sprint Qualifying",
+      "session_key": 11317,
+      "date_start": "2026-07-03T15:30:00+00:00",
+      "date_end": "2026-07-03T16:14:00+00:00",
+      "gmt_offset": "01:00:00",
+      "is_cancelled": false
+    },
+    {
+      "session_name": "Sprint",
+      "session_key": 11321,
+      "date_start": "2026-07-04T11:00:00+00:00",
+      "date_end": "2026-07-04T12:00:00+00:00",
+      "gmt_offset": "01:00:00",
+      "is_cancelled": false
+    },
+    {
+      "session_name": "Qualifying",
+      "session_key": 11322,
+      "date_start": "2026-07-04T15:00:00+00:00",
+      "date_end": "2026-07-04T16:00:00+00:00",
+      "gmt_offset": "01:00:00",
+      "is_cancelled": false
+    },
+    {
+      "session_name": "Race",
+      "session_key": 11326,
+      "date_start": "2026-07-05T14:00:00+00:00",
+      "date_end": "2026-07-05T16:00:00+00:00",
+      "gmt_offset": "01:00:00",
+      "is_cancelled": false
+    }
+  ]
+}

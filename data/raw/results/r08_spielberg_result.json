@@ -1,0 +1,37 @@
+{
+  "round": 8,
+  "race_name": "Spielberg",
+  "year": 2026,
+  "is_sprint_weekend": false,
+  "top10": [
+    "RUS",
+    "VER",
+    "ANT",
+    "PIA",
+    "HAM",
+    "HAD",
+    "NOR",
+    "LEC",
+    "LAW",
+    "LIN"
+  ],
+  "dnfs": [
+    "STR",
+    "SAI",
+    "PER",
+    "BOT"
+  ],
+  "sprint_top3": null,
+  "championship_top10_before_race": [
+    "ANT",
+    "RUS",
+    "HAM",
+    "PIA",
+    "NOR",
+    "LEC",
+    "VER",
+    "HAD",
+    "GAS",
+    "LAW"
+  ]
+}

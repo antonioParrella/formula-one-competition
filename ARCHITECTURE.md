@@ -279,9 +279,28 @@ ResultsFetcher(round_num, year)
 }
 ```
 
+### 4b. ScheduleFetcher (`fetch_schedule.py`)
+
+Fetches the round's full session schedule (start times) from OpenF1 so the
+Scorer can detect late submissions offline.
+
+```
+ScheduleFetcher(round_num, year)
+    ║
+    ╠═ fetch_and_save(force=False)
+    ║   ├─ Fetch-if-missing (skips network when the file already exists)
+    ║   ├─ Resolves meeting_key via get_race_calendar (cancellation-aware renumbering)
+    ║   ├─ Saves all sessions (Practice/Qualifying/Sprint/Race) with UTC date_start
+    ║   └─ Saves to data/raw/schedule/r{N}_{slug}_schedule.json
+    ║
+    ╚═ Import-only — no CLI entry point
+```
+
 ### 5. Scorer (`scorer.py`)
 
-Reads raw tips, raw results, and overrides — applies scoring rules — outputs processed scored data.
+Reads raw tips, raw results, overrides, and the session schedule — applies
+scoring rules (including automatic late penalties via
+`penalties.assess_lateness()`) — outputs processed scored data.
 
 ```
 Scorer(round_num)
@@ -331,10 +350,17 @@ Scorer(round_num)
 - Must have started the race (DNS doesn't count)
 - Season budget: **5 picks total** (used across any round)
 
-**Penalties:**
+**Penalties (automatic — `penalties.assess_lateness()`):**
 
-- Late: **-5 per missed practice session**
-- After qualifying: **scores zero**
+- Detected by comparing `submitted_at` (Australia/Melbourne local time) against
+  real session start times from `data/raw/schedule/` (UTC), compared in UTC
+- Late: **-5 per penalty session whose start has passed** (basis = session start;
+  deadline = Practice 1 start)
+- Normal weekend penalty sessions: Practice 1/2/3; cutoff = Qualifying
+- Sprint weekend penalty sessions: Practice 1 + Sprint Qualifying; cutoff = Sprint
+- After the cutoff has started: **scores zero** (main + DNF)
+- Late on a sprint weekend also earns **zero sprint points**
+- Automatic penalty **stacks on** any manual override penalty
 - Total cannot go negative (floored at 0)
 
 #### Processed Scored File Format
@@ -354,6 +380,10 @@ Scorer(round_num)
       "submitted_at": "2026-03-26T22:32:33",
       "score": 28,
       "penalty": 0,
+      "auto_penalty": 0,
+      "override_penalty": 0,
+      "late_sessions": [],
+      "zeroed": false,
       "picks": [
         {"driver": "Russell",  "result": "exact", "underdog": false, "points": 5},
         {"driver": "Leclerc",  "result": "close", "underdog": false, "points": 3}
@@ -372,11 +402,16 @@ Scorer(round_num)
         {"driver": "Piastri",    "result": "miss", "points": 0},
         {"driver": "Norris",     "result": "miss", "points": 0}
       ],
-      "score": 0
+      "score": 0,
+      "zeroed": false
     }
   ]
 }
 ```
+
+`penalty` = `auto_penalty` + `override_penalty`. Pick-level `points` stay raw;
+the deduction is applied to `score` (floored at 0). A late player's sprint
+entry has `zeroed: true` and `score: 0`.
 
 ### 6. Aggregator (`aggregator.py`)
 
@@ -670,16 +705,20 @@ At scoring time, `race_utils.py` also provides `clean_race_name()` which strips 
 
 ## Override System
 
+Late penalties are applied automatically (see the Penalties section). Overrides
+remain for manual corrections the automatic detection can't make, and **stack on
+top of** the automatic penalty.
+
 ```json
 // data/overrides/r02_china_overrides.json
 {
   "round": 2,
-  "note": "Player X submitted late — penalise 1 session",
+  "note": "Manual adjustment on top of any automatic penalty",
   "overrides": [
     {
       "player": "Player X",
       "penalty_points": 5,
-      "reason": "late_submission_1_session"
+      "reason": "manual_correction"
     }
   ]
 }
@@ -688,4 +727,5 @@ At scoring time, `race_utils.py` also provides `clean_race_name()` which strips 
 - Only created when a manual correction is needed
 - Separate from raw data so corrections are visible and reversible
 - Applied during scoring via `Scorer._parse_overrides()`
-- Penalty applied after main race + DNF scores calculated, before flooring at 0
+- `penalty = auto_penalty + override_penalty`, applied after main race + DNF
+  scores are calculated, before flooring at 0

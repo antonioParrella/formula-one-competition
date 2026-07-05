@@ -2,7 +2,7 @@
   "round": 1,
   "race_name": "Melbourne",
   "scores": {
-    "Veljko": 11,
+    "Veljko": 1,
     "Tara": 7,
     "Riki": 8,
     "Luca": 28,
@@ -19,8 +19,15 @@
       "player": "Veljko",
       "response_id": 11,
       "submitted_at": "2026-03-06T19:00:17",
-      "score": 11,
-      "penalty": 0,
+      "score": 1,
+      "penalty": 10,
+      "auto_penalty": 10,
+      "override_penalty": 0,
+      "late_sessions": [
+        "Practice 1",
+        "Practice 2"
+      ],
+      "zeroed": false,
       "picks": [
         {
           "driver": "Piastri",
@@ -97,6 +104,10 @@
       "submitted_at": "2026-03-06T09:22:44",
       "score": 7,
       "penalty": 0,
+      "auto_penalty": 0,
+      "override_penalty": 0,
+      "late_sessions": [],
+      "zeroed": false,
       "picks": [
         {
           "driver": "Piastri",
@@ -167,6 +178,10 @@
       "submitted_at": "2026-03-06T09:10:17",
       "score": 8,
       "penalty": 0,
+      "auto_penalty": 0,
+      "override_penalty": 0,
+      "late_sessions": [],
+      "zeroed": false,
       "picks": [
         {
           "driver": "Verstappen",
@@ -237,6 +252,10 @@
       "submitted_at": "2026-03-05T21:12:48",
       "score": 28,
       "penalty": 0,
+      "auto_penalty": 0,
+      "override_penalty": 0,
+      "late_sessions": [],
+      "zeroed": false,
       "picks": [
         {
           "driver": "Russell",
@@ -318,6 +337,10 @@
       "submitted_at": "2026-03-05T19:25:40",
       "score": 19,
       "penalty": 0,
+      "auto_penalty": 0,
+      "override_penalty": 0,
+      "late_sessions": [],
+      "zeroed": false,
       "picks": [
         {
           "driver": "Russell",
@@ -388,6 +411,10 @@
       "submitted_at": "2026-03-05T17:49:51",
       "score": 21,
       "penalty": 0,
+      "auto_penalty": 0,
+      "override_penalty": 0,
+      "late_sessions": [],
+      "zeroed": false,
       "picks": [
         {
           "driver": "Norris",
@@ -474,6 +501,10 @@
       "submitted_at": "2026-03-05T17:45:29",
       "score": 28,
       "penalty": 0,
+      "auto_penalty": 0,
+      "override_penalty": 0,
+      "late_sessions": [],
+      "zeroed": false,
       "picks": [
         {
           "driver": "Russell",
@@ -555,6 +586,10 @@
       "submitted_at": "2026-03-04T15:48:02",
       "score": 31,
       "penalty": 0,
+      "auto_penalty": 0,
+      "override_penalty": 0,
+      "late_sessions": [],
+      "zeroed": false,
       "picks": [
         {
           "driver": "Verstappen",
@@ -636,6 +671,10 @@
       "submitted_at": "2026-03-04T14:27:01",
       "score": 7,
       "penalty": 0,
+      "auto_penalty": 0,
+      "override_penalty": 0,
+      "late_sessions": [],
+      "zeroed": false,
       "picks": [
         {
           "driver": "Piastri",
@@ -712,6 +751,10 @@
       "submitted_at": "2026-03-04T08:46:41",
       "score": 23,
       "penalty": 0,
+      "auto_penalty": 0,
+      "override_penalty": 0,
+      "late_sessions": [],
+      "zeroed": false,
       "picks": [
         {
           "driver": "Russell",
@@ -782,6 +825,10 @@
       "submitted_at": "2026-03-04T07:15:47",
       "score": 11,
       "penalty": 0,
+      "auto_penalty": 0,
+      "override_penalty": 0,
+      "late_sessions": [],
+      "zeroed": false,
       "picks": [
         {
           "driver": "Russell",

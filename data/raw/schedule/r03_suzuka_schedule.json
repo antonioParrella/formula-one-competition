@@ -1,0 +1,50 @@
+{
+  "round": 3,
+  "race_name": "Suzuka",
+  "year": 2026,
+  "meeting_key": 1281,
+  "is_sprint_weekend": false,
+  "fetched_at": "2026-07-05T15:10:27.083151",
+  "sessions": [
+    {
+      "session_name": "Practice 1",
+      "session_key": 11246,
+      "date_start": "2026-03-27T02:30:00+00:00",
+      "date_end": "2026-03-27T03:30:00+00:00",
+      "gmt_offset": "09:00:00",
+      "is_cancelled": false
+    },
+    {
+      "session_name": "Practice 2",
+      "session_key": 11247,
+      "date_start": "2026-03-27T06:00:00+00:00",
+      "date_end": "2026-03-27T07:00:00+00:00",
+      "gmt_offset": "09:00:00",
+      "is_cancelled": false
+    },
+    {
+      "session_name": "Practice 3",
+      "session_key": 11248,
+      "date_start": "2026-03-28T02:30:00+00:00",
+      "date_end": "2026-03-28T03:30:00+00:00",
+      "gmt_offset": "09:00:00",
+      "is_cancelled": false
+    },
+    {
+      "session_name": "Qualifying",
+      "session_key": 11249,
+      "date_start": "2026-03-28T06:00:00+00:00",
+      "date_end": "2026-03-28T07:00:00+00:00",
+      "gmt_offset": "09:00:00",
+      "is_cancelled": false
+    },
+    {
+      "session_name": "Race",
+      "session_key": 11253,
+      "date_start": "2026-03-29T05:00:00+00:00",
+      "date_end": "2026-03-29T07:00:00+00:00",
+      "gmt_offset": "09:00:00",
+      "is_cancelled": false
+    }
+  ]
+}

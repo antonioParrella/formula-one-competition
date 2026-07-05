@@ -2,9 +2,9 @@
   "round": 6,
   "race_name": "Monaco",
   "scores": {
-    "Alex": 16,
-    "Veljko": 9,
-    "Antonio": 8,
+    "Alex": 11,
+    "Veljko": 4,
+    "Antonio": 3,
     "Dean": 9,
     "Rino": 26,
     "Riki": 14,
@@ -19,8 +19,14 @@
       "player": "Alex",
       "response_id": 14,
       "submitted_at": "2026-06-05T22:59:26",
-      "score": 16,
-      "penalty": 0,
+      "score": 11,
+      "penalty": 5,
+      "auto_penalty": 5,
+      "override_penalty": 0,
+      "late_sessions": [
+        "Practice 1"
+      ],
+      "zeroed": false,
       "picks": [
         {
           "driver": "Verstappen",
@@ -89,8 +95,14 @@
       "player": "Veljko",
       "response_id": 13,
       "submitted_at": "2026-06-05T22:05:00",
-      "score": 9,
-      "penalty": 0,
+      "score": 4,
+      "penalty": 5,
+      "auto_penalty": 5,
+      "override_penalty": 0,
+      "late_sessions": [
+        "Practice 1"
+      ],
+      "zeroed": false,
       "picks": [
         {
           "driver": "Hamilton",
@@ -159,8 +171,14 @@
       "player": "Antonio",
       "response_id": 12,
       "submitted_at": "2026-06-05T22:00:15",
-      "score": 8,
-      "penalty": 0,
+      "score": 3,
+      "penalty": 5,
+      "auto_penalty": 5,
+      "override_penalty": 0,
+      "late_sessions": [
+        "Practice 1"
+      ],
+      "zeroed": false,
       "picks": [
         {
           "driver": "Leclerc",
@@ -231,6 +249,10 @@
       "submitted_at": "2026-06-05T18:13:48",
       "score": 9,
       "penalty": 0,
+      "auto_penalty": 0,
+      "override_penalty": 0,
+      "late_sessions": [],
+      "zeroed": false,
       "picks": [
         {
           "driver": "Leclerc",
@@ -301,6 +323,10 @@
       "submitted_at": "2026-06-05T17:12:04",
       "score": 26,
       "penalty": 0,
+      "auto_penalty": 0,
+      "override_penalty": 0,
+      "late_sessions": [],
+      "zeroed": false,
       "picks": [
         {
           "driver": "Hamilton",
@@ -377,6 +403,10 @@
       "submitted_at": "2026-06-05T16:38:48",
       "score": 14,
       "penalty": 0,
+      "auto_penalty": 0,
+      "override_penalty": 0,
+      "late_sessions": [],
+      "zeroed": false,
       "picks": [
         {
           "driver": "Russell",
@@ -447,6 +477,10 @@
       "submitted_at": "2026-06-05T14:19:11",
       "score": 6,
       "penalty": 0,
+      "auto_penalty": 0,
+      "override_penalty": 0,
+      "late_sessions": [],
+      "zeroed": false,
       "picks": [
         {
           "driver": "Russell",
@@ -517,6 +551,10 @@
       "submitted_at": "2026-06-05T07:52:24",
       "score": 23,
       "penalty": 0,
+      "auto_penalty": 0,
+      "override_penalty": 0,
+      "late_sessions": [],
+      "zeroed": false,
       "picks": [
         {
           "driver": "Leclerc",
@@ -593,6 +631,10 @@
       "submitted_at": "2026-06-04T22:57:31",
       "score": 14,
       "penalty": 0,
+      "auto_penalty": 0,
+      "override_penalty": 0,
+      "late_sessions": [],
+      "zeroed": false,
       "picks": [
         {
           "driver": "Leclerc",
@@ -669,6 +711,10 @@
       "submitted_at": "2026-06-04T18:04:49",
       "score": 7,
       "penalty": 0,
+      "auto_penalty": 0,
+      "override_penalty": 0,
+      "late_sessions": [],
+      "zeroed": false,
       "picks": [
         {
           "driver": "Leclerc",
@@ -745,6 +791,10 @@
       "submitted_at": "2026-06-03T08:45:05",
       "score": 14,
       "penalty": 0,
+      "auto_penalty": 0,
+      "override_penalty": 0,
+      "late_sessions": [],
+      "zeroed": false,
       "picks": [
         {
           "driver": "Russell",

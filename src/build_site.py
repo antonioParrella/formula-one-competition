@@ -143,13 +143,30 @@ class SiteBuilder:
             for player, s_pt in sprint_scores.items():
                 total_scores[player] = total_scores.get(player, 0) + s_pt
 
-            # Per-player breakdown as structured data
+            # Per-player breakdown as structured data.
+            # Derive raw pick/DNF points from player_tips so a penalty
+            # (or a zeroed total) is shown explicitly rather than being
+            # hidden inside a reduced "main" figure.
+            tips_by_player = {
+                pt["player"]: pt for pt in data.get("player_tips", [])
+            }
             breakdown = {}
             for player in total_scores:
-                main = race_scores.get(player, 0) - dnf_scores.get(player, 0)
+                pt = tips_by_player.get(player)
                 dnf = dnf_scores.get(player, 0)
                 spr = sprint_scores.get(player, 0)
-                breakdown[player] = {"main": main, "dnf": dnf, "sprint": spr}
+                if pt is not None:
+                    main = sum(p.get("points", 0) for p in pt.get("picks", []))
+                    # Effective deduction: penalty capped by the non-negative
+                    # floor and by any zeroing, so main + dnf - penalty == score.
+                    shown_penalty = main + dnf - pt.get("score", 0)
+                else:
+                    main = race_scores.get(player, 0) - dnf
+                    shown_penalty = 0
+                bd = {"main": main, "dnf": dnf, "sprint": spr}
+                if shown_penalty > 0:
+                    bd["penalty"] = shown_penalty
+                breakdown[player] = bd
 
             scores_sorted = dict(
                 sorted(total_scores.items(), key=lambda x: x[1], reverse=True)
