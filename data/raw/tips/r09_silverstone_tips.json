@@ -1,0 +1,283 @@
+{
+  "round": 9,
+  "race_name": "Silverstone",
+  "survey_id": "TOgkhQU0V",
+  "is_sprint_weekend": true,
+  "fetched_at": "2026-07-05T02:23:53.653470",
+  "total_responses": 11,
+  "submissions": [
+    {
+      "player": "Riki",
+      "response_id": 11,
+      "submitted_at": "2026-07-04T09:44:53",
+      "time_spent_s": 35,
+      "main_race": [
+        "RUS",
+        "ANT",
+        "HAM",
+        "NOR",
+        "VER",
+        "PIA",
+        "LEC",
+        "SAI",
+        "HAD",
+        "ALO"
+      ],
+      "sprint": [
+        "RUS",
+        "ANT",
+        "LEC"
+      ],
+      "dnf_picks": []
+    },
+    {
+      "player": "Alex",
+      "response_id": 10,
+      "submitted_at": "2026-07-03T22:18:44",
+      "time_spent_s": 29,
+      "main_race": [
+        "NOR",
+        "HAD",
+        "PIA",
+        "HAM",
+        "VER",
+        "LEC",
+        "RUS",
+        "ANT",
+        "ALB",
+        "SAI"
+      ],
+      "sprint": [
+        "VER",
+        "LEC",
+        "PIA"
+      ],
+      "dnf_picks": [
+        "NOR",
+        "PIA",
+        "VER",
+        "HAD",
+        "LEC"
+      ]
+    },
+    {
+      "player": "Josh",
+      "response_id": 9,
+      "submitted_at": "2026-07-03T20:15:15",
+      "time_spent_s": 121,
+      "main_race": [
+        "HAM",
+        "RUS",
+        "ANT",
+        "NOR",
+        "VER",
+        "PIA",
+        "LEC",
+        "HAD",
+        "LAW",
+        "LIN"
+      ],
+      "sprint": [
+        "ANT",
+        "HAM",
+        "RUS"
+      ],
+      "dnf_picks": []
+    },
+    {
+      "player": "Tara",
+      "response_id": 8,
+      "submitted_at": "2026-07-03T19:09:47",
+      "time_spent_s": 242,
+      "main_race": [
+        "ANT",
+        "HAM",
+        "RUS",
+        "PIA",
+        "NOR",
+        "LEC",
+        "VER",
+        "HAD",
+        "GAS",
+        "LAW"
+      ],
+      "sprint": [
+        "RUS",
+        "ANT",
+        "HAM"
+      ],
+      "dnf_picks": []
+    },
+    {
+      "player": "Antonio",
+      "response_id": 7,
+      "submitted_at": "2026-07-03T19:05:37",
+      "time_spent_s": 273,
+      "main_race": [
+        "RUS",
+        "HAM",
+        "ANT",
+        "LEC",
+        "NOR",
+        "PIA",
+        "VER",
+        "LIN",
+        "BEA",
+        "COL"
+      ],
+      "sprint": [
+        "HAM",
+        "ANT",
+        "RUS"
+      ],
+      "dnf_picks": []
+    },
+    {
+      "player": "Dean",
+      "response_id": 6,
+      "submitted_at": "2026-07-03T11:01:18",
+      "time_spent_s": 211,
+      "main_race": [
+        "RUS",
+        "ANT",
+        "HAM",
+        "VER",
+        "NOR",
+        "PIA",
+        "LEC",
+        "HAD",
+        "GAS",
+        "COL"
+      ],
+      "sprint": [
+        "RUS",
+        "ANT",
+        "HAM"
+      ],
+      "dnf_picks": []
+    },
+    {
+      "player": "Rino",
+      "response_id": 5,
+      "submitted_at": "2026-07-03T08:14:57",
+      "time_spent_s": 252,
+      "main_race": [
+        "RUS",
+        "ANT",
+        "HAM",
+        "NOR",
+        "VER",
+        "LEC",
+        "PIA",
+        "GAS",
+        "BEA",
+        "LIN"
+      ],
+      "sprint": [
+        "RUS",
+        "ANT",
+        "NOR"
+      ],
+      "dnf_picks": []
+    },
+    {
+      "player": "Luca",
+      "response_id": 4,
+      "submitted_at": "2026-07-03T08:05:35",
+      "time_spent_s": 47,
+      "main_race": [
+        "HAM",
+        "RUS",
+        "PIA",
+        "VER",
+        "ANT",
+        "NOR",
+        "HAD",
+        "LEC",
+        "LAW",
+        "LIN"
+      ],
+      "sprint": [
+        "HAM",
+        "NOR",
+        "ANT"
+      ],
+      "dnf_picks": []
+    },
+    {
+      "player": "Barry",
+      "response_id": 3,
+      "submitted_at": "2026-07-02T20:25:44",
+      "time_spent_s": 247,
+      "main_race": [
+        "RUS",
+        "HAM",
+        "NOR",
+        "ANT",
+        "VER",
+        "PIA",
+        "LEC",
+        "HAD",
+        "LAW",
+        "SAI"
+      ],
+      "sprint": [
+        "RUS",
+        "HAM",
+        "ANT"
+      ],
+      "dnf_picks": []
+    },
+    {
+      "player": "Veljko",
+      "response_id": 2,
+      "submitted_at": "2026-07-02T04:29:25",
+      "time_spent_s": 104,
+      "main_race": [
+        "HAM",
+        "ANT",
+        "VER",
+        "RUS",
+        "LEC",
+        "NOR",
+        "PIA",
+        "HAD",
+        "LAW",
+        "LIN"
+      ],
+      "sprint": [
+        "ANT",
+        "RUS",
+        "VER"
+      ],
+      "dnf_picks": []
+    },
+    {
+      "player": "Jake",
+      "response_id": 1,
+      "submitted_at": "2026-07-01T08:42:03",
+      "time_spent_s": 65,
+      "main_race": [
+        "RUS",
+        "HAM",
+        "ANT",
+        "NOR",
+        "VER",
+        "LEC",
+        "PIA",
+        "HAD",
+        "OCO",
+        "COL"
+      ],
+      "sprint": [
+        "RUS",
+        "HAM",
+        "ANT"
+      ],
+      "dnf_picks": [
+        "BOT",
+        "PER"
+      ]
+    }
+  ]
+}
