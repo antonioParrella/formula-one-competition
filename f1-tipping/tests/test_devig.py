@@ -2,6 +2,7 @@ import pytest
 
 from odds.devig import (
     PROB_CAP,
+    devig_classified,
     devig_h2h,
     devig_snapshot,
     devig_topn,
@@ -75,6 +76,45 @@ def test_select_price_prefers_last_traded_then_midpoint():
     assert select_price({"last_traded": None, "back": 2.8, "lay": 3.4}) == pytest.approx(3.1)
     assert select_price({"last_traded": None, "back": 2.8, "lay": None}) == 2.8
     assert select_price({"last_traded": None, "back": None, "lay": None}) is None
+
+
+def test_classified_two_way_normalises():
+    q_yes, q_no = 1 / 1.10, 1 / 8.0
+    assert devig_classified(1.10, 8.0) == pytest.approx(q_yes / (q_yes + q_no))
+
+
+def test_classified_one_sided_keeps_vig_and_caps():
+    assert devig_classified(1.25, None) == pytest.approx(0.8)
+    assert devig_classified(None, 10.0) == pytest.approx(0.9)
+    assert devig_classified(1.0005, None) == pytest.approx(PROB_CAP)
+    assert devig_classified(None, None) is None
+
+
+def test_devig_snapshot_extracts_dnf_from_classified():
+    snapshot = {
+        "race_name": "Test",
+        "markets": {
+            "win": {"market_name": "Winner", "runners": {
+                "AAA": {"last_traded": 2.0}, "BBB": {"last_traded": 2.0}}},
+            "classified": {
+                "yes": {"market_name": "Yes To be Classified", "runners": {
+                    "AAA": {"last_traded": 1.10},
+                    "BBB": {"last_traded": 1.25},
+                    # only priced here -> must not join the fit field
+                    "CCC": {"last_traded": 1.20},
+                }},
+                "no": {"market_name": "No To be Classified", "runners": {
+                    "AAA": {"last_traded": 8.0},
+                }},
+            },
+        },
+    }
+    out = devig_snapshot(snapshot)
+    q_yes, q_no = 1 / 1.10, 1 / 8.0
+    assert out["dnf"]["AAA"] == pytest.approx(1 - q_yes / (q_yes + q_no))
+    assert out["dnf"]["BBB"] == pytest.approx(0.2)
+    assert out["drivers"] == ["AAA", "BBB"]
+    assert any(m.startswith("classified(yes+no):") for m in out["markets_used"])
 
 
 def test_devig_snapshot_requires_win_market():

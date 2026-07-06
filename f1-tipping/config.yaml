@@ -4,21 +4,59 @@
 race:
   # Update these before each fetch — used to find the Betfair event and to
   # name snapshot files. Round drives the underdog rule (no bonus in round 1).
-  name: "Silverstone"
+  name: "British Grand Prix"    # must match the Betfair event text (e.g. "F1 British Grand Prix")
   year: 2026
   round: 8
   include_sprint_markets: false   # sprint weekends list separate markets — keep GP only
 
 betfair:
   credentials_path: "~/.betfair/credentials.yaml"   # username, password, app_key, certs_path
-  event_type_id: "27"                               # Motor Sport
+  event_type_id: "8"                                # Motor Sport (Betfair canonical id)
   # Market name fragments searched in listMarketCatalogue output, priority order.
   market_names:
     win:   ["Race Winner", "Winner"]
     top10: ["Points Finish", "Top 10 Finish", "Top 10"]
     top6:  ["Top 6 Finish", "Top 6"]
     top3:  ["Podium Finish", "Top 3 Finish", "Top 3", "Podium"]
+    # Driver-runner markets "Yes To be Classified" / "No To be Classified" —
+    # per driver, de-vigged to P(classified); 1 - P(classified) is the
+    # driver's DNF probability.
+    classified: ["To Be Classified", "Classified"]
   fetch_h2h: true                                   # markets with ' v ' in the name
+
+sources:
+  # Sources pulled by `fetch --source all`. Each failing source is skipped
+  # with a warning; if >= 2 succeed a combined snapshot is also saved (and,
+  # being newest, is what `fit` picks up).
+  enabled: [betfair, kalshi, polymarket]
+
+kalshi:
+  # Public REST market data — no account or auth (auth is trading-only).
+  # Race events open ~2 weeks before the race; earlier fetches fail loudly.
+  api_base: "https://api.elections.kalshi.com/trade-api/v2"
+  # Series ticker per structural market. Event tickers are
+  # <series>-<race suffix> (e.g. KXF1RACE-BRIGP26); the suffix is
+  # discovered from the win series by race name.
+  series:
+    win:   KXF1RACE
+    top3:  KXF1RACEPODIUM
+    top5:  KXF1TOP5
+    top10: KXF1TOP10
+  max_spread: 0.15    # drop two-sided quotes wider than this (prob space)
+
+polymarket:
+  # Public Gamma API — no account or auth. Winner books go live weeks out;
+  # podium/h2h sit on placeholder quotes (dropped by max_spread) until
+  # close to the weekend.
+  api_base: "https://gamma-api.polymarket.com"
+  tag_slug: f1
+  # Event title fragments per market key, matched together with race.name
+  # (e.g. "Belgian Grand Prix: Driver Winner").
+  market_titles:
+    win:  ["driver winner"]
+    top3: ["podium"]
+    h2h:  ["head-to-head"]
+  max_spread: 0.15
 
 devig:
   win_method: proportional      # proportional | power
@@ -33,8 +71,11 @@ model:
   fit_tau: 0.15                 # soft-rank temperature for the differentiable fit
   seed: 20260703
   dnf:
-    default_prob: 0.10          # season-average retirement prior
-    per_driver: {}              # e.g. { STR: 0.18, GAS: 0.14 }
+    # Per driver, highest priority first: per_driver override here ->
+    # market-implied 1 - P(classified) from the "To Be Classified" Yes/No
+    # markets -> default_prob season prior.
+    default_prob: 0.10          # season-average retirement prior (fallback)
+    per_driver: {}              # explicit override, e.g. { STR: 0.18, GAS: 0.14 }
 
 underdogs:
   # Championship top-10 before the race: picks OUTSIDE this set score double
@@ -54,10 +95,10 @@ optimise:
   assume_additive: true
 
 drivers:
-  # Betfair runner name -> 3-letter code. Codes must exist in
-  # src/race_utils.DRIVER_MAP (single source of truth). Runners not matched
-  # here fall back to a surname match against DRIVER_MAP, else are skipped
-  # with a warning.
+  # Runner name -> 3-letter code, used by every odds source (the key name
+  # is historical). Codes must exist in src/race_utils.DRIVER_MAP (single
+  # source of truth). Runners not matched here fall back to a surname match
+  # against DRIVER_MAP, else are skipped with a warning.
   betfair_names:
     "Max Verstappen": VER
     "Lando Norris": NOR
@@ -69,6 +110,7 @@ drivers:
     "Andrea Kimi Antonelli": ANT
     "Isack Hadjar": HAD
     "Carlos Sainz": SAI
+    "Carlos Sainz Jr.": SAI
     "Fernando Alonso": ALO
     "Alexander Albon": ALB
     "Alex Albon": ALB

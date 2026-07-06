@@ -9,11 +9,15 @@ Paste odds into a CSV with header ``driver,market,odds``:
     VER,top10,1.02
     VER,h2h:VER:NOR,1.8           # h2h market label names both drivers
     NOR,h2h:VER:NOR,2.1
+    VER,classified,1.06           # "To Be Classified" Yes price
+    STR,dnf,7.0                   # ... No price (either or both sides)
 
-Markets: ``win``, ``top3``, ``top6``, ``top10``, and ``h2h:<A>:<B>``
-(one row per driver, both required). Blank lines and ``#`` comments are
-ignored. The parsed odds are saved as a normal snapshot, so everything
-downstream (fit, validate, optimise) is identical to the Betfair path.
+Markets: ``win``, ``top3``, ``top5``, ``top6``, ``top10``, ``h2h:<A>:<B>`` (one
+row per driver, both required), and ``classified``/``dnf`` (the Yes/No
+sides of the driver's "To Be Classified" market — one side is enough).
+Blank lines and ``#`` comments are ignored. The parsed odds are saved
+as a normal snapshot, so everything downstream (fit, validate,
+optimise) is identical to the Betfair path.
 """
 
 import _paths  # noqa: F401
@@ -24,13 +28,15 @@ from pathlib import Path
 from odds.names import runner_to_code
 from odds.snapshot import save_snapshot
 
-STRUCTURAL_MARKETS = ("win", "top3", "top6", "top10")
+STRUCTURAL_MARKETS = ("win", "top3", "top5", "top6", "top10")
 
 
 def parse_csv(path: Path, race_name: str, config_names: dict[str, str]) -> dict:
     """Parse a manual odds CSV into an (unsaved) snapshot dict."""
     structural: dict[str, dict[str, dict]] = {}
     h2h_markets: dict[str, dict[str, dict]] = {}
+    # Yes/No sides of the "To be Classified" event, keyed by driver code.
+    classified: dict[str, dict[str, dict]] = {"yes": {}, "no": {}}
     skipped: list[str] = []
 
     with open(path, newline="", encoding="utf-8-sig") as fh:
@@ -57,10 +63,13 @@ def parse_csv(path: Path, race_name: str, config_names: dict[str, str]) -> dict:
                 structural.setdefault(market, {})[code] = runner
             elif market.startswith("h2h:"):
                 h2h_markets.setdefault(market, {})[code] = runner
+            elif market in ("classified", "dnf"):
+                side = "yes" if market == "classified" else "no"
+                classified[side][code] = runner
             else:
                 raise ValueError(
                     f"line {line_no}: unknown market {market!r} (expected one of "
-                    f"{STRUCTURAL_MARKETS} or h2h:<A>:<B>)"
+                    f"{STRUCTURAL_MARKETS}, h2h:<A>:<B>, classified, or dnf)"
                 )
 
     if skipped:
@@ -90,6 +99,16 @@ def parse_csv(path: Path, race_name: str, config_names: dict[str, str]) -> dict:
     for label, runners in h2h_markets.items():
         if len(runners) != 2:
             print(f"WARNING: h2h market {label!r} has {len(runners)} priced runner(s), skipped")
+    markets["classified"] = {
+        side: {
+            "market_name": f"manual classified {side}",
+            "market_id": None,
+            "total_matched": None,
+            "runners": runners,
+        }
+        for side, runners in classified.items()
+        if runners
+    }
 
     if "win" not in markets:
         raise RuntimeError(f"Manual CSV {path} contains no 'win' market rows")
@@ -101,5 +120,9 @@ def fetch_manual(path: str | Path, race_name: str, config_names: dict[str, str])
     """Parse a manual CSV and cache it as a timestamped snapshot."""
     snapshot = parse_csv(Path(path), race_name, config_names)
     n_structural = [k for k in STRUCTURAL_MARKETS if k in snapshot["markets"]]
-    print(f"Parsed manual odds: markets={n_structural}, h2h={len(snapshot['markets']['h2h'])}")
+    cls = snapshot["markets"]["classified"]
+    n_cls = len({c for entry in cls.values() for c in entry["runners"]})
+    print(f"Parsed manual odds: markets={n_structural}, "
+          f"h2h={len(snapshot['markets']['h2h'])}, "
+          f"classified={n_cls} driver(s)")
     return save_snapshot(snapshot)

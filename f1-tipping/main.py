@@ -2,11 +2,15 @@
 
 Run from inside f1-tipping/:
 
-    python main.py fetch                    # Betfair Exchange
-    python main.py fetch --manual odds.csv  # paste-in CSV fallback
-    python main.py fit                      # de-vig + calibrate + validate
-    python main.py optimise                 # search ticket space
-    python main.py all --manual odds.csv    # whole pipeline
+    python main.py fetch                       # Betfair Exchange
+    python main.py fetch --source kalshi       # Kalshi (public API, no auth)
+    python main.py fetch --source polymarket   # Polymarket (public API, no auth)
+    python main.py fetch --source all          # every enabled source + combined
+    python main.py fetch --manual odds.csv     # paste-in CSV fallback
+    python main.py combine                     # merge latest snapshot per source
+    python main.py fit                         # de-vig + calibrate + validate
+    python main.py optimise                    # search ticket space
+    python main.py all --source all            # whole pipeline
 """
 
 import _paths  # noqa: F401
@@ -22,7 +26,14 @@ from model.fit import build_dnf_probs, fit_strengths, load_fit, save_fit
 from model.simulate import simulate_races
 from model.validate import validate_fit
 from odds.devig import devig_snapshot
-from odds.snapshot import DATA_DIR, load_latest_snapshot, race_slug
+from odds.snapshot import (
+    DATA_DIR,
+    list_snapshots,
+    load_latest_snapshot,
+    load_snapshot,
+    race_slug,
+    save_snapshot,
+)
 from optimise.search import optimise
 from race_utils import DRIVER_MAP          # existing code — single source of driver names
 from scorer import Scorer                  # existing comp scorer — for DNF pick value
@@ -36,31 +47,102 @@ def load_config(path: str) -> dict:
     return yaml.safe_load(cfg_path.read_text())
 
 
+def _fetch_source(source: str, cfg: dict) -> Path:
+    if source == "betfair":
+        from odds.betfair_client import fetch_betfair
+
+        return fetch_betfair(cfg)
+    if source == "kalshi":
+        from odds.kalshi_client import fetch_kalshi
+
+        return fetch_kalshi(cfg)
+    if source == "polymarket":
+        from odds.polymarket_client import fetch_polymarket
+
+        return fetch_polymarket(cfg)
+    raise ValueError(f"Unknown odds source {source!r}")
+
+
 def cmd_fetch(cfg: dict, args: argparse.Namespace) -> None:
     if args.manual:
         from odds.manual_input import fetch_manual
 
         fetch_manual(args.manual, cfg["race"]["name"],
                      cfg["drivers"]["betfair_names"])
-    else:
-        from odds.betfair_client import fetch_betfair
+        return
+    if args.source != "all":
+        _fetch_source(args.source, cfg)
+        return
 
-        fetch_betfair(cfg)
+    enabled = (cfg.get("sources") or {}).get(
+        "enabled", ["betfair", "kalshi", "polymarket"])
+    paths: list[Path] = []
+    for source in enabled:
+        print(f"\n=== fetch: {source} ===")
+        try:
+            paths.append(_fetch_source(source, cfg))
+        except Exception as exc:  # one dead source must not sink the others
+            print(f"WARNING: {source} fetch failed: {exc}")
+    if not paths:
+        raise RuntimeError("All odds sources failed — try --manual <csv>.")
+    if len(paths) == 1:
+        print("\nOnly one source fetched — nothing to combine.")
+        return
+
+    from odds.combine import combine_snapshots
+
+    print(f"\n=== combine: {len(paths)} sources ===")
+    snapshots = [load_snapshot(p) for p in paths]
+    save_snapshot(combine_snapshots(snapshots, cfg["devig"]["win_method"],
+                                    cfg["devig"].get("topn_method", "power")))
+
+
+def cmd_combine(cfg: dict, args: argparse.Namespace) -> None:
+    """Merge the latest archived snapshot of each source into one."""
+    from odds.combine import combine_latest
+
+    combine_latest(cfg["race"]["name"], cfg["devig"]["win_method"],
+                   cfg["devig"].get("topn_method", "power"),
+                   allow_stale=args.allow_stale)
 
 
 def _devigged_markets(cfg: dict, args: argparse.Namespace) -> dict:
-    snapshot = load_latest_snapshot(cfg["race"]["name"],
-                                    allow_stale=args.allow_stale)
+    if getattr(args, "snapshot", None):
+        snapshot = load_snapshot(args.snapshot, allow_stale=True)
+    else:
+        snapshot = load_latest_snapshot(cfg["race"]["name"],
+                                        allow_stale=args.allow_stale)
     markets = devig_snapshot(snapshot, cfg["devig"]["win_method"],
                              cfg["devig"].get("topn_method", "power"))
     print("Markets used: " + "; ".join(markets["markets_used"]))
     return markets
 
 
+def cmd_snapshots(cfg: dict, args: argparse.Namespace) -> None:
+    """List the archived odds snapshots (the odds history)."""
+    snaps = list_snapshots()
+    if not snaps:
+        print("No odds snapshots archived yet. Run `python main.py fetch`.")
+        return
+    print(f"{len(snaps)} archived odds snapshot(s) in {DATA_DIR}:")
+    for p in snaps:
+        snap = json.loads(p.read_text())
+        markets = snap.get("markets", {})
+        structural = [k for k in ("win", "top3", "top5", "top6", "top10")
+                      if k in markets]
+        cls = markets.get("classified") or {}
+        n_cls = len({c for entry in cls.values() for c in entry.get("runners", {})})
+        print(f"  {p.name:<44} {snap.get('source', '?'):<7} "
+              f"{snap.get('fetched_at', '?')[:19]}  "
+              f"markets={structural} h2h={len(markets.get('h2h', []))} "
+              f"classified={n_cls}")
+
+
 def cmd_fit(cfg: dict, args: argparse.Namespace) -> None:
     markets = _devigged_markets(cfg, args)
     model_cfg = cfg["model"]
-    dnf_probs = build_dnf_probs(markets["drivers"], model_cfg["dnf"])
+    dnf_probs = build_dnf_probs(markets["drivers"], model_cfg["dnf"],
+                                markets.get("dnf"))
 
     fit = fit_strengths(
         markets,
@@ -146,16 +228,31 @@ def cmd_optimise(cfg: dict, args: argparse.Namespace) -> None:
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("command",
-                        choices=["fetch", "fit", "validate", "optimise", "all"])
+                        choices=["fetch", "combine", "fit", "validate",
+                                 "optimise", "all", "snapshots"])
     parser.add_argument("--config", default="config.yaml")
+    parser.add_argument("--source", default="betfair",
+                        choices=["betfair", "kalshi", "polymarket", "all"],
+                        help="odds source to fetch; 'all' fetches every "
+                             "source in sources.enabled and also saves a "
+                             "combined snapshot")
     parser.add_argument("--manual", metavar="CSV",
                         help="fetch odds from a driver,market,odds CSV "
-                             "instead of Betfair")
+                             "instead of an API source")
+    parser.add_argument("--snapshot", metavar="FILE",
+                        help="fit/validate against a specific archived odds "
+                             "snapshot (filename under data/) instead of the latest")
     parser.add_argument("--allow-stale", action="store_true",
                         help="use a snapshot older than 24h")
     args = parser.parse_args()
 
     cfg = load_config(args.config)
+    if args.command == "snapshots":
+        cmd_snapshots(cfg, args)
+        return
+    if args.command == "combine":
+        cmd_combine(cfg, args)
+        return
     if args.command in ("fetch", "all"):
         cmd_fetch(cfg, args)
     if args.command in ("fit", "all"):

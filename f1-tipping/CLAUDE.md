@@ -4,7 +4,7 @@
 
 A simulation engine that finds the optimal top-10 pick for an F1 tipping competition. Pipeline:
 
-1. Pull betting odds from the Betfair Exchange API
+1. Pull betting odds from the Betfair Exchange API, Kalshi, and Polymarket (combinable)
 2. De-vig odds into implied probabilities
 3. Fit a probabilistic race model (Plackett-Luce with a DNF layer)
 4. Monte Carlo simulate full finishing orders (~100k races)
@@ -20,7 +20,11 @@ f1-tipping/
 ├── CLAUDE.md
 ├── config.yaml              # race name, market IDs, sim count, credentials path
 ├── odds/
-│   ├── betfair_client.py    # auth + market data fetching
+│   ├── betfair_client.py    # Betfair: auth + market data fetching
+│   ├── kalshi_client.py     # Kalshi: public REST, no auth (win/top3/top5/top10)
+│   ├── polymarket_client.py # Polymarket: public Gamma API, no auth (win/top3/h2h)
+│   ├── predmarket.py        # shared prob-quote -> decimal-odds helpers + HTTP GET
+│   ├── combine.py           # merge snapshots across sources (liquidity-weighted)
 │   ├── manual_input.py      # paste-in CSV fallback (always keep working)
 │   └── devig.py             # overround removal
 ├── model/
@@ -45,10 +49,27 @@ f1-tipping/
   3. `Top 6 Finish`
   4. `Podium Finish` / `Top 3`
   5. Driver head-to-head matchups (search event for `v` in market names)
+  6. `Yes To be Classified` / `No To be Classified` (driver-runner markets) — de-vigged into per-driver DNF probabilities
 - Use `listMarketCatalogue` filtered on eventTypeId `27` (Motor Sport) to discover markets for the race weekend, then `listMarketBook` with `EX_BEST_OFFERS` for prices.
 - Use **last traded price** where liquidity exists, else back/lay midpoint. Record both in the snapshot.
 - Cache every fetch to `data/` with a timestamp before doing anything else. All downstream steps read from snapshots, never live — makes runs reproducible and avoids hammering the API.
 - Rate limits are generous but don't poll; a snapshot per session is enough.
+
+## Kalshi & Polymarket Notes
+
+- Both have **fully public, unauthenticated read APIs** — no account, key, or cert. Auth is only for trading, which this project never does. Clients use stdlib `urllib` (no new dependencies).
+- Both quote binary markets as probabilities in (0, 1); clients convert to decimal odds (1/p) with back = 1/ask, lay = 1/bid (same ordering as Betfair), so snapshots are source-agnostic downstream.
+- **Kalshi** (`https://api.elections.kalshi.com/trade-api/v2`): one event per race per series — `KXF1RACE` (winner), `KXF1RACEPODIUM` (top3), `KXF1TOP5`, `KXF1TOP10`. Event ticker = `<series>-<suffix>` (e.g. `KXF1RACE-BRIGP26`); the suffix is discovered from the win series by race-name match. Race events **open ~2 weeks pre-race** — earlier fetches fail loudly. No H2H or classified markets. `total_matched` is in contracts (a ~$1-scale proxy).
+- **Polymarket** (`https://gamma-api.polymarket.com`): events per race — "<Race>: Driver Winner" / "Driver Podium Finish" / "Head-to-Head", discovered via `tag_slug=f1&closed=false` + title fragments. Winner books are live and tight weeks out; podium/H2H sit on **placeholder quotes (0.02/0.98)** until near the weekend. H2H outcome names are surnames; Sainz appears as "Jr." and is deliberately skipped when unmappable.
+- **Spread guard**: two-sided quotes wider than `max_spread` (default 0.15 in prob space) are dropped entirely — an unseeded book's midpoint is garbage, not a price. A market left with fewer priced runners than its N is skipped by devig with a warning instead of dying.
+- Placeholder runners ("Driver A", "another driver") are skipped silently; real reserve drivers (Perez, Bottas, Lindblad) are kept, same as Betfair's 22-runner fields.
+
+## Combining Sources
+
+- `odds/combine.py` merges the latest snapshot per source into a snapshot with `source: "combined"`. Per structural market: **de-vig each source separately first** (each has its own overround), then average per-driver probabilities weighted by `_market_weight(total_matched)`, and write back as decimal odds. Re-devigging the combined market downstream is a near no-op, so fit/validate/optimise are untouched.
+- H2H markets are concatenated (tagged `[source]` in the market name) — same pair from two sources is two independent fit targets, each at its own liquidity weight. Classified sides merge per driver, most liquid source first.
+- `python main.py fetch --source all` fetches every source in `sources.enabled` (failures warn and continue), then saves a combined snapshot if ≥ 2 succeeded — being newest, it is what `fit` picks up. `python main.py combine` re-combines the latest archived snapshot per source (respects `--allow-stale`).
+- Don't combine snapshots fetched far apart in time — odds move with news; `combine` reports each input's age.
 
 ## De-vigging
 
@@ -60,8 +81,8 @@ f1-tipping/
 ## Model
 
 - **Plackett-Luce**: each driver has strength θᵢ. Sample finishing order by repeatedly drawing without replacement, weight ∝ exp(θᵢ).
-- **Fitting**: optimise θ (scipy, L-BFGS) to minimise squared error between simulated/analytic marginals and de-vigged market probs across all available markets: P(win), P(top3), P(top6), P(top10), and H2H win rates. Weight markets by liquidity if available.
-- **DNF layer**: per-driver retirement probability (from DNF markets if available, else a season-average prior ~10% adjustable per driver). In each sim, drivers DNF independently and are removed to the back of the order before Plackett-Luce ranks the survivors. This creates the correlated attrition scenarios that matter for the underdog bonus.
+- **Fitting**: optimise θ (scipy, L-BFGS) to minimise squared error between simulated/analytic marginals and de-vigged market probs across all available markets: P(win), P(top3), P(top5) (Kalshi) or P(top6) (Betfair), P(top10), and H2H win rates. Weight markets by liquidity if available.
+- **DNF layer**: per-driver retirement probability — 1 − P(classified) from the per-driver `To Be Classified?` Yes/No markets where priced, else a season-average prior ~10%; explicit `dnf.per_driver` config overrides win over both. In each sim, drivers DNF independently and are removed to the back of the order before Plackett-Luce ranks the survivors. This creates the correlated attrition scenarios that matter for the underdog bonus.
 - **Validation**: after fitting, `validate.py` must print a table comparing market probs vs simulated marginals for every market used. Flag any deviation > 2 percentage points.
 - Default simulation count: 100,000 races. Vectorise with numpy; a full run should take seconds, not minutes.
 
@@ -85,7 +106,7 @@ f1-tipping/
 - Python 3.11+, type hints throughout, `numpy` + `scipy` + `betfairlightweight` + `pyyaml`.
 - Drivers identified by 3-letter code (VER, NOR, PIA, ...). Single source of truth mapping in `config.yaml`: Betfair runner name → code.
 - All randomness seeded via config for reproducibility.
-- CLI: `python main.py fetch`, `python main.py fit`, `python main.py optimise`, or `python main.py all`.
+- CLI: `python main.py fetch [--source betfair|kalshi|polymarket|all]`, `python main.py combine`, `python main.py fit`, `python main.py optimise`, or `python main.py all`.
 - Fail loudly if a market is missing or stale (snapshot > 24h old) rather than silently fitting on partial data — print which markets were used.
 - Tests: pytest; at minimum, test de-vig maths, Plackett-Luce sampling marginals against analytic values on a 3-driver toy case, and scoring on hand-computed examples.
 
@@ -94,6 +115,7 @@ f1-tipping/
 - Betfair market names vary by race weekend; don't hardcode market IDs, discover them via catalogue search each time and confirm in the fetch output.
 - Sprint weekends have separate markets for sprint vs grand prix — filter carefully.
 - Grid penalties and late driver changes can make odds shift sharply; always fetch fresh odds close to your comp's lock-in deadline.
+- Events vanish from the Betfair catalogue shortly after the race — there is no retro fetch. Anything you want archived (especially the thin `To be Classified` markets) must be snapshotted pre-race.
 - Betfair is geo-restricted in some countries; if unavailable, `manual_input.py` (paste odds as CSV: `driver,market,odds`) must remain a fully working alternative path through the entire pipeline.
 
 ---

@@ -80,7 +80,8 @@ def _find_event(client, event_type_id: str, race_name: str):
 
 def _classify(market_name: str, market_names_cfg: dict[str, list[str]],
               include_sprint: bool) -> str | None:
-    """Map a catalogue market name to win/top3/top6/top10/h2h, else None."""
+    """Map a catalogue market name to win/top3/top6/top10/classified/h2h,
+    else None."""
     lowered = market_name.lower()
     if "sprint" in lowered and not include_sprint:
         return None
@@ -110,7 +111,7 @@ def fetch_betfair(cfg: dict) -> Path:
             market_projection=["RUNNER_DESCRIPTION", "MARKET_START_TIME"],
         )
 
-        classified: dict[str, list] = {}
+        by_key: dict[str, list] = {}
         for cat in catalogues:
             key = _classify(
                 cat.market_name,
@@ -118,19 +119,20 @@ def fetch_betfair(cfg: dict) -> Path:
                 cfg["race"].get("include_sprint_markets", False),
             )
             if key:
-                classified.setdefault(key, []).append(cat)
+                by_key.setdefault(key, []).append(cat)
 
-        if "win" not in classified:
+        if "win" not in by_key:
             raise RuntimeError(
                 "No win market found — markets discovered: "
                 + ", ".join(sorted(c.market_name for c in catalogues))
             )
 
-        # One market per structural key (most matched wins); all h2h markets.
+        # One market per structural key (most matched wins); all h2h and
+        # per-driver classified markets.
         chosen: dict[str, list] = {}
-        for key, cats in classified.items():
+        for key, cats in by_key.items():
             cats.sort(key=lambda c: c.total_matched or 0, reverse=True)
-            chosen[key] = cats if key == "h2h" else cats[:1]
+            chosen[key] = cats if key in ("h2h", "classified") else cats[:1]
 
         all_cats = [c for cats in chosen.values() for c in cats]
         books = {}
@@ -144,17 +146,27 @@ def fetch_betfair(cfg: dict) -> Path:
             ):
                 books[book.market_id] = book
 
-        markets: dict = {"h2h": []}
+        markets: dict = {"h2h": [], "classified": {}}
         for key, cats in chosen.items():
             for cat in cats:
+                label = key
+                if key == "classified":
+                    # "Yes To be Classified" / "No To be Classified" are
+                    # driver-runner markets; keep the most-matched per side.
+                    side = _classified_side(cat.market_name)
+                    if side in markets["classified"]:
+                        continue
+                    label = f"classified[{side}]"
                 entry = _market_entry(cat, books.get(cat.market_id), config_names)
                 if entry is None:
                     continue
                 if key == "h2h":
                     markets["h2h"].append(entry)
+                elif key == "classified":
+                    markets["classified"][side] = entry
                 else:
                     markets[key] = entry
-                print(f"  {key:<6} {cat.market_name} "
+                print(f"  {label:<6} {cat.market_name} "
                       f"({len(entry['runners'])} runners, "
                       f"matched £{cat.total_matched or 0:,.0f})")
     finally:
@@ -195,3 +207,14 @@ def _market_entry(cat, book, config_names: dict[str, str]) -> dict | None:
         "total_matched": cat.total_matched,
         "runners": runners,
     }
+
+
+def _classified_side(market_name: str) -> str:
+    """Which side of the classification event a market prices.
+
+    Betfair lists "Yes To be Classified" and "No To be Classified" as
+    separate driver-runner markets; backing a driver in the "No" market
+    is backing the DNF. An unprefixed name defaults to the Yes side.
+    """
+    first = market_name.lower().split()[0] if market_name.split() else ""
+    return "no" if first == "no" else "yes"

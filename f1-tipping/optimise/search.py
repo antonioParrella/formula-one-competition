@@ -105,6 +105,7 @@ def optimise(
     n_runner_ups: int = 5,
     assume_additive: bool = True,
     seed: int = 0,
+    verbose: bool = True,
 ) -> OptimiseReport:
     """Search ticket space for the highest expected points."""
     n = len(sims.drivers)
@@ -121,7 +122,7 @@ def optimise(
             start, exp_points, sims, multipliers, max_iters, assume_additive
         )
         seen[tuple(ticket)] = ticket_ev
-        if k in (0, 1):
+        if verbose and k in (0, 1):
             label = ("greedy start", "assignment start")[k]
             print(f"  {label:<17} -> local optimum EV {ticket_ev:.2f}")
 

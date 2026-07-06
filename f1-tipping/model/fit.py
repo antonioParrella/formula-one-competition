@@ -35,11 +35,36 @@ THETA_CLIP = np.log(1e-4)  # floor for the log-win-prob initialisation
 L2_PENALTY = 1e-4
 
 
-def build_dnf_probs(drivers: list[str], dnf_cfg: dict) -> dict[str, float]:
-    """Per-driver DNF probabilities: season-average prior + overrides."""
+def build_dnf_probs(
+    drivers: list[str],
+    dnf_cfg: dict,
+    market_dnf: dict[str, float] | None = None,
+) -> dict[str, float]:
+    """Per-driver DNF probabilities.
+
+    Per driver, highest priority first: explicit ``dnf.per_driver``
+    config override, market-implied 1 - P(classified) from the
+    "To Be Classified" markets (``market_dnf``), season-average prior.
+    """
     default = float(dnf_cfg.get("default_prob", 0.10))
     per_driver = dnf_cfg.get("per_driver") or {}
-    return {c: float(per_driver.get(c, default)) for c in drivers}
+    market_dnf = market_dnf or {}
+    probs: dict[str, float] = {}
+    n_config = n_market = n_prior = 0
+    for c in drivers:
+        if c in per_driver:
+            probs[c] = float(per_driver[c])
+            n_config += 1
+        elif c in market_dnf:
+            probs[c] = float(market_dnf[c])
+            n_market += 1
+        else:
+            probs[c] = default
+            n_prior += 1
+    if market_dnf:
+        print(f"DNF probs: {n_market} market-implied, {n_config} config "
+              f"override(s), {n_prior} on the {default:.0%} season prior")
+    return probs
 
 
 def _analytic_h2h(theta_a: float, theta_b: float, dnf_a: float, dnf_b: float) -> float:

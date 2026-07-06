@@ -5,6 +5,8 @@ Turns raw exchange odds into implied probabilities:
 - win market: proportional normalisation (default) or the power method
 - top-N markets: probabilities must sum to N, proportional with a cap at 1
 - H2H markets: two outcomes, normalise to 1
+- "To Be Classified" Yes/No markets: two outcomes, normalise to 1;
+  1 - P(classified) is the driver's DNF probability
 
 Also converts a whole snapshot (see ``odds/snapshot.py``) into the
 market-probability structure consumed by ``model/fit.py``.
@@ -16,8 +18,10 @@ from scipy.optimize import brentq
 
 PROB_CAP = 0.999  # no market outcome is treated as certain
 
-# Structural market key -> top-k it informs.
-TOPK_BY_MARKET = {"win": 1, "top3": 3, "top6": 6, "top10": 10}
+# Structural market key -> top-k it informs. top5 is Kalshi's ladder
+# step (KXF1TOP5); Betfair prices top6 instead — the fit uses whichever
+# is present.
+TOPK_BY_MARKET = {"win": 1, "top3": 3, "top5": 5, "top6": 6, "top10": 10}
 
 
 def select_price(runner: dict) -> float | None:
@@ -118,6 +122,25 @@ def devig_h2h(odds_a: float, odds_b: float) -> float:
     return qa / (qa + qb)
 
 
+def devig_classified(yes_price: float | None, no_price: float | None) -> float | None:
+    """P(classified) for one driver from "To be Classified" prices.
+
+    Both sides priced: standard two-way normalisation. One side only
+    (the "No" market is often not listed or thin): its implied
+    probability is used as-is, capped — the residual vig stays in, but
+    that still beats a flat prior.
+    """
+    q_yes = 1.0 / yes_price if yes_price and yes_price > 1.0 else None
+    q_no = 1.0 / no_price if no_price and no_price > 1.0 else None
+    if q_yes is not None and q_no is not None:
+        return q_yes / (q_yes + q_no)
+    if q_yes is not None:
+        return min(q_yes, PROB_CAP)
+    if q_no is not None:
+        return 1.0 - min(q_no, PROB_CAP)
+    return None
+
+
 def _market_weight(total_matched: float | None) -> float:
     """Liquidity weight for the fitting objective.
 
@@ -139,12 +162,17 @@ def devig_snapshot(
     Returns::
 
         {
-          "drivers":      [codes, ...],           # union over all markets
+          "drivers":      [codes, ...],           # union over fit markets
           "topk":         {1: {code: p}, 3: ..., 6: ..., 10: ...},
           "weights":      {1: w, 3: w, ...},
           "h2h":          [((a, b), p_a, weight), ...],
+          "dnf":          {code: 1 - P(classified), ...},
           "markets_used": ["win: Race Winner (n=20)", ...],
         }
+
+    ``dnf`` comes from the per-driver "To Be Classified" markets and is
+    an input to the DNF layer, not a fit target; drivers priced only
+    there are not added to the fitted field.
     """
     markets = snapshot.get("markets", {})
     topk: dict[int, dict[str, float]] = {}
@@ -162,6 +190,12 @@ def devig_snapshot(
             if (price := select_price(runner)) is not None
         }
         if not odds:
+            continue
+        if k > 1 and len(odds) < k:
+            # Thin sources (wide spreads dropped) can leave a top-N market
+            # with too few priced runners to de-vig — skip it, don't die.
+            print(f"WARNING: {key} market has only {len(odds)} priced "
+                  f"runners (need >= {k}), skipped")
             continue
         topk[k] = (devig_win(odds, win_method) if k == 1
                    else devig_topn(odds, k, topn_method))
@@ -183,6 +217,24 @@ def devig_snapshot(
     if h2h:
         used.append(f"h2h: {len(h2h)} matchup market(s)")
 
+    # "To be Classified": driver-runner markets for the Yes and (where
+    # listed) No side. Per driver this is a binary event — two-way de-vig
+    # when both sides are priced, raw implied probability otherwise.
+    classified = markets.get("classified") or {}
+    yes_runners = (classified.get("yes") or {}).get("runners", {})
+    no_runners = (classified.get("no") or {}).get("runners", {})
+    dnf: dict[str, float] = {}
+    for code in set(yes_runners) | set(no_runners):
+        p_classified = devig_classified(
+            select_price(yes_runners.get(code, {})),
+            select_price(no_runners.get(code, {})),
+        )
+        if p_classified is not None:
+            dnf[code] = 1.0 - p_classified
+    if dnf:
+        sides = "+".join(s for s in ("yes", "no") if classified.get(s))
+        used.append(f"classified({sides}): {len(dnf)} drivers")
+
     if 1 not in topk:
         raise RuntimeError(
             "Snapshot has no usable win market — refusing to fit on partial "
@@ -194,5 +246,6 @@ def devig_snapshot(
         "topk": topk,
         "weights": weights,
         "h2h": h2h,
+        "dnf": dnf,
         "markets_used": used,
     }
