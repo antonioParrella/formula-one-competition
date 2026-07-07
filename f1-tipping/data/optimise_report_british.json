@@ -1,0 +1,117 @@
+{
+  "race": {
+    "name": "British Grand Prix",
+    "year": 2026,
+    "round": 8,
+    "include_sprint_markets": false
+  },
+  "best_ticket": [
+    "ANT",
+    "HAM",
+    "RUS",
+    "LEC",
+    "VER",
+    "NOR",
+    "PIA",
+    "HAD",
+    "LIN",
+    "BOR"
+  ],
+  "best_ev": 25.155990000000003,
+  "score_percentiles": {
+    "mean": 25.15599,
+    "p10": 17.0,
+    "p50": 25.0,
+    "p90": 34.0
+  },
+  "runner_ups": [
+    {
+      "ticket": [
+        "ANT",
+        "RUS",
+        "HAM",
+        "LEC",
+        "VER",
+        "NOR",
+        "PIA",
+        "HAD",
+        "LIN",
+        "BOR"
+      ],
+      "ev": 25.150129999999997
+    },
+    {
+      "ticket": [
+        "ANT",
+        "HAM",
+        "RUS",
+        "LEC",
+        "VER",
+        "NOR",
+        "PIA",
+        "HAD",
+        "LIN",
+        "HUL"
+      ],
+      "ev": 25.129550000000002
+    },
+    {
+      "ticket": [
+        "ANT",
+        "HAM",
+        "RUS",
+        "LEC",
+        "VER",
+        "NOR",
+        "HAD",
+        "PIA",
+        "LIN",
+        "BOR"
+      ],
+      "ev": 25.115949999999998
+    },
+    {
+      "ticket": [
+        "ANT",
+        "HAM",
+        "RUS",
+        "LEC",
+        "NOR",
+        "VER",
+        "PIA",
+        "HAD",
+        "LIN",
+        "BOR"
+      ],
+      "ev": 25.057290000000002
+    },
+    {
+      "ticket": [
+        "ANT",
+        "HAM",
+        "RUS",
+        "LEC",
+        "VER",
+        "PIA",
+        "NOR",
+        "HAD",
+        "LIN",
+        "BOR"
+      ],
+      "ev": 25.01979
+    }
+  ],
+  "underdog_top10": [
+    "ANT",
+    "GAS",
+    "HAD",
+    "HAM",
+    "LAW",
+    "LEC",
+    "NOR",
+    "PIA",
+    "RUS",
+    "VER"
+  ],
+  "n_sims": 100000
+}
