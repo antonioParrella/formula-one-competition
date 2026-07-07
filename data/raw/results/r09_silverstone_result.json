@@ -1,0 +1,40 @@
+{
+  "round": 9,
+  "race_name": "Silverstone",
+  "year": 2026,
+  "is_sprint_weekend": true,
+  "top10": [
+    "LEC",
+    "RUS",
+    "HAM",
+    "NOR",
+    "HAD",
+    "LAW",
+    "LIN",
+    "BOR",
+    "COL",
+    "GAS"
+  ],
+  "dnfs": [
+    "VER",
+    "ALB",
+    "HUL"
+  ],
+  "sprint_top3": [
+    "ANT",
+    "HAM",
+    "NOR"
+  ],
+  "championship_top10_before_race": [
+    "ANT",
+    "RUS",
+    "HAM",
+    "NOR",
+    "LEC",
+    "PIA",
+    "VER",
+    "HAD",
+    "GAS",
+    "LAW"
+  ]
+}
