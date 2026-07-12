@@ -13,6 +13,60 @@ A simulation engine that finds the optimal top-10 pick for an F1 tipping competi
 
 Key wrinkle: the comp has an **underdog bonus** based on driver position, so pick value depends on correlated tail scenarios (attrition promotes several underdogs at once). This is why we need a full joint distribution over finishing orders, not independent per-driver probabilities.
 
+## How to run
+
+**The single script is `main.py`.** Run everything from inside `optimiser/`
+(`_paths.py` bootstraps `../src` onto the path, so it must be the working dir).
+
+```bash
+# One-time setup (from the repo root). A venv already exists at ../venv:
+#   Windows:  ..\venv\Scripts\activate
+#   macOS/Linux:  source ../venv/bin/activate
+cd optimiser
+pip install -r requirements.txt
+```
+
+**1. Configure `config.yaml`** — before each race, set `race.name` (must match the
+Betfair/Polymarket event text), `race.year`, and `race.round` (round drives the
+underdog bonus). Refresh `underdogs.manual_top10` if using the manual fallback.
+
+**2. Run the whole pipeline in one shot:**
+
+```bash
+python main.py all --source all          # fetch every source + combine, fit, optimise, report
+# no Betfair access / geo-blocked? use the manual CSV path instead:
+python main.py all --manual example_odds.csv
+```
+
+`all` prints the **optimal top-10 ticket** with its expected points and p10/p50/p90,
+the runner-up tickets, and the best DNF picks.
+
+**Or run the stages individually** (each reads the previous stage's saved output):
+
+```bash
+python main.py fetch --source all        # pull odds -> archives a snapshot in data/
+python main.py combine                   # (optional) re-merge latest snapshot per source
+python main.py fit                        # de-vig + calibrate the race model + validate
+python main.py optimise                   # search ticket space -> prints + saves the pick
+python main.py report                     # render the self-contained analysis HTML
+python main.py snapshots                  # list the archived odds history
+```
+
+**Common flags:** `--source betfair|kalshi|polymarket|all` (default `betfair`);
+`--manual <csv>` (paste-in `driver,market,odds` fallback); `--snapshot <file>` to
+fit/validate a specific archived snapshot; `--allow-stale` to use a snapshot older
+than 24h; `--bayes` (+ `--bayes-method mcmc|is`) for the Bayesian path (slow — see
+MATH.md §7); `--config <path>` for an alternate config.
+
+**Outputs** (all under `data/`): `odds_<race>_<ts>.json` (snapshot),
+`model_fit_<race>.json` (fit), `optimise_report_<race>.json` (the pick),
+`analysis_<race>.html` (report). `report.py` can also run standalone.
+
+**Historical validation** is a separate script:
+`python backtest.py` (writes `data/backtest_<model>.json`).
+
+**Tests:** `python -m pytest tests/ -q`.
+
 ## Architecture
 
 ```

@@ -1,5 +1,5 @@
 from urllib.request import urlopen
-from urllib.error import URLError
+from urllib.error import URLError, HTTPError
 import pandas as pd
 import json
 import time
@@ -21,6 +21,13 @@ def _fetch_openf1(endpoint: str, **params) -> pd.DataFrame:
             data = json.loads(response.read().decode("utf-8"))
             return pd.DataFrame(data)
         except (URLError, OSError) as e:
+            # A 4xx client error (e.g. a 404 when a round's pre-race
+            # standings aren't published yet) is permanent — retrying
+            # can't make the resource appear. Fail fast so callers can
+            # fall back immediately instead of waiting out the backoff.
+            # Only 429 (rate limit) and 5xx/connection errors are transient.
+            if isinstance(e, HTTPError) and 400 <= e.code < 500 and e.code != 429:
+                raise
             print(f"Attempt {attempt + 1}/{max_retries} failed: {e}")
             if attempt < max_retries - 1:
                 print(f"Retrying in {retry_delay}s...")
