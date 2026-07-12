@@ -23,7 +23,13 @@ from pathlib import Path
 import yaml
 
 from comp_context import resolve_context
-from model.fit import build_dnf_probs, fit_strengths, load_fit, save_fit
+from model.fit import (
+    build_dnf_probs,
+    fit_dispersion,
+    fit_strengths,
+    load_fit,
+    save_fit,
+)
 from model.simulate import simulate_races
 from model.validate import validate_fit
 from odds.devig import devig_snapshot
@@ -152,7 +158,9 @@ def cmd_fit(cfg: dict, args: argparse.Namespace) -> None:
     dnf_probs = build_dnf_probs(markets["drivers"], model_cfg["dnf"],
                                 markets.get("dnf"))
 
-    fit = fit_strengths(
+    dist = str(model_cfg.get("dist", "gumbel"))
+    fit_fn = fit_dispersion if dist == "gaussian" else fit_strengths
+    fit = fit_fn(
         markets,
         dnf_probs,
         fit_sims=int(model_cfg["fit_sims"]),
@@ -205,6 +213,8 @@ def cmd_validate(cfg: dict, args: argparse.Namespace,
         fit["theta"], fit["dnf_probs"],
         n_sims=int(cfg["model"]["n_sims"]),
         seed=int(cfg["model"]["seed"]) + 1,  # fresh draws, not the fit's
+        sigma_by_code=fit.get("sigma"),
+        dist=fit.get("model", "gumbel"),
     )
     validate_fit(fit, markets, sims)
 
@@ -227,6 +237,8 @@ def cmd_optimise(cfg: dict, args: argparse.Namespace) -> None:
             fit["theta"], fit["dnf_probs"],
             n_sims=int(cfg["model"]["n_sims"]),
             seed=int(cfg["model"]["seed"]) + 1,
+            sigma_by_code=fit.get("sigma"),
+            dist=fit.get("model", "gumbel"),
         )
         dnf_probs = fit["dnf_probs"]
         report_suffix = ""

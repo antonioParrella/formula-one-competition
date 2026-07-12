@@ -25,7 +25,7 @@ from pathlib import Path
 
 import numpy as np
 from scipy.optimize import minimize
-from scipy.special import expit
+from scipy.special import expit, ndtr
 
 from odds.snapshot import race_slug
 
@@ -33,6 +33,7 @@ DATA_DIR = Path(__file__).resolve().parent.parent / "data"
 SOFT_DNF_DEMOTION = 60.0   # saturates the sigmoids just like the hard sim
 THETA_CLIP = np.log(1e-4)  # floor for the log-win-prob initialisation
 L2_PENALTY = 1e-4
+L2_LOGSIGMA = 1e-3         # pulls weakly-identified σ toward 1 (DISPERSION.md §6)
 
 
 def build_dnf_probs(
@@ -78,6 +79,23 @@ def _analytic_h2h(theta_a: float, theta_b: float, dnf_a: float, dnf_b: float) ->
     one_dnf_a = dnf_a * (1.0 - dnf_b)
     one_dnf_b = dnf_b * (1.0 - dnf_a)
     return (1.0 - one_dnf_a - one_dnf_b) * p_pl + one_dnf_b
+
+
+def _analytic_h2h_gaussian(
+    mu_a: float, mu_b: float, sigma_a: float, sigma_b: float,
+    dnf_a: float, dnf_b: float,
+) -> float:
+    """P(a classified ahead of b) under the Gaussian dispersion model.
+
+    Thurstonian pairwise marginal Φ((μa − μb)/√(σa² + σb²)) (DISPERSION.md
+    §3.2), DNF-adjusted with the same four-case decomposition as the PL
+    form: the base probit replaces the PL logistic, everything else is
+    identical.
+    """
+    p_base = ndtr((mu_a - mu_b) / np.sqrt(sigma_a**2 + sigma_b**2))
+    one_dnf_a = dnf_a * (1.0 - dnf_b)
+    one_dnf_b = dnf_b * (1.0 - dnf_a)
+    return (1.0 - one_dnf_a - one_dnf_b) * p_base + one_dnf_b
 
 
 def fit_strengths(
@@ -156,6 +174,115 @@ def fit_strengths(
     return {
         "drivers": drivers,
         "theta": {c: float(theta[idx[c]]) for c in drivers},
+        "dnf_probs": {c: float(dnf_probs[c]) for c in drivers},
+        "fit_report": {
+            "loss": float(result.fun),
+            "iterations": int(result.nit),
+            "converged": bool(result.success),
+            "fit_sims": fit_sims,
+            "tau": tau,
+            "seed": seed,
+            "markets_used": market_probs["markets_used"],
+        },
+    }
+
+
+def fit_dispersion(
+    market_probs: dict,
+    dnf_probs: dict[str, float],
+    fit_sims: int = 4000,
+    tau: float = 0.15,
+    seed: int = 0,
+) -> dict:
+    """Calibrate the Gaussian dispersion model (DISPERSION.md).
+
+    Each driver gets a *location* μ and a *dispersion* σ; performance is
+    ``Xᵢ = μᵢ + σᵢ·εᵢ`` with εᵢ standard normal, and the finishing order
+    is X sorted descending. Fitting the extra σ per driver lets the model
+    match win/top-3/top-6/top-10 *simultaneously* where rank-1 PL cannot
+    (the "market incoherence" of MATH.md §3.3).
+
+    Same soft-rank surrogate as :func:`fit_strengths`, with two changes:
+    the fixed draws are standard normal and scaled by σ, and H2H uses the
+    probit closed form. Optimises ``[μ; log σ]`` (log σ so σ > 0 is
+    automatic and the multiplicative gauge is a shift in log-σ space);
+    μ is mean-centred and log σ is centred (geometric-mean σ = 1) on
+    every evaluation to pin both gauge freedoms (DISPERSION.md §6).
+
+    Returns ``{"drivers", "model", "theta" (=μ), "sigma", "dnf_probs",
+    "fit_report"}``; ``theta`` holds μ so the same downstream simulate
+    path consumes it, with ``sigma``/``model`` passed alongside.
+    """
+    drivers = market_probs["drivers"]
+    n = len(drivers)
+    idx = {c: i for i, c in enumerate(drivers)}
+    dnf_vec = np.array([dnf_probs[c] for c in drivers], dtype=np.float32)
+
+    # Fixed standard-normal draws — deterministic, smooth objective in (μ, log σ).
+    rng = np.random.default_rng(seed)
+    eps = rng.standard_normal(size=(fit_sims, n)).astype(np.float32)
+    dnf_mask = rng.random((fit_sims, n)).astype(np.float32) < dnf_vec[None, :]
+    demotion = np.where(dnf_mask, np.float32(SOFT_DNF_DEMOTION), np.float32(0.0))
+
+    topk_targets = []
+    for k, probs in sorted(market_probs["topk"].items()):
+        cols = np.array([idx[c] for c in probs], dtype=np.intp)
+        target = np.array([probs[c] for c in probs], dtype=np.float64)
+        topk_targets.append((k, cols, target, market_probs["weights"][k]))
+    h2h_targets = [
+        (idx[a], idx[b], p_a, w) for (a, b), p_a, w in market_probs["h2h"]
+    ]
+
+    inv_tau = np.float32(1.0 / tau)
+
+    def objective(params: np.ndarray) -> float:
+        mu = params[:n]
+        log_sigma = params[n:]
+        mu = mu - mu.mean()                      # additive gauge
+        log_sigma = log_sigma - log_sigma.mean()  # multiplicative gauge
+        sigma = np.exp(log_sigma)
+        s = (mu.astype(np.float32)[None, :]
+             + sigma.astype(np.float32)[None, :] * eps - demotion)
+        ahead = expit((s[:, None, :] - s[:, :, None]) * inv_tau)
+        soft_rank = ahead.sum(axis=2) - np.float32(0.5)
+        sse = 0.0
+        for k, cols, target, weight in topk_targets:
+            p_model = expit((np.float32(k - 0.5) - soft_rank) * inv_tau).mean(
+                axis=0, dtype=np.float64
+            )
+            sse += weight * float(((p_model[cols] - target) ** 2).sum())
+        for i, j, p_target, weight in h2h_targets:
+            p_model = _analytic_h2h_gaussian(
+                mu[i], mu[j], sigma[i], sigma[j], dnf_vec[i], dnf_vec[j])
+            sse += weight * (p_model - p_target) ** 2
+        return (sse + L2_PENALTY * float((mu**2).sum())
+                + L2_LOGSIGMA * float((log_sigma**2).sum()))
+
+    win_probs = market_probs["topk"][1]
+    floor = min(win_probs.values())
+    mu0 = np.array([np.log(max(win_probs.get(c, floor), 1e-4)) for c in drivers])
+    mu0 = np.clip(mu0, THETA_CLIP, None)
+    mu0 -= mu0.mean()
+    params0 = np.concatenate([mu0, np.zeros(n)])  # σ⁰ = 1
+
+    t0 = time.perf_counter()
+    result = minimize(objective, params0, method="L-BFGS-B",
+                      options={"maxiter": 300, "eps": 1e-3})
+    elapsed = time.perf_counter() - t0
+
+    mu = result.x[:n] - result.x[:n].mean()
+    log_sigma = result.x[n:] - result.x[n:].mean()
+    sigma = np.exp(log_sigma)
+    print(f"Fit (gaussian): loss {result.fun:.6f} after {result.nit} iterations "
+          f"({elapsed:.1f}s), {'converged' if result.success else result.message}")
+    print(f"  σ range [{sigma.min():.2f}, {sigma.max():.2f}], "
+          f"median {np.median(sigma):.2f}")
+
+    return {
+        "drivers": drivers,
+        "model": "gaussian",
+        "theta": {c: float(mu[idx[c]]) for c in drivers},
+        "sigma": {c: float(sigma[idx[c]]) for c in drivers},
         "dnf_probs": {c: float(dnf_probs[c]) for c in drivers},
         "fit_report": {
             "loss": float(result.fun),

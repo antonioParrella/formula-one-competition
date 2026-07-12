@@ -329,6 +329,8 @@ def build_report(cfg: dict, snapshot_name: str | None = None,
         fit["theta"], fit["dnf_probs"],
         n_sims=int(cfg["model"]["n_sims"]),
         seed=int(cfg["model"]["seed"]) + 1,  # same set validate/optimise use
+        sigma_by_code=fit.get("sigma"),
+        dist=fit.get("model", "gumbel"),
     )
     win = top_k_probs(sims.finish_pos, 1)
     sim_win = {c: float(win[i]) for i, c in enumerate(sims.drivers)}

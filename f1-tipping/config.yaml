@@ -66,6 +66,12 @@ devig:
   topn_method: power            # power | proportional
 
 model:
+  # Race-model family (DISPERSION.md):
+  #   gumbel   - Plackett-Luce, one strength θ per driver (MATH.md)
+  #   gaussian - Thurstonian: each driver gets a center μ AND a spread σ,
+  #              fixing the rank-1 incoherence (can't match win/top-3/6/10
+  #              with one parameter). See DISPERSION.md and COMPARISON.md.
+  dist: gaussian
   n_sims: 100000                # Monte Carlo races for optimisation/validation
   fit_sims: 4000                # fixed draws used inside the fitting objective
   fit_tau: 0.15                 # soft-rank temperature for the differentiable fit
