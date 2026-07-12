@@ -189,7 +189,7 @@ def run(rounds: list[int], model: str) -> None:
     rounds_won = sum(1 for r in rows if r["optimal_score"] >= r["human_max"])
     print(f"  Optimiser would have won {rounds_won}/{n} rounds outright.")
 
-    out = REPO_ROOT / "f1-tipping" / "data" / f"backtest_{model}.json"
+    out = REPO_ROOT / "optimiser" / "data" / f"backtest_{model}.json"
     out.write_text(json.dumps(rows, indent=2))
     print(f"\nDetail saved -> {out}")
     print("\nNote: 'standings baseline' uses only pre-race championship order — "

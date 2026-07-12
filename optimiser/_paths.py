@@ -13,7 +13,7 @@ Import this before any ``src/`` import:
 import sys
 from pathlib import Path
 
-PKG_ROOT = Path(__file__).resolve().parent      # f1-tipping/
+PKG_ROOT = Path(__file__).resolve().parent      # optimiser/
 REPO_ROOT = PKG_ROOT.parent                     # formula-one-competition/
 SRC_DIR = REPO_ROOT / "src"
 

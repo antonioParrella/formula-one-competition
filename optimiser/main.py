@@ -1,6 +1,6 @@
 """F1 Tipping Optimiser CLI.
 
-Run from inside f1-tipping/:
+Run from inside optimiser/:
 
     python main.py fetch                       # Betfair Exchange
     python main.py fetch --source kalshi       # Kalshi (public API, no auth)

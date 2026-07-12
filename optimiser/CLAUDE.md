@@ -16,7 +16,7 @@ Key wrinkle: the comp has an **underdog bonus** based on driver position, so pic
 ## Architecture
 
 ```
-f1-tipping/
+optimiser/
 ├── CLAUDE.md
 ├── config.yaml              # race name, market IDs, sim count, credentials path
 ├── odds/
@@ -134,10 +134,10 @@ This directory lives inside the `formula-one-competition` repo — the comp this
 
 The comp's underdog rule (from `Scorer`): from round 2 onwards, any pick of a driver outside the championship top-10 before the race scores **double**. That set is resolved by `comp_context.py` (OpenF1, or a manual list in `config.yaml`).
 
-Path bootstrap: `_paths.py` puts `../src` and this directory on `sys.path`; run everything from inside `f1-tipping/`:
+Path bootstrap: `_paths.py` puts `../src` and this directory on `sys.path`; run everything from inside `optimiser/`:
 
 ```
-cd f1-tipping
+cd optimiser
 python main.py fetch --manual example_odds.csv   # or plain `fetch` for Betfair
 python main.py fit
 python main.py optimise

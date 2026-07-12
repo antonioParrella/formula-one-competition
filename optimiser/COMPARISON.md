@@ -206,7 +206,7 @@ had no classified market, so all attrition sat on the flat 0.10 prior.
 ## Reproducing this
 
 ```bash
-cd f1-tipping
+cd optimiser
 # fit both models on the latest snapshot and compare — set model.dist:
 python main.py fit                 # config model.dist: gumbel  (rank-1 PL)
 # edit config.yaml -> model.dist: gaussian, then:
