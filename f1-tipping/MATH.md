@@ -610,21 +610,23 @@ Inference inverts this story.
 
 ### 7.2 The observation space: what the market says
 
-The data vector stacks one observation per (market, runner) pair, all
-mapped to logits. Three observation types:
+The data vector stacks one observation per (market, runner) pair, in
+**observation units** $T(\cdot)$: by default the identity on
+probabilities (`bayes.obs_scale: probability`), with
+$T = \operatorname{logit}$ configurable. Three observation types:
 
 | $j$ ranges over | observed $y_j$ | model mean $\mu_j(x)$ | precision $\omega_j$ |
 |---|---|---|---|
-| top-$k$ markets, $k \in \{1,3,6,10\}$, priced driver $i$ | $\operatorname{logit}\hat p_k(i)$ | $\operatorname{logit}\tilde P_k(i;\, \bar\theta, d)$ | $\omega_k$ (Section 1.4) |
-| H2H pairs $(a, b)$ | $\operatorname{logit}\hat p_{ab}$ | $\operatorname{logit}\Pr(a \succ b;\, \bar\theta, d)$ — Section 2.4 closed form | $\omega_{ab}$ |
-| classified, priced driver $i$ | $\operatorname{logit}\hat p_i(\text{classified})$ | $-\eta_i$ | $\omega_{\text{cls},i}$ |
+| top-$k$ markets, $k \in \{1,3,6,10\}$, priced driver $i$ | $T(\hat p_k(i))$ | $T(\tilde P_k(i;\, \bar\theta, d))$ | $\omega_k$ (Section 1.4) |
+| H2H pairs $(a, b)$ | $T(\hat p_{ab})$ | $T(\Pr(a \succ b;\, \bar\theta, d))$ — Section 2.4 closed form | $\omega_{ab}$ |
+| classified, priced driver $i$ | $T(\hat p_i(\text{classified}))$ | $1 - \sigma(\eta_i)$, resp. $-\eta_i$ on the logit scale | $\omega_{\text{cls},i}$ |
 
 with $\bar\theta = \theta - \tfrac1n\sum_i\theta_i$ the centred
 strengths (gauge: Section 7.3) and all probabilities clipped to
-$[\varepsilon, 1-\varepsilon]$, $\varepsilon = \max(10^{-4}, 1/(2M))$,
-before the logit — the simulated surrogate cannot resolve
-probabilities finer than $\sim 1/M$, and the clip keeps saturated
-longshot prices from producing infinite logits.
+$[\varepsilon, 1-\varepsilon]$, $\varepsilon = \max(10^{-4}, 1/(2M))$
+— the simulated surrogate cannot resolve probabilities finer than
+$\sim 1/M$, and on the logit scale the clip keeps saturated longshot
+prices from producing infinite logits.
 
 Three remarks:
 
@@ -640,22 +642,30 @@ Three remarks:
   neither engine needs gradients, so this staircase is admissible —
   $d$ is identified chiefly through the smooth classified and H2H
   terms anyway.
-- **The classified mean is linear in the state**:
-  $\Pr(\text{classified}) = 1 - d_i = 1 - \sigma(\eta_i) =
-  \sigma(-\eta_i)$, so $\operatorname{logit}\Pr(\text{classified}) =
-  -\eta_i$. This upgrades the classified markets from the plug-in
-  inputs of Section 1.3 to genuine observations: the market pins $d_i$
+- **The classified mean upgrades the market to an observation**:
+  $\Pr(\text{classified}) = 1 - d_i = 1 - \sigma(\eta_i)$ (which on
+  the logit scale is the linear $-\eta_i$). The classified markets
+  stop being the plug-in inputs of Section 1.3: the market pins $d_i$
   *with a precision*, rather than fixing it outright.
-- **Why logits and not probabilities?** (i) Probability-scale
-  residuals are heteroscedastic: a 1 pp error against
-  $\hat p = 0.5$ is noise, against $\hat p = 0.99$ it is a
-  factor-of-two error in the implied longshot price. By the delta
-  method a constant logit-scale noise corresponds to price noise
-  proportional to $p(1-p)$ — shrinking toward the ends of the unit
-  interval, roughly how price uncertainty actually behaves. (ii) The
-  support is all of $\mathbb R$, so Gaussian noise never leaks outside
-  $[0,1]$. (iii) $p$ and $1-p$ are treated symmetrically — backing and
-  laying the same outcome give consistent likelihoods.
+- **Which scale? Measured, not assumed.** The logit scale is the
+  a-priori elegant choice: unbounded support, symmetric in $p$ vs
+  $1-p$, and by the delta method a constant logit noise means price
+  noise $\propto p(1-p)$. **On real snapshots it fails**: back-marker
+  prices are pinned at the exchange's longshot limit (e.g. $1000.0$,
+  $\hat p = 0.1\%$) while the model puts $0.03\%$ on them — a
+  meaningless-in-points difference that is a *logit residual of
+  $\approx 2.6$*, squared and summed over a dozen longshots. Those
+  junk terms dominate the likelihood, $\sigma_{\text{obs}}$ inflates
+  to cover them (measured: posterior median $0.86$), and the
+  now-weakened likelihood lets the prior drag the liquid favourites'
+  $\theta$ around (ANT's win CI ballooned to $[11\%, 41\%]$ against a
+  $35\%$ market). The **probability scale** is therefore the default:
+  residuals are in the same units as the Section 3 objective and the
+  validation table, a longshot mispricing of $0.07$ pp contributes
+  $0.07$ pp, and the measured posterior ($\sigma_{\text{obs}} \approx
+  0.03$, i.e. $3$ pp) is sharp where the markets are liquid. What is
+  lost: probability-scale Gaussian noise puts (small) mass outside
+  $[0,1]$ for extreme prices — accepted, and clipped where it matters.
 
 ### 7.3 Priors, likelihood, posterior
 
@@ -676,18 +686,19 @@ explaining every residual by inflating the noise.
 > **Rationale (why a Gaussian pseudo-likelihood).** An exchange price
 > is not a binomial count — it is the equilibrium of anonymous order
 > flow, and it has no "true" sampling distribution. Any likelihood is
-> therefore a modelling choice. Gaussian-on-logits is chosen for three
-> reasons. (1) It is the maximum-entropy distribution given a mean and
-> a variance — the weakest additional assumption beyond "the market is
-> right up to some scatter". (2) The liquidity weights of Section 1.4
-> slot in exactly as inverse-variance multipliers,
-> $\mathrm{Var} \propto 1/\omega$: a £100k market is a *tighter*
-> observation, formalising what the point fit did heuristically.
-> (3) It nests the existing fit: with $\sigma_{\text{obs}}$ fixed and
-> flat priors, the MAP of this model minimises the same
-> liquidity-weighted squared error as Section 3.1, measured on the
-> logit rather than the probability scale — the Bayesian path is a
-> strict generalisation of the point fit, not a rival model.
+> therefore a modelling choice. A Gaussian in observation units is
+> chosen for three reasons. (1) It is the maximum-entropy distribution
+> given a mean and a variance — the weakest additional assumption
+> beyond "the market is right up to some scatter". (2) The liquidity
+> weights of Section 1.4 slot in exactly as inverse-variance
+> multipliers, $\mathrm{Var} \propto 1/\omega$: a £100k market is a
+> *tighter* observation, formalising what the point fit did
+> heuristically. (3) On the default probability scale it **nests the
+> existing fit exactly**: with $\sigma_{\text{obs}}$ fixed and flat
+> priors, the MAP of this model minimises precisely the Section 3.1
+> liquidity-weighted squared error (the $L_2$ anchor becoming the
+> $\theta$ prior) — the Bayesian path is a strict generalisation of
+> the point fit, not a rival model.
 
 **Why one global $\sigma_{\text{obs}}$, and why inferred?** Inferred,
 because the residual scale is dominated by rank-1 misfit whose size is
@@ -734,15 +745,19 @@ $$\theta_i \overset{\text{iid}}{\sim} \mathcal N(0, \tau_p^2), \qquad
   re-expressed through a Jacobian, with no identifiability gain: the
   classified *market*, not the prior, is meant to carry the
   information.
-- **Noise scale**, $\sigma_{\text{sc}} = 0.5$ (`bayes.sigma_scale`).
-  Half-normal: weakly informative, full mass at small scales (a
-  near-perfect fit is not penalised), thin tail that resists "explain
-  everything as noise". Scale intuition: $\sigma_{\text{obs}} = 0.5$
-  on the logit scale is $\approx \pm 12$ pp around a 50% price at unit
-  weight. Sampled as $\gamma = \log\sigma_{\text{obs}}$; the change of
-  variables gives
+- **Noise scale**, $\sigma_{\text{sc}} = 0.05$ (`bayes.sigma_scale`;
+  $\approx 0.5$ if `obs_scale: logit`). Half-normal: weakly
+  informative, full mass at small scales (a near-perfect fit is not
+  penalised), thin tail that resists "explain everything as noise".
+  Scale intuition: on the probability scale $\sigma_{\text{obs}} =
+  0.05$ is a $5$ pp typical market-vs-model discrepancy at unit
+  weight — comfortably above the measured $\approx 3$ pp. Sampled as
+  $\gamma = \log\sigma_{\text{obs}}$; the change of variables gives
   $\log p(\gamma) = -e^{2\gamma}/(2\sigma_{\text{sc}}^2) + \gamma +
-  \text{const}$ (the $+\gamma$ is the Jacobian).
+  \text{const}$ (the $+\gamma$ is the Jacobian). Initialised from the
+  data: the MAP fit's weighted SSE is already in probability units, so
+  $\gamma_0 = \log\big(1.5\sqrt{L_{\text{MAP}}/N_{\text{obs}}}\big)$
+  starts the sampler at the residual scale the data implies.
 
 **Posterior.** Bayes' rule, up to an additive constant:
 
@@ -877,6 +892,16 @@ proposal misses the posterior — the run **warns and directs to
 The largest weights are replaced by their fitted Pareto quantiles
 (PSIS smoothing), trading a little bias for much variance.
 
+**One adaptive refinement.** When the first round's $\hat k$ exceeds
+$0.4$, the proposal is **moment-matched** to the PSIS-weighted draws —
+location $\leftarrow \sum_r \tilde w_r x_r$, scale $\leftarrow c^2$
+times the weighted covariance — and one fresh round is drawn from the
+re-fitted $t_\nu$; the round with the lower $\hat k$ is kept. This
+re-centres past any slack in the mode search (the float32 noise floor
+can stall the quasi-Newton line search short of the optimum) and
+widens along directions the Laplace curvature underestimated, at the
+price of one extra batch of evaluations.
+
 **Resampling to draws.** Downstream plumbing wants unweighted draws,
 so the weighted set is reduced by **sampling-importance-resampling**:
 systematic resampling of $S$ indices with probabilities $\tilde w_r$
@@ -933,14 +958,27 @@ $$\mathrm{Var}(\text{score})
 so the reported p10/p50/p90 now include what the markets genuinely do
 not know.
 
-Validation upgrades from a threshold to a calibration test: for each
-market probability the table reports the posterior-predictive marginal
-and a 90% credible interval (per-draw hard-engine marginals across a
-subsample of draws), and flags a market whose de-vigged probability
-falls **outside its interval** — replacing the fixed 2 pp rule of
-Section 3.2, which cannot distinguish misfit from honest uncertainty.
-The posterior median of $\sigma_{\text{obs}}$ is printed as the
-one-number summary of model-vs-market misfit.
+Validation upgrades from a threshold to a calibration test, with
+**two intervals** per market probability:
+
+- the **CI** — credible interval of the model marginal (parameter
+  uncertainty only, from per-draw hard-engine marginals across a
+  subsample of draws);
+- the **PI** — the observation-predictive interval: the CI convolved
+  with the $\sigma_{\text{obs}}/\sqrt{\omega}$ noise band the
+  likelihood itself claims, i.e. the interval for the *market price*
+  under the full observation model $y \sim \mathcal N(\mu(x),
+  \sigma^2_{\text{obs}}/\omega)$.
+
+A market outside the CI merely shows structural (rank-1) misfit larger
+than parameter uncertainty — with a tight posterior this is common and
+expected. The **flag fires on the PI**: a price the model cannot
+explain even after admitting its own misfit level. A calibrated model
+leaves $\approx$ 90% of markets unflagged, and that coverage is
+printed. The posterior median of $\sigma_{\text{obs}}$ is the
+one-number summary of model-vs-market misfit — replacing the fixed
+2 pp rule of Section 3.2, which cannot distinguish misfit from honest
+uncertainty.
 
 ### 7.7 What the posterior buys, honestly
 
@@ -971,7 +1009,7 @@ posterior-predictive tail probability.
 | Monte Carlo | unbiased estimator | sampling error $O(1/\sqrt N)$ | $N=10^5 \Rightarrow <0.2$pp |
 | Scoring | matches `Scorer` exactly (tested) | — | equality test on random inputs |
 | Optimise | Hungarian = global optimum **under additivity** | additivity assumption; $\hat E$ has MC error | exact today; `assume_additive: false` for future rules |
-| Bayes likelihood (§7) | H2H and classified means; gauge pinned by the prior | Gaussian pseudo-likelihood on logits; within-market independence; surrogate bias in the mean | inferred $\sigma_{\text{obs}}$; CI-based validation |
+| Bayes likelihood (§7) | H2H and classified means; gauge pinned by the prior | Gaussian pseudo-likelihood in probability units (logit variant measured to fail on pinned longshots); within-market independence; surrogate bias in the mean | inferred $\sigma_{\text{obs}}$; PI-based calibration check |
 | Bayes sampling (§7) | stretch move satisfies detailed balance; log-posterior deterministic under CRN | finite chain (mixing); IS proposal mismatch | acceptance, $\hat R$, $\tau_{\text{int}}$; ESS, Pareto $\hat k$ — printed with thresholds |
 | Posterior predictive (§7) | unbiased mixture over draws | $S \times R$ granularity (races share draws in blocks) | $S \approx 1024$ draws; validation CIs from dedicated per-draw sims |
 

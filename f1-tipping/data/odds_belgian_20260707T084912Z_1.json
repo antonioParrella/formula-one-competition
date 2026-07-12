@@ -1,0 +1,154 @@
+{
+  "race_name": "Belgian Grand Prix",
+  "source": "combined",
+  "combined_from": [
+    {
+      "source": "betfair",
+      "fetched_at": "2026-07-07T08:49:08.989297+00:00"
+    },
+    {
+      "source": "polymarket",
+      "fetched_at": "2026-07-07T08:49:12.221743+00:00"
+    }
+  ],
+  "markets": {
+    "h2h": [
+      {
+        "market_name": "[polymarket] Who will finish higher: Verstappen or Piastri?",
+        "market_id": "f1-belgian-grand-prix-h2h-verstappen-vs-piastri-2026-07-19",
+        "total_matched": null,
+        "runners": {
+          "VER": {
+            "last_traded": null,
+            "back": 1.0101010101010102,
+            "lay": null
+          },
+          "PIA": {
+            "last_traded": null,
+            "back": null,
+            "lay": 99.99999999999991
+          }
+        }
+      }
+    ],
+    "classified": {},
+    "win": {
+      "market_name": "combined win (betfair+polymarket)",
+      "market_id": null,
+      "total_matched": 34852.032976,
+      "runners": {
+        "NOR": {
+          "last_traded": 25.983172571269684,
+          "back": null,
+          "lay": null
+        },
+        "VER": {
+          "last_traded": 18.73307180550478,
+          "back": null,
+          "lay": null
+        },
+        "PIA": {
+          "last_traded": 18.518312107588493,
+          "back": null,
+          "lay": null
+        },
+        "LEC": {
+          "last_traded": 8.182080336968111,
+          "back": null,
+          "lay": null
+        },
+        "RUS": {
+          "last_traded": 4.951977479631874,
+          "back": null,
+          "lay": null
+        },
+        "HAM": {
+          "last_traded": 8.327872056354707,
+          "back": null,
+          "lay": null
+        },
+        "SAI": {
+          "last_traded": 1111.6283071839064,
+          "back": null,
+          "lay": null
+        },
+        "ALB": {
+          "last_traded": 1111.6283071839064,
+          "back": null,
+          "lay": null
+        },
+        "GAS": {
+          "last_traded": 195.68138393772855,
+          "back": null,
+          "lay": null
+        },
+        "ALO": {
+          "last_traded": 1111.6283071839064,
+          "back": null,
+          "lay": null
+        },
+        "STR": {
+          "last_traded": 452.77518171783817,
+          "back": null,
+          "lay": null
+        },
+        "HUL": {
+          "last_traded": 1111.6283071839064,
+          "back": null,
+          "lay": null
+        },
+        "OCO": {
+          "last_traded": 1111.6283071839064,
+          "back": null,
+          "lay": null
+        },
+        "ANT": {
+          "last_traded": 2.7352327163508434,
+          "back": null,
+          "lay": null
+        },
+        "LAW": {
+          "last_traded": 195.68138393772855,
+          "back": null,
+          "lay": null
+        },
+        "BOR": {
+          "last_traded": 1111.6283071839064,
+          "back": null,
+          "lay": null
+        },
+        "BEA": {
+          "last_traded": 195.68138393772855,
+          "back": null,
+          "lay": null
+        },
+        "HAD": {
+          "last_traded": 73.80584110034707,
+          "back": null,
+          "lay": null
+        },
+        "COL": {
+          "last_traded": 1111.6283071839064,
+          "back": null,
+          "lay": null
+        },
+        "PER": {
+          "last_traded": 1111.6283071839064,
+          "back": null,
+          "lay": null
+        },
+        "BOT": {
+          "last_traded": 1111.6283071839064,
+          "back": null,
+          "lay": null
+        },
+        "LIN": {
+          "last_traded": 195.68138393772855,
+          "back": null,
+          "lay": null
+        }
+      }
+    }
+  },
+  "fetched_at": "2026-07-07T08:49:12.265783+00:00"
+}

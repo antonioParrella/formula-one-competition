@@ -75,7 +75,21 @@ def test_combine_merges_classified_most_liquid_first():
     assert runners["STR"]["last_traded"] == 1.10  # thin fills the gap
 
 
-def test_combine_rejects_mismatched_races_and_single_snapshot():
+def test_combine_skips_degenerate_topn_from_one_source(capsys):
+    # Polymarket shipped a top-3 with exactly 3 priced runners (every other
+    # book a dropped placeholder) — skip that source's market, keep the rest.
+    a = _snap("kalshi", {
+        "win": _market({"VER": 2.0, "NOR": 2.0}, 1000),
+        "top3": _market({"VER": 1.2, "NOR": 1.3, "PIA": 2.0, "LEC": 3.0,
+                         "HAM": 5.0, "RUS": 8.0}, 500),
+    })
+    b = _snap("polymarket", {
+        "win": _market({"VER": 2.0, "NOR": 2.0}, 1000),
+        "top3": _market({"VER": 1.10, "NOR": 1.15, "PIA": 1.30}),
+    })
+    combined = combine_snapshots([a, b])
+    assert combined["markets"]["top3"]["market_name"] == "combined top3 (kalshi)"
+    assert "only 3 priced runners" in capsys.readouterr().out
     a = _snap("betfair", {"win": _market({"VER": 2.0, "NOR": 2.0}, 1)})
     with pytest.raises(ValueError, match="at least two"):
         combine_snapshots([a])

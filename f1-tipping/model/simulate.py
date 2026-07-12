@@ -44,12 +44,17 @@ def sample_finish_positions(
 ) -> tuple[np.ndarray, np.ndarray]:
     """Sample finishing positions for every driver in every race.
 
+    ``theta``/``dnf_probs`` are ``(n,)`` for one parameter set shared by
+    every race, or ``(n_sims, n)`` for per-race parameters (the
+    posterior-predictive path mixes over posterior draws this way).
     Returns ``(finish_pos, dnf)`` where ``finish_pos[s, d]`` is driver
     d's 0-based classified position in race s.
     """
-    n = theta.shape[0]
-    scores = theta[None, :] + rng.gumbel(size=(n_sims, n))
-    dnf = rng.random((n_sims, n)) < dnf_probs[None, :]
+    theta = np.atleast_2d(theta)
+    dnf_probs = np.atleast_2d(dnf_probs)
+    n = theta.shape[-1]
+    scores = theta + rng.gumbel(size=(n_sims, n))
+    dnf = rng.random((n_sims, n)) < dnf_probs
     scores = np.where(dnf, scores - DNF_DEMOTION, scores)
 
     order = np.argsort(-scores, axis=1)              # order[s, pos] = driver

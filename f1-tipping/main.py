@@ -10,6 +10,7 @@ Run from inside f1-tipping/:
     python main.py combine                     # merge latest snapshot per source
     python main.py fit                         # de-vig + calibrate + validate
     python main.py optimise                    # search ticket space
+    python main.py report                      # self-contained analysis HTML
     python main.py all --source all            # whole pipeline
 """
 
@@ -138,6 +139,13 @@ def cmd_snapshots(cfg: dict, args: argparse.Namespace) -> None:
               f"classified={n_cls}")
 
 
+def _bayes_cfg(cfg: dict, args: argparse.Namespace) -> dict:
+    bayes_cfg = dict(cfg.get("bayes") or {})
+    if getattr(args, "bayes_method", None):
+        bayes_cfg["method"] = args.bayes_method
+    return bayes_cfg
+
+
 def cmd_fit(cfg: dict, args: argparse.Namespace) -> None:
     markets = _devigged_markets(cfg, args)
     model_cfg = cfg["model"]
@@ -152,13 +160,47 @@ def cmd_fit(cfg: dict, args: argparse.Namespace) -> None:
         seed=int(model_cfg["seed"]),
     )
     save_fit(fit, cfg["race"]["name"])
-    cmd_validate(cfg, args, fit=fit, markets=markets)
+
+    posterior = None
+    if getattr(args, "bayes", False):
+        from model.bayes import fit_posterior, save_posterior
+
+        posterior = fit_posterior(markets, dnf_probs, model_cfg["dnf"], fit,
+                                  _bayes_cfg(cfg, args))
+        save_posterior(posterior, cfg["race"]["name"])
+    cmd_validate(cfg, args, fit=fit, markets=markets, posterior=posterior)
 
 
 def cmd_validate(cfg: dict, args: argparse.Namespace,
-                 fit: dict | None = None, markets: dict | None = None) -> None:
-    fit = fit or load_fit(cfg["race"]["name"])
+                 fit: dict | None = None, markets: dict | None = None,
+                 posterior: dict | None = None) -> None:
     markets = markets or _devigged_markets(cfg, args)
+    if getattr(args, "bayes", False):
+        from model.bayes import (
+            _cfg as bayes_defaults,
+            load_posterior,
+            posterior_marginal_draws,
+            simulate_posterior,
+        )
+        from model.validate import validate_posterior
+
+        posterior = posterior or load_posterior(cfg["race"]["name"])
+        bayes_cfg = bayes_defaults(_bayes_cfg(cfg, args))
+        seed = int(cfg["model"]["seed"])
+        sims = simulate_posterior(posterior, int(cfg["model"]["n_sims"]),
+                                  seed=seed + 1)
+        marginal_draws, draw_indices = posterior_marginal_draws(
+            posterior,
+            ks=sorted(markets["topk"]),
+            n_draws=int(bayes_cfg["ci_draws"]),
+            sims_per_draw=int(bayes_cfg["ci_sims_per_draw"]),
+            seed=seed + 3,
+        )
+        validate_posterior(posterior, markets, sims, marginal_draws,
+                           draw_indices, ci=float(bayes_cfg["ci"]))
+        return
+
+    fit = fit or load_fit(cfg["race"]["name"])
     sims = simulate_races(
         fit["theta"], fit["dnf_probs"],
         n_sims=int(cfg["model"]["n_sims"]),
@@ -168,14 +210,26 @@ def cmd_validate(cfg: dict, args: argparse.Namespace,
 
 
 def cmd_optimise(cfg: dict, args: argparse.Namespace) -> None:
-    fit = load_fit(cfg["race"]["name"])
     context = resolve_context(cfg)
 
-    sims = simulate_races(
-        fit["theta"], fit["dnf_probs"],
-        n_sims=int(cfg["model"]["n_sims"]),
-        seed=int(cfg["model"]["seed"]) + 1,
-    )
+    if getattr(args, "bayes", False):
+        from model.bayes import load_posterior, simulate_posterior
+
+        posterior = load_posterior(cfg["race"]["name"])
+        sims = simulate_posterior(posterior, int(cfg["model"]["n_sims"]),
+                                  seed=int(cfg["model"]["seed"]) + 1)
+        dnf_probs = dict(zip(posterior["drivers"],
+                             posterior["dnf"].mean(axis=0)))
+        report_suffix = "_bayes"
+    else:
+        fit = load_fit(cfg["race"]["name"])
+        sims = simulate_races(
+            fit["theta"], fit["dnf_probs"],
+            n_sims=int(cfg["model"]["n_sims"]),
+            seed=int(cfg["model"]["seed"]) + 1,
+        )
+        dnf_probs = fit["dnf_probs"]
+        report_suffix = ""
     multipliers = underdog_multipliers(sims.drivers, context)
 
     opt_cfg = cfg["optimise"]
@@ -204,7 +258,7 @@ def cmd_optimise(cfg: dict, args: argparse.Namespace) -> None:
         print(f"  EV {ev:6.2f}  {' '.join(ticket)}")
 
     dnf_ev = sorted(
-        ((c, fit["dnf_probs"][c] * Scorer.POINTS_DNF) for c in sims.drivers),
+        ((c, dnf_probs[c] * Scorer.POINTS_DNF) for c in sims.drivers),
         key=lambda x: x[1], reverse=True,
     )[:5]
     print("\nDNF pick value (P(dnf) x "
@@ -212,7 +266,8 @@ def cmd_optimise(cfg: dict, args: argparse.Namespace) -> None:
     for code, ev in dnf_ev:
         print(f"  {code}  {DRIVER_MAP.get(code, '?'):<12} EV {ev:.1f}")
 
-    out = DATA_DIR / f"optimise_report_{race_slug(cfg['race']['name'])}.json"
+    out = (DATA_DIR /
+           f"optimise_report_{race_slug(cfg['race']['name'])}{report_suffix}.json")
     out.write_text(json.dumps({
         "race": cfg["race"],
         "best_ticket": report.best_ticket,
@@ -225,11 +280,18 @@ def cmd_optimise(cfg: dict, args: argparse.Namespace) -> None:
     print(f"\nReport saved -> {out}")
 
 
+def cmd_report(cfg: dict, args: argparse.Namespace) -> None:
+    """Render the analysis HTML from the latest snapshot/fit/optimise run."""
+    from report import build_report
+
+    build_report(cfg, snapshot_name=getattr(args, "snapshot", None))
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("command",
                         choices=["fetch", "combine", "fit", "validate",
-                                 "optimise", "all", "snapshots"])
+                                 "optimise", "report", "all", "snapshots"])
     parser.add_argument("--config", default="config.yaml")
     parser.add_argument("--source", default="betfair",
                         choices=["betfair", "kalshi", "polymarket", "all"],
@@ -244,6 +306,13 @@ def main() -> None:
                              "snapshot (filename under data/) instead of the latest")
     parser.add_argument("--allow-stale", action="store_true",
                         help="use a snapshot older than 24h")
+    parser.add_argument("--bayes", action="store_true",
+                        help="Bayesian path: fit samples P(theta | odds); "
+                             "validate/optimise consume posterior-predictive "
+                             "races (MATH.md Section 7)")
+    parser.add_argument("--bayes-method", choices=["mcmc", "is"],
+                        help="override bayes.method from config: ensemble "
+                             "MCMC (robust) or importance sampling (fast)")
     args = parser.parse_args()
 
     cfg = load_config(args.config)
@@ -261,6 +330,8 @@ def main() -> None:
         cmd_validate(cfg, args)
     if args.command in ("optimise", "all"):
         cmd_optimise(cfg, args)
+    if args.command in ("report", "all"):
+        cmd_report(cfg, args)
 
 
 if __name__ == "__main__":

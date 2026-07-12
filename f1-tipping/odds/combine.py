@@ -58,10 +58,19 @@ def combine_snapshots(
                 continue
             odds = {code: p for code, runner in market.get("runners", {}).items()
                     if (p := select_price(runner)) is not None}
-            if not odds or (k > 1 and len(odds) < k):
+            if not odds or (k > 1 and len(odds) <= k):
+                if odds:
+                    print(f"WARNING: [{snap.get('source', '?')}] {key} market "
+                          f"has only {len(odds)} priced runners (need > {k}), "
+                          "skipped")
                 continue
-            probs = (devig_win(odds, win_method) if k == 1
-                     else devig_topn(odds, k, topn_method))
+            try:
+                probs = (devig_win(odds, win_method) if k == 1
+                         else devig_topn(odds, k, topn_method))
+            except ValueError as exc:
+                print(f"WARNING: [{snap.get('source', '?')}] {key} market "
+                      f"failed to de-vig ({exc}), skipped")
+                continue
             weight = _market_weight(market.get("total_matched"))
             for code, p in probs.items():
                 weighted[code] = weighted.get(code, 0.0) + weight * p

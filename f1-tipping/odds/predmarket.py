@@ -55,11 +55,16 @@ def runner_from_quotes(bid, ask, last, max_spread: float) -> dict | None:
     (1/bid) — same ordering as Betfair (back <= lay). A two-sided book
     wider than ``max_spread`` is an unseeded placeholder (e.g. 0.02/0.98
     before the weekend) and both quotes are dropped rather than letting
-    the garbage midpoint through; one-sided books keep their quote.
-    Returns None if no usable price remains.
+    the garbage midpoint through. A one-sided book keeps its quote only
+    when a last trade anchors it: a lone resting order that has never
+    traded is an empty book wearing a price (a solitary 0.99 ask read as
+    "99%" once fed a fit a 1% head-to-head that contradicted the win
+    market by 5x). Returns None if no usable price remains.
     """
     bid, ask, last = fnum(bid), fnum(ask), fnum(last)
     if bid and ask and ask - bid > max_spread:
+        bid = ask = None
+    if to_odds(last) is None and (to_odds(bid) is None) != (to_odds(ask) is None):
         bid = ask = None
     runner = {"last_traded": to_odds(last), "back": to_odds(ask), "lay": to_odds(bid)}
     if all(v is None for v in runner.values()):

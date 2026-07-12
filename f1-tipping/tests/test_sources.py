@@ -29,11 +29,16 @@ def test_runner_from_quotes_placeholder_book_dropped():
     assert runner == {"last_traded": 2.0, "back": None, "lay": None}
 
 
-def test_runner_from_quotes_one_sided_book_kept():
-    runner = runner_from_quotes(0, 0.01, 0, max_spread=0.15)
-    assert runner["back"] == pytest.approx(100.0)
+def test_runner_from_quotes_one_sided_book_needs_a_trade():
+    # A lone never-traded resting order is not a price (a solitary 0.99
+    # ask once read as a 99%/1% h2h "consensus" and corrupted a fit).
+    assert runner_from_quotes(0, 0.01, 0, max_spread=0.15) is None
+    assert runner_from_quotes(None, 0.99, None, max_spread=0.15) is None
+    # ... but a last trade anchors it, and the quote side is kept too.
+    runner = runner_from_quotes(None, 0.30, 0.29, max_spread=0.15)
+    assert runner["last_traded"] == pytest.approx(1 / 0.29)
+    assert runner["back"] == pytest.approx(1 / 0.30)
     assert runner["lay"] is None
-    assert runner["last_traded"] is None
 
 
 def _kalshi_market(name, bid, ask, last, vol, status="active"):

@@ -4,9 +4,9 @@
 race:
   # Update these before each fetch — used to find the Betfair event and to
   # name snapshot files. Round drives the underdog rule (no bonus in round 1).
-  name: "British Grand Prix"    # must match the Betfair event text (e.g. "F1 British Grand Prix")
+  name: "Belgian Grand Prix"    # must match the Betfair event text (e.g. "F1 Belgian Grand Prix")
   year: 2026
-  round: 8
+  round: 10                     # comp round (Spa, race 2026-07-19)
   include_sprint_markets: false   # sprint weekends list separate markets — keep GP only
 
 betfair:
@@ -77,13 +77,45 @@ model:
     default_prob: 0.10          # season-average retirement prior (fallback)
     per_driver: {}              # explicit override, e.g. { STR: 0.18, GAS: 0.14 }
 
+bayes:
+  # Bayesian path (`fit --bayes`, MATH.md Section 7): de-vigged market
+  # probs become logit-scale observations of latent theta; the posterior
+  # is sampled and validate/optimise consume posterior-predictive races.
+  method: mcmc            # mcmc (robust, ~10-20 min) | is (fast, ~2-4 min, k-hat guarded)
+  fit_sims: 1000          # CRN draws behind the surrogate likelihood (cheaper than model.fit_sims)
+  tau: 0.15               # soft-rank temperature (match model.fit_tau)
+  batch: 16               # states per batched surrogate evaluation (memory bound)
+  tau_prior: 2.0          # N(0, tau_prior^2) prior on raw theta (gauge + longshot containment)
+  # Observation scale for the likelihood. probability (default) matches the
+  # point fit's objective and the validation metric; logit was measured to
+  # let pinned longshot prices dominate and inflate sigma_obs.
+  obs_scale: probability  # probability | logit
+  sigma_scale: 0.05       # HalfNormal prior scale for sigma_obs, in obs units
+                          # (0.05 = 5pp on the probability scale; ~0.5 for logit)
+  dnf_prior_sd: 0.7       # logit-normal sd around dnf.default_prob for sampled DNF params
+  seed: 20260703          # CRN draws = seed; walker init = +1; chain/proposal = +2; SIR = +3
+  # mcmc engine
+  walkers: 64             # auto-raised to 2*D (even)
+  steps: 1200
+  burn_in: 400
+  thin: 50                # retained draws S = walkers * floor((steps - burn_in)/thin)
+  # is engine
+  is_draws: 8000          # proposal draws
+  is_nu: 7                # Student-t degrees of freedom (heavy tails for finite-variance weights)
+  is_scale: 1.3           # proposal covariance inflation over the Laplace H^-1
+  resample_draws: 1024    # unweighted draws after SIR
+  # validation credible intervals
+  ci: 0.90
+  ci_draws: 200           # posterior draws behind the CI columns
+  ci_sims_per_draw: 4000
+
 underdogs:
   # Championship top-10 before the race: picks OUTSIDE this set score double
   # (Scorer.MULTIPLIER_UNDERDOG) from round 2 onwards.
   source: openf1                # openf1 | manual
-  # Fallback / manual list. Snapshot is standings BEFORE round 7 (Barcelona) —
-  # refresh before relying on it.
-  manual_top10: [ANT, HAM, RUS, LEC, NOR, PIA, VER, GAS, HAD, LAW]
+  # Fallback / manual list. Snapshot is standings AFTER round 9 (Silverstone),
+  # i.e. entering round 10 (Spa) — refresh before relying on it.
+  manual_top10: [ANT, RUS, HAM, LEC, NOR, PIA, VER, HAD, GAS, LAW]
 
 optimise:
   n_restarts: 20

@@ -56,6 +56,29 @@ def test_topn_power_takes_vig_from_longshots():
     assert power["A"] > 0.9  # favourite stays consistent with a 1.04 price
 
 
+def test_topn_with_exactly_n_runners_raises():
+    # sum-to-N over N runners forces certainty on all of them; the power
+    # method has no root there (q < 1 => q^k < 1). Must raise, not crash
+    # inside brentq.
+    with pytest.raises(ValueError, match="needs > 3"):
+        devig_topn({"A": 1.05, "B": 1.10, "C": 1.20}, 3)
+
+
+def test_devig_snapshot_skips_topn_with_exactly_n_runners(capsys):
+    snapshot = {
+        "race_name": "Test",
+        "markets": {
+            "win": {"market_name": "w", "runners": {
+                "AAA": {"last_traded": 2.0}, "BBB": {"last_traded": 2.0}}},
+            "top3": {"market_name": "t3", "runners": {
+                c: {"last_traded": 1.1} for c in ("AAA", "BBB", "CCC")}},
+        },
+    }
+    out = devig_snapshot(snapshot)
+    assert 3 not in out["topk"]
+    assert "only 3 priced runners" in capsys.readouterr().out
+
+
 def test_topn_proportional_caps_favourites_at_one():
     # Scaling up would push the 1.01 shots above certainty.
     odds = {"A": 1.01, "B": 1.01, "C": 1.2, "D": 15.0, "E": 40.0, "F": 60.0}

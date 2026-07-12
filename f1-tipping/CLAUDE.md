@@ -36,6 +36,7 @@ f1-tipping/
 ├── optimise/
 │   └── search.py            # ticket optimisation
 ├── data/                    # cached odds snapshots (JSON, timestamped)
+├── report.py                # self-contained analysis HTML (no backtesting)
 └── main.py                  # CLI entry point
 ```
 
@@ -61,7 +62,7 @@ f1-tipping/
 - Both quote binary markets as probabilities in (0, 1); clients convert to decimal odds (1/p) with back = 1/ask, lay = 1/bid (same ordering as Betfair), so snapshots are source-agnostic downstream.
 - **Kalshi** (`https://api.elections.kalshi.com/trade-api/v2`): one event per race per series — `KXF1RACE` (winner), `KXF1RACEPODIUM` (top3), `KXF1TOP5`, `KXF1TOP10`. Event ticker = `<series>-<suffix>` (e.g. `KXF1RACE-BRIGP26`); the suffix is discovered from the win series by race-name match. Race events **open ~2 weeks pre-race** — earlier fetches fail loudly. No H2H or classified markets. `total_matched` is in contracts (a ~$1-scale proxy).
 - **Polymarket** (`https://gamma-api.polymarket.com`): events per race — "<Race>: Driver Winner" / "Driver Podium Finish" / "Head-to-Head", discovered via `tag_slug=f1&closed=false` + title fragments. Winner books are live and tight weeks out; podium/H2H sit on **placeholder quotes (0.02/0.98)** until near the weekend. H2H outcome names are surnames; Sainz appears as "Jr." and is deliberately skipped when unmappable.
-- **Spread guard**: two-sided quotes wider than `max_spread` (default 0.15 in prob space) are dropped entirely — an unseeded book's midpoint is garbage, not a price. A market left with fewer priced runners than its N is skipped by devig with a warning instead of dying.
+- **Spread guard**: two-sided quotes wider than `max_spread` (default 0.15 in prob space) are dropped entirely — an unseeded book's midpoint is garbage, not a price. One-sided quotes are kept only when a last trade anchors them: a lone never-traded resting order (e.g. a solitary 0.99 ask in an h2h) is an empty book wearing a price. A market left with fewer priced runners than its N is skipped by devig with a warning instead of dying.
 - Placeholder runners ("Driver A", "another driver") are skipped silently; real reserve drivers (Perez, Bottas, Lindblad) are kept, same as Betfair's 22-runner fields.
 
 ## Combining Sources
@@ -84,6 +85,7 @@ f1-tipping/
 - **Fitting**: optimise θ (scipy, L-BFGS) to minimise squared error between simulated/analytic marginals and de-vigged market probs across all available markets: P(win), P(top3), P(top5) (Kalshi) or P(top6) (Betfair), P(top10), and H2H win rates. Weight markets by liquidity if available.
 - **DNF layer**: per-driver retirement probability — 1 − P(classified) from the per-driver `To Be Classified?` Yes/No markets where priced, else a season-average prior ~10%; explicit `dnf.per_driver` config overrides win over both. In each sim, drivers DNF independently and are removed to the back of the order before Plackett-Luce ranks the survivors. This creates the correlated attrition scenarios that matter for the underdog bonus.
 - **Validation**: after fitting, `validate.py` must print a table comparing market probs vs simulated marginals for every market used. Flag any deviation > 2 percentage points.
+- **Bayesian path** (`fit/validate/optimise --bayes`, MATH.md §7): de-vigged market probs become noisy observations of latent θ; the posterior P(θ | odds) is sampled by `model/bayes.py` with two engines — `bayes.method: mcmc` (ensemble stretch move in `model/mcmc.py`, robust, ~10 min) or `is` (Laplace-t importance sampling in `model/importance.py`, ~2-4 min, guarded by Pareto k̂ ≤ 0.7). A global noise scale σ_obs is inferred and measures rank-1 misfit; DNF probs of classified-priced drivers are sampled jointly. Posterior-predictive races are packaged as a normal `SimSet` (draws × races), so scoring/optimise are unchanged. Observations live on the **probability scale** (`bayes.obs_scale`) — the logit scale was measured to fail (pinned longshot prices dominate). Posterior saved to `data/model_posterior_<race>.npz`.
 - Default simulation count: 100,000 races. Vectorise with numpy; a full run should take seconds, not minutes.
 
 ## Scoring Rules
@@ -106,7 +108,8 @@ f1-tipping/
 - Python 3.11+, type hints throughout, `numpy` + `scipy` + `betfairlightweight` + `pyyaml`.
 - Drivers identified by 3-letter code (VER, NOR, PIA, ...). Single source of truth mapping in `config.yaml`: Betfair runner name → code.
 - All randomness seeded via config for reproducibility.
-- CLI: `python main.py fetch [--source betfair|kalshi|polymarket|all]`, `python main.py combine`, `python main.py fit`, `python main.py optimise`, or `python main.py all`.
+- CLI: `python main.py fetch [--source betfair|kalshi|polymarket|all]`, `python main.py combine`, `python main.py fit`, `python main.py optimise`, `python main.py report` (or standalone `python report.py`), or `python main.py all`.
+- `report.py` renders `data/analysis_<race>.html` — a self-contained page (no external assets, light/dark aware) built from the latest snapshot + fit + optimise report for the configured race. Current-race analysis only; backtesting stays out of the HTML (backtest.py prints its own text output). It never touches `docs/index.html`, which belongs to the comp leaderboard site.
 - Fail loudly if a market is missing or stale (snapshot > 24h old) rather than silently fitting on partial data — print which markets were used.
 - Tests: pytest; at minimum, test de-vig maths, Plackett-Luce sampling marginals against analytic values on a 3-driver toy case, and scoring on hand-computed examples.
 

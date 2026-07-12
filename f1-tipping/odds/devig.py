@@ -83,8 +83,13 @@ def devig_topn(odds: dict[str, float], n: int, method: str = "power") -> dict[st
     win/top-6 prices, which no consistent race model can reproduce.
     """
     q = implied(odds)
-    if len(q) < n:
-        raise ValueError(f"Top-{n} market has only {len(q)} priced runners")
+    if len(q) <= n:
+        # With <= n priced runners the constraint sum(p) = n forces every
+        # runner to certainty: degenerate (and rootless for the power
+        # method, since q < 1 implies q^k < 1 for every k > 0).
+        raise ValueError(
+            f"Top-{n} market has only {len(q)} priced runners (needs > {n})"
+        )
 
     if method == "power":
         probs = [min(p, PROB_CAP) for p in q.values()]
@@ -191,11 +196,12 @@ def devig_snapshot(
         }
         if not odds:
             continue
-        if k > 1 and len(odds) < k:
+        if k > 1 and len(odds) <= k:
             # Thin sources (wide spreads dropped) can leave a top-N market
-            # with too few priced runners to de-vig — skip it, don't die.
+            # with too few priced runners to de-vig — with <= N runners the
+            # sum-to-N constraint forces all to certainty. Skip, don't die.
             print(f"WARNING: {key} market has only {len(odds)} priced "
-                  f"runners (need >= {k}), skipped")
+                  f"runners (need > {k}), skipped")
             continue
         topk[k] = (devig_win(odds, win_method) if k == 1
                    else devig_topn(odds, k, topn_method))
@@ -223,7 +229,9 @@ def devig_snapshot(
     classified = markets.get("classified") or {}
     yes_runners = (classified.get("yes") or {}).get("runners", {})
     no_runners = (classified.get("no") or {}).get("runners", {})
+    cls_weight = _market_weight((classified.get("yes") or {}).get("total_matched"))
     dnf: dict[str, float] = {}
+    dnf_weights: dict[str, float] = {}
     for code in set(yes_runners) | set(no_runners):
         p_classified = devig_classified(
             select_price(yes_runners.get(code, {})),
@@ -231,6 +239,7 @@ def devig_snapshot(
         )
         if p_classified is not None:
             dnf[code] = 1.0 - p_classified
+            dnf_weights[code] = cls_weight
     if dnf:
         sides = "+".join(s for s in ("yes", "no") if classified.get(s))
         used.append(f"classified({sides}): {len(dnf)} drivers")
@@ -247,5 +256,6 @@ def devig_snapshot(
         "weights": weights,
         "h2h": h2h,
         "dnf": dnf,
+        "dnf_weights": dnf_weights,
         "markets_used": used,
     }
