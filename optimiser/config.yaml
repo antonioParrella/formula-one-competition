@@ -79,9 +79,24 @@ model:
   dnf:
     # Per driver, highest priority first: per_driver override here ->
     # market-implied 1 - P(classified) from the "To Be Classified" Yes/No
-    # markets -> default_prob season prior.
-    default_prob: 0.10          # season-average retirement prior (fallback)
+    # markets -> this season's DNF rate from OpenF1 (dnf.season) ->
+    # default_prob flat fallback.
+    default_prob: 0.10          # flat fallback: OpenF1 down or round 1 (no races yet)
     per_driver: {}              # explicit override, e.g. { STR: 0.18, GAS: 0.14 }
+    season:                     # per-driver season-to-date DNF rate (dnf_prior.py)
+      enabled: true             # pull each driver's DNF rate from OpenF1
+      prior_strength: 4.0       # Beta pseudo-starts shrinking each rate toward the grid average
+      include_sprints: false    # count sprint retirements too (default: grands prix only)
+      anchor_to_default: true   # rescale so the mean DNF = default_prob (keep only the
+                                # cross-driver SHAPE); the raw season level is ~2x default_prob
+                                # and pushes strong drivers' 1-P(DNF) top-k ceiling below their
+                                # market win/points prices, wrecking the fit (see dnf_prior.py)
+    attrition:                  # correlated attrition + circuit conditioning (attrition.py, ATTRITION.md)
+      enabled: true             # calibrate the shared race shock + circuit rates from OpenF1
+      shock: true               # add one latent race shock Z~N(0,1) so DNFs cluster (heavy tail)
+      circuit: true             # scale the DNF level to the venue (Spa low ~0.6x, Melbourne high ~1.9x)
+      calibration_years: [2023, 2024, 2025]   # seasons pooled to fit the shock loading + circuit rates
+      circuit_prior_starts: 40  # Beta pseudo-starts shrinking each circuit's rate toward the grid avg
 
 bayes:
   # Bayesian path (`fit --bayes`, MATH.md Section 7): de-vigged market

@@ -14,10 +14,21 @@ once). The engine is otherwise identical — draw noise, scale, add,
 argsort — so the DNF layer and everything downstream are untouched. The
 default (``dist="gumbel"``, ``sigma=None``) is exactly the PL model.
 
-DNF layer: each driver retires independently with probability pᵢ. DNF'd
-drivers are demoted behind every survivor (relative order among DNFs
-kept PL-consistent), which produces the correlated attrition scenarios
-that promote several underdogs into the top 10 at once.
+DNF layer: each driver retires with probability pᵢ. DNF'd drivers are
+demoted behind every survivor (relative order among DNFs kept
+PL-consistent).
+
+**Correlated attrition** (``shock_lambda > 0``, ATTRITION.md): real races
+retire cars in clusters — a single shared shock (safety car, weather,
+lap-1 pileup) fattens the "many cars out" tail ~5× beyond independent
+Bernoulli. We model this with one latent race shock Zᵣ ~ N(0, 1) that
+shifts every driver's DNF log-odds together:
+``dᵢ,ᵣ = logistic(bᵢ + λ·Zᵣ)``. The per-driver base ``bᵢ`` is chosen so
+the shock preserves each driver's marginal DNF rate pᵢ (so the fit and
+validate marginals are untouched); ``λ`` is calibrated to the historical
+DNF-count tail (``attrition.py``). ``λ = 0`` recovers independent DNFs.
+It is the shared shock — not the demotion — that promotes several
+underdogs into the top 10 at once.
 """
 
 from dataclasses import dataclass
@@ -27,6 +38,19 @@ import numpy as np
 # Demotion applied to a DNF'd driver's Gumbel score. Gumbel noise spans
 # a few units, so this puts every DNF behind every survivor.
 DNF_DEMOTION = 1e6
+
+
+def _shock_base_logit(dnf_probs: np.ndarray, shock_lambda: float) -> np.ndarray:
+    """Base log-odds whose logistic-normal mean over the race shock equals
+    ``dnf_probs`` — so the shared shock is *mean-preserving* per driver.
+
+    Uses the probit approximation E[σ(b + λZ)] ≈ σ(b / √(1 + λ²·π/8)):
+    inverting it gives ``b = logit(p)·√(1 + λ²·π/8)``. Vectorised, so it
+    works for ``(n,)`` and ``(n_sims, n)`` DNF arrays alike.
+    """
+    p = np.clip(dnf_probs, 1e-6, 1.0 - 1e-6)
+    scale = np.sqrt(1.0 + shock_lambda * shock_lambda * (np.pi / 8.0))
+    return np.log(p / (1.0 - p)) * scale
 
 
 @dataclass(frozen=True)
@@ -52,6 +76,7 @@ def sample_finish_positions(
     rng: np.random.Generator,
     sigma: np.ndarray | None = None,
     dist: str = "gumbel",
+    shock_lambda: float = 0.0,
 ) -> tuple[np.ndarray, np.ndarray]:
     """Sample finishing positions for every driver in every race.
 
@@ -77,7 +102,15 @@ def sample_finish_positions(
     if sigma is not None:
         noise = noise * np.atleast_2d(sigma)
     scores = theta + noise
-    dnf = rng.random((n_sims, n)) < dnf_probs
+    if shock_lambda > 0.0:
+        # One shared shock per race lifts everyone's DNF log-odds together,
+        # producing the correlated "many cars out" tail (ATTRITION.md).
+        base = _shock_base_logit(dnf_probs, shock_lambda)     # (., n)
+        z = rng.standard_normal((n_sims, 1))                  # per-race shock
+        d_race = 1.0 / (1.0 + np.exp(-(base + shock_lambda * z)))
+        dnf = rng.random((n_sims, n)) < d_race
+    else:
+        dnf = rng.random((n_sims, n)) < dnf_probs
     scores = np.where(dnf, scores - DNF_DEMOTION, scores)
 
     order = np.argsort(-scores, axis=1)              # order[s, pos] = driver
@@ -93,13 +126,16 @@ def simulate_races(
     seed: int,
     sigma_by_code: dict[str, float] | None = None,
     dist: str = "gumbel",
+    shock_lambda: float = 0.0,
 ) -> SimSet:
     """Simulate ``n_sims`` races for the fitted driver set.
 
     Pass ``sigma_by_code`` and ``dist="gaussian"`` for the
     heterogeneous-dispersion model (DISPERSION.md); the defaults are the
     Plackett-Luce model. ``theta_by_code`` holds the driver *locations*
-    μ (identical to PL strengths in the default path).
+    μ (identical to PL strengths in the default path). ``shock_lambda > 0``
+    adds the shared per-race attrition shock (ATTRITION.md); it is
+    mean-preserving, so per-driver DNF marginals are unchanged.
     """
     drivers = list(theta_by_code)
     theta = np.array([theta_by_code[c] for c in drivers], dtype=np.float64)
@@ -110,7 +146,8 @@ def simulate_races(
 
     rng = np.random.default_rng(seed)
     finish_pos, dnf = sample_finish_positions(
-        theta, dnf_probs, n_sims, rng, sigma=sigma, dist=dist)
+        theta, dnf_probs, n_sims, rng, sigma=sigma, dist=dist,
+        shock_lambda=shock_lambda)
     return SimSet(drivers=drivers, finish_pos=finish_pos, dnf=dnf)
 
 

@@ -2,13 +2,18 @@
 
 Re-simulates the fitted model with the full Monte Carlo engine (no
 soft-rank relaxation) and prints a table comparing every market
-probability used in fitting against its simulated marginal. Any
-deviation over 2 percentage points is flagged.
+probability used in fitting against its simulated marginal. A deviation
+is flagged when it exceeds a **liquidity-adjusted** threshold: a 2pp gap
+only means something when the market is liquid enough to price to that
+precision, so the threshold widens for thin markets (see
+``_flag_threshold``).
 
 The Bayesian path (``validate_posterior``) upgrades the threshold to a
 calibration test: each market probability is compared against the
 posterior-predictive marginal and its credible interval, and flagged
 only when the market falls *outside* the interval (MATH.md Section 7.6).
+That interval already widens with illiquidity (the noise band scales as
+1/sqrt(weight)), so it is liquidity-aware by construction.
 """
 
 import _paths  # noqa: F401
@@ -18,46 +23,76 @@ import numpy as np
 from model.fit import _analytic_h2h
 from model.simulate import SimSet, h2h_prob, top_k_probs
 
-FLAG_THRESHOLD = 0.02  # 2 percentage points
+FLAG_THRESHOLD = 0.02  # 2 percentage points, at/above reference liquidity
+# _market_weight (odds/devig.py) is the liquidity proxy: unknown -> 1.0,
+# ~£10k matched -> 1.0, rising to 1.5 at ~£1M, falling to 0.2 for a near
+# empty book. We anchor the flat 2pp flag to this reference weight.
+LIQUID_WEIGHT = 1.0
+
+
+def _flag_threshold(weight: float) -> float:
+    """Liquidity-adjusted deviation threshold for a market.
+
+    A 2pp gap is only worth a warning when the market is liquid enough to
+    trust its de-vigged price to that precision. At or above the
+    reference liquidity — and when liquidity is unknown (weight 1.0, e.g.
+    the manual CSV path) — the flat ``FLAG_THRESHOLD`` holds. Below it the
+    price is noisier, so the threshold widens in proportion to how thin
+    the book is (weight 0.5 -> 4pp, weight 0.2 -> 10pp). It never tightens
+    below 2pp for a very liquid market — that would flag gaps the flat
+    rule never did.
+    """
+    return FLAG_THRESHOLD * max(1.0, LIQUID_WEIGHT / max(weight, 1e-9))
 
 
 def validate_fit(fit: dict, market_probs: dict, sims: SimSet) -> bool:
     """Print the market-vs-sim comparison table; True if nothing flagged."""
     col = {c: i for i, c in enumerate(sims.drivers)}
-    header = f"{'market':<8} {'driver(s)':<12} {'market %':>9} {'sim %':>9} {'diff pp':>8}"
+    header = (f"{'market':<8} {'driver(s)':<12} {'market %':>9} {'sim %':>9} "
+              f"{'diff pp':>8} {'thr pp':>7}")
     print("\nValidation: de-vigged market probs vs simulated marginals "
           f"({sims.n_sims:,} races)")
+    print("flag threshold scales with market liquidity — "
+          f"{FLAG_THRESHOLD:.0%} when liquid, wider for thin books")
     print(header)
     print("─" * len(header))
 
+    weights = market_probs.get("weights", {})
     flagged: list[str] = []
     for k, probs in sorted(market_probs["topk"].items()):
         sim_p = top_k_probs(sims.finish_pos, k)
         label = "win" if k == 1 else f"top{k}"
+        thr = _flag_threshold(weights.get(k, LIQUID_WEIGHT))
         for code in sorted(probs, key=probs.get, reverse=True):
             diff = sim_p[col[code]] - probs[code]
-            flag = "  ⚠" if abs(diff) > FLAG_THRESHOLD else ""
+            flag = "  ⚠" if abs(diff) > thr else ""
             print(f"{label:<8} {code:<12} {probs[code]:>8.1%} "
-                  f"{sim_p[col[code]]:>8.1%} {diff * 100:>+7.1f}{flag}")
+                  f"{sim_p[col[code]]:>8.1%} {diff * 100:>+7.1f} "
+                  f"{thr * 100:>6.1f}{flag}")
             if flag:
-                flagged.append(f"{label} {code} ({diff * 100:+.1f}pp)")
+                flagged.append(
+                    f"{label} {code} ({diff * 100:+.1f}pp > {thr * 100:.1f}pp)")
 
-    for (a, b), p_a, _w in market_probs["h2h"]:
+    for (a, b), p_a, w in market_probs["h2h"]:
         sim_p = h2h_prob(sims.finish_pos, col[a], col[b])
         diff = sim_p - p_a
-        flag = "  ⚠" if abs(diff) > FLAG_THRESHOLD else ""
+        thr = _flag_threshold(w)
+        flag = "  ⚠" if abs(diff) > thr else ""
         print(f"{'h2h':<8} {a + ' v ' + b:<12} {p_a:>8.1%} {sim_p:>8.1%} "
-              f"{diff * 100:>+7.1f}{flag}")
+              f"{diff * 100:>+7.1f} {thr * 100:>6.1f}{flag}")
         if flag:
-            flagged.append(f"h2h {a} v {b} ({diff * 100:+.1f}pp)")
+            flagged.append(
+                f"h2h {a} v {b} ({diff * 100:+.1f}pp > {thr * 100:.1f}pp)")
 
     if flagged:
-        print(f"\n⚠ {len(flagged)} marginal(s) deviate by more than "
-              f"{FLAG_THRESHOLD:.0%}: {', '.join(flagged)}")
-        print("Consider more fit iterations, a lower fit_tau, or checking "
-              "the snapshot for stale/illiquid prices.")
+        print(f"\n⚠ {len(flagged)} marginal(s) deviate beyond their "
+              f"liquidity-adjusted threshold: {', '.join(flagged)}")
+        print("These are liquid enough for the gap to be real — consider more "
+              "fit iterations, a lower fit_tau, or checking the snapshot for "
+              "stale prices.")
     else:
-        print(f"\nAll marginals within {FLAG_THRESHOLD:.0%} of market probs.")
+        print("\nAll marginals within their liquidity-adjusted threshold "
+              f"({FLAG_THRESHOLD:.0%} at full liquidity, wider for thin books).")
     return not flagged
 
 

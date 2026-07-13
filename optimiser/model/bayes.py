@@ -88,6 +88,7 @@ def build_log_posterior(
     dnf_probs: dict[str, float],
     dnf_cfg: dict,
     bayes_cfg: dict | None = None,
+    season_dnf: dict[str, float] | None = None,
 ) -> tuple[Callable[[np.ndarray], np.ndarray], dict]:
     """Batched log-posterior over x = (theta, eta, gamma).
 
@@ -152,8 +153,17 @@ def build_log_posterior(
     tau_p = float(cfg["tau_prior"])
     sigma_sc = float(cfg["sigma_scale"])
     s_d = float(cfg["dnf_prior_sd"])
-    eta0 = float(logit(np.clip(float((dnf_cfg or {}).get("default_prob", 0.10)),
-                               1e-4, 1 - 1e-4)))
+    # Prior centre for each sampled DNF eta: this driver's season DNF rate
+    # (dnf_prior), else the flat default_prob. Broadcasts to the old scalar
+    # when season_dnf is empty. Aligned to eta_codes / columns n..n+m.
+    default_prob = float(np.clip(float((dnf_cfg or {}).get("default_prob", 0.10)),
+                                 1e-4, 1 - 1e-4))
+    season_dnf = season_dnf or {}
+    eta0 = np.array(
+        [float(logit(np.clip(season_dnf.get(c, default_prob), 1e-4, 1 - 1e-4)))
+         for c in eta_codes],
+        dtype=np.float64,
+    )
     D = n + m + 1
 
     def log_prob_batch(X: np.ndarray) -> np.ndarray:
@@ -202,7 +212,7 @@ def build_log_posterior(
             lp = (-0.5 * (theta_raw ** 2).sum(axis=1) / tau_p**2
                   - np.exp(2.0 * gamma) / (2.0 * sigma_sc**2) + gamma)
             if m:
-                lp -= 0.5 * ((xb[:, n:n + m] - eta0) ** 2).sum(axis=1) / s_d**2
+                lp -= 0.5 * ((xb[:, n:n + m] - eta0[None, :]) ** 2).sum(axis=1) / s_d**2
             out[lo:lo + chunk] = ll + lp
         return out
 
@@ -248,6 +258,7 @@ def fit_posterior(
     dnf_cfg: dict,
     map_fit: dict,
     bayes_cfg: dict | None = None,
+    season_dnf: dict[str, float] | None = None,
 ) -> dict:
     """Sample P(theta, eta, gamma | odds) with the configured engine.
 
@@ -256,7 +267,8 @@ def fit_posterior(
     mean-centred, dnf draws mix sampled and fixed columns.
     """
     cfg = _cfg(bayes_cfg)
-    log_prob, meta = build_log_posterior(market_probs, dnf_probs, dnf_cfg, cfg)
+    log_prob, meta = build_log_posterior(market_probs, dnf_probs, dnf_cfg, cfg,
+                                         season_dnf=season_dnf)
     n, m, D = meta["n"], meta["m"], meta["D"]
     x_init = _initial_state(meta, map_fit, market_probs.get("dnf") or {})
     method = str(cfg["method"]).lower()
