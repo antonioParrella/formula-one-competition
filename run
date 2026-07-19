@@ -1,0 +1,63 @@
+#!/usr/bin/env bash
+# Easy launcher for the F1 tipping optimiser.
+#
+#   ./run                       # setup venv (if needed) + `main.py all --source all`
+#   ./run fit                   # any main.py subcommand/flags are passed straight through
+#   ./run all --manual odds.csv
+#   ./run --setup               # just (re)create the venv + install deps, don't run
+#
+# Idempotent: the venv is created and deps installed only when missing. Delete
+# venv/.deps-installed to force a reinstall.
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+VENV="$ROOT/venv"
+STAMP="$VENV/.deps-installed"
+
+# Windows venvs use Scripts/, POSIX uses bin/.
+if [ -x "$VENV/Scripts/python.exe" ]; then
+  PY="$VENV/Scripts/python.exe"
+else
+  PY="$VENV/bin/python"
+fi
+
+# Pick a bootstrap interpreter for creating the venv.
+find_python() {
+  for c in python3 python py; do
+    if command -v "$c" >/dev/null 2>&1; then
+      if [ "$c" = "py" ]; then echo "py -3"; else echo "$c"; fi
+      return 0
+    fi
+  done
+  echo "error: no python interpreter found on PATH" >&2
+  exit 1
+}
+
+if [ ! -x "$PY" ]; then
+  echo ">> creating venv at $VENV"
+  $(find_python) -m venv "$VENV"
+  if [ -x "$VENV/Scripts/python.exe" ]; then PY="$VENV/Scripts/python.exe"; else PY="$VENV/bin/python"; fi
+fi
+
+if [ ! -f "$STAMP" ]; then
+  echo ">> installing dependencies"
+  "$PY" -m pip install --upgrade pip >/dev/null
+  "$PY" -m pip install -r "$ROOT/config/requirements.txt"
+  "$PY" -m pip install -r "$ROOT/optimiser/requirements.txt"
+  touch "$STAMP"
+fi
+
+# --setup: bootstrap only, no pipeline run.
+if [ "${1:-}" = "--setup" ]; then
+  echo ">> setup complete"
+  exit 0
+fi
+
+# Default to the full pipeline across all odds sources; passthrough any args.
+if [ "$#" -eq 0 ]; then
+  set -- all --source all
+fi
+
+# _paths.py bootstraps ../src, so main.py must run with optimiser/ as the cwd.
+cd "$ROOT/optimiser"
+exec "$PY" main.py "$@"

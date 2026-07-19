@@ -1,0 +1,14 @@
+# Derived, regenerable artifacts (fits, reports, backtests) — not tracked.
+data/*
+!data/.gitkeep
+
+# ...but ALWAYS keep queried odds snapshots. Live markets settle and can
+# never be re-fetched, so every query is archived here as a permanent,
+# timestamped record (small JSON). This is the odds history to go back to.
+!data/odds_*.json
+
+# Never commit credentials or certs (they live in ~/.betfair anyway).
+*.pem
+*.crt
+*.key
+credentials.yaml

@@ -1,0 +1,282 @@
+{
+  "race_name": "Belgian Grand Prix",
+  "source": "kalshi",
+  "markets": {
+    "h2h": [],
+    "classified": {},
+    "win": {
+      "market_name": "KXF1RACE-BELGP26",
+      "market_id": "KXF1RACE-BELGP26",
+      "total_matched": 10636.22,
+      "runners": {
+        "BOT": {
+          "last_traded": 100.0,
+          "back": 100.0,
+          "lay": null
+        },
+        "VER": {
+          "last_traded": 12.5,
+          "back": 12.5,
+          "lay": 14.285714285714285
+        },
+        "ANT": {
+          "last_traded": 2.5,
+          "back": 2.5,
+          "lay": 2.564102564102564
+        },
+        "NOR": {
+          "last_traded": 25.0,
+          "back": 33.333333333333336,
+          "lay": 100.0
+        },
+        "RUS": {
+          "last_traded": 4.3478260869565215,
+          "back": 4.3478260869565215,
+          "lay": 4.545454545454546
+        },
+        "LEC": {
+          "last_traded": 6.666666666666667,
+          "back": 8.333333333333334,
+          "lay": 9.090909090909092
+        },
+        "HAM": {
+          "last_traded": 5.2631578947368425,
+          "back": 5.2631578947368425,
+          "lay": 5.555555555555555
+        },
+        "OCO": {
+          "last_traded": 100.0,
+          "back": 100.0,
+          "lay": null
+        },
+        "ALB": {
+          "last_traded": 100.0,
+          "back": 100.0,
+          "lay": null
+        },
+        "SAI": {
+          "last_traded": 100.0,
+          "back": 100.0,
+          "lay": null
+        },
+        "PIA": {
+          "last_traded": 25.0,
+          "back": 50.0,
+          "lay": 100.0
+        }
+      }
+    },
+    "top3": {
+      "market_name": "KXF1RACEPODIUM-BELGP26",
+      "market_id": "KXF1RACEPODIUM-BELGP26",
+      "total_matched": 783.89,
+      "runners": {
+        "ANT": {
+          "last_traded": 1.2195121951219512,
+          "back": 1.2345679012345678,
+          "lay": 1.3157894736842106
+        },
+        "HAM": {
+          "last_traded": 1.639344262295082,
+          "back": 1.6129032258064517,
+          "lay": 1.7543859649122808
+        },
+        "NOR": {
+          "last_traded": 5.2631578947368425,
+          "back": 5.555555555555555,
+          "lay": 8.333333333333334
+        },
+        "VER": {
+          "last_traded": 2.7777777777777777,
+          "back": 2.7027027027027026,
+          "lay": 3.0303030303030303
+        },
+        "STR": {
+          "last_traded": 25.0,
+          "back": 33.333333333333336,
+          "lay": null
+        },
+        "HAD": {
+          "last_traded": 16.666666666666668,
+          "back": 16.666666666666668,
+          "lay": null
+        },
+        "PIA": {
+          "last_traded": 7.692307692307692,
+          "back": 7.692307692307692,
+          "lay": 8.333333333333334
+        },
+        "LEC": {
+          "last_traded": 2.1739130434782608,
+          "back": 1.923076923076923,
+          "lay": 2.1739130434782608
+        },
+        "RUS": {
+          "last_traded": 1.4285714285714286,
+          "back": 1.3333333333333333,
+          "lay": 1.4285714285714286
+        }
+      }
+    },
+    "top5": {
+      "market_name": "KXF1TOP5-BELGP26",
+      "market_id": "KXF1TOP5-BELGP26",
+      "total_matched": 307.6,
+      "runners": {
+        "VER": {
+          "last_traded": 1.4705882352941175,
+          "back": 1.4925373134328357,
+          "lay": 1.5873015873015872
+        },
+        "COL": {
+          "last_traded": 20.0,
+          "back": 14.285714285714285,
+          "lay": null
+        },
+        "STR": {
+          "last_traded": 25.0,
+          "back": 33.333333333333336,
+          "lay": null
+        },
+        "HAD": {
+          "last_traded": null,
+          "back": 4.3478260869565215,
+          "lay": 6.25
+        },
+        "NOR": {
+          "last_traded": 1.5873015873015872,
+          "back": 1.5873015873015872,
+          "lay": 1.7241379310344829
+        },
+        "PIA": {
+          "last_traded": 2.3255813953488373,
+          "back": 2.380952380952381,
+          "lay": 2.6315789473684212
+        },
+        "ALB": {
+          "last_traded": 25.0,
+          "back": 25.0,
+          "lay": null
+        },
+        "RUS": {
+          "last_traded": null,
+          "back": 1.2048192771084338,
+          "lay": 1.3157894736842106
+        },
+        "ANT": {
+          "last_traded": null,
+          "back": 1.1363636363636365,
+          "lay": 1.2345679012345678
+        },
+        "HAM": {
+          "last_traded": null,
+          "back": 1.282051282051282,
+          "lay": 1.4084507042253522
+        },
+        "LEC": {
+          "last_traded": null,
+          "back": 1.282051282051282,
+          "lay": 1.4084507042253522
+        }
+      }
+    },
+    "top10": {
+      "market_name": "KXF1TOP10-BELGP26",
+      "market_id": "KXF1TOP10-BELGP26",
+      "total_matched": 291.66999999999996,
+      "runners": {
+        "LIN": {
+          "last_traded": null,
+          "back": 1.7241379310344829,
+          "lay": 1.9607843137254901
+        },
+        "HAM": {
+          "last_traded": null,
+          "back": 1.075268817204301,
+          "lay": 1.1627906976744187
+        },
+        "RUS": {
+          "last_traded": null,
+          "back": 1.075268817204301,
+          "lay": 1.1627906976744187
+        },
+        "BEA": {
+          "last_traded": null,
+          "back": 4.3478260869565215,
+          "lay": 6.25
+        },
+        "NOR": {
+          "last_traded": null,
+          "back": 1.1363636363636365,
+          "lay": 1.2345679012345678
+        },
+        "LEC": {
+          "last_traded": null,
+          "back": 1.075268817204301,
+          "lay": 1.1627906976744187
+        },
+        "ANT": {
+          "last_traded": null,
+          "back": 1.075268817204301,
+          "lay": 1.1627906976744187
+        },
+        "COL": {
+          "last_traded": null,
+          "back": 1.7241379310344829,
+          "lay": 1.9607843137254901
+        },
+        "LAW": {
+          "last_traded": 1.7241379310344829,
+          "back": 1.7241379310344829,
+          "lay": 1.8867924528301885
+        },
+        "VER": {
+          "last_traded": null,
+          "back": 1.1363636363636365,
+          "lay": 1.2345679012345678
+        },
+        "PER": {
+          "last_traded": 25.0,
+          "back": 25.0,
+          "lay": null
+        },
+        "PIA": {
+          "last_traded": null,
+          "back": 1.1363636363636365,
+          "lay": 1.2345679012345678
+        },
+        "HUL": {
+          "last_traded": null,
+          "back": 4.3478260869565215,
+          "lay": 6.25
+        },
+        "STR": {
+          "last_traded": 25.0,
+          "back": 33.333333333333336,
+          "lay": null
+        },
+        "BOR": {
+          "last_traded": null,
+          "back": 2.6315789473684212,
+          "lay": 3.2258064516129035
+        },
+        "HAD": {
+          "last_traded": null,
+          "back": 1.2048192771084338,
+          "lay": 1.3157894736842106
+        },
+        "GAS": {
+          "last_traded": 1.7241379310344829,
+          "back": 1.7241379310344829,
+          "lay": 1.8867924528301885
+        },
+        "SAI": {
+          "last_traded": 25.0,
+          "back": 20.0,
+          "lay": null
+        }
+      }
+    }
+  },
+  "fetched_at": "2026-07-08T22:30:23.896950+00:00"
+}

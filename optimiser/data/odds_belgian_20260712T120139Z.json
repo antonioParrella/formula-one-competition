@@ -1,0 +1,126 @@
+{
+  "race_name": "Belgian Grand Prix",
+  "source": "betfair",
+  "markets": {
+    "h2h": [],
+    "classified": {},
+    "win": {
+      "market_name": "Winner",
+      "market_id": "1.259773806",
+      "total_matched": 1476.963868,
+      "runners": {
+        "ANT": {
+          "last_traded": 2.84,
+          "back": 2.68,
+          "lay": 2.84
+        },
+        "RUS": {
+          "last_traded": 4.4,
+          "back": 4.3,
+          "lay": 5.1
+        },
+        "HAM": {
+          "last_traded": 6.8,
+          "back": 6.8,
+          "lay": 7.8
+        },
+        "LEC": {
+          "last_traded": 8.0,
+          "back": 7.8,
+          "lay": 10.0
+        },
+        "VER": {
+          "last_traded": 13.5,
+          "back": 13.5,
+          "lay": 18.0
+        },
+        "NOR": {
+          "last_traded": 36.0,
+          "back": 20.0,
+          "lay": 110.0
+        },
+        "PIA": {
+          "last_traded": 42.0,
+          "back": 10.0,
+          "lay": 110.0
+        },
+        "HAD": {
+          "last_traded": 160.0,
+          "back": 30.0,
+          "lay": 450.0
+        },
+        "GAS": {
+          "last_traded": null,
+          "back": 55.0,
+          "lay": null
+        },
+        "LAW": {
+          "last_traded": null,
+          "back": 55.0,
+          "lay": null
+        },
+        "BEA": {
+          "last_traded": null,
+          "back": 55.0,
+          "lay": null
+        },
+        "LIN": {
+          "last_traded": null,
+          "back": 55.0,
+          "lay": null
+        },
+        "SAI": {
+          "last_traded": null,
+          "back": 1000.0,
+          "lay": null
+        },
+        "ALB": {
+          "last_traded": null,
+          "back": 1000.0,
+          "lay": null
+        },
+        "ALO": {
+          "last_traded": null,
+          "back": 1000.0,
+          "lay": null
+        },
+        "STR": {
+          "last_traded": null,
+          "back": 1000.0,
+          "lay": null
+        },
+        "HUL": {
+          "last_traded": null,
+          "back": 1000.0,
+          "lay": null
+        },
+        "OCO": {
+          "last_traded": null,
+          "back": 1000.0,
+          "lay": null
+        },
+        "BOR": {
+          "last_traded": null,
+          "back": 1000.0,
+          "lay": null
+        },
+        "COL": {
+          "last_traded": null,
+          "back": 1000.0,
+          "lay": null
+        },
+        "PER": {
+          "last_traded": null,
+          "back": 1000.0,
+          "lay": null
+        },
+        "BOT": {
+          "last_traded": null,
+          "back": 1000.0,
+          "lay": null
+        }
+      }
+    }
+  },
+  "fetched_at": "2026-07-12T12:01:39.302108+00:00"
+}

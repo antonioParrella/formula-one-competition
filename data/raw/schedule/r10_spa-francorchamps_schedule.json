@@ -1,0 +1,50 @@
+{
+  "round": 10,
+  "race_name": "Spa-Francorchamps",
+  "year": 2026,
+  "meeting_key": 1290,
+  "is_sprint_weekend": false,
+  "fetched_at": "2026-07-20T07:39:11.946014",
+  "sessions": [
+    {
+      "session_name": "Practice 1",
+      "session_key": 11327,
+      "date_start": "2026-07-17T11:30:00+00:00",
+      "date_end": "2026-07-17T12:30:00+00:00",
+      "gmt_offset": "02:00:00",
+      "is_cancelled": false
+    },
+    {
+      "session_name": "Practice 2",
+      "session_key": 11328,
+      "date_start": "2026-07-17T15:00:00+00:00",
+      "date_end": "2026-07-17T16:00:00+00:00",
+      "gmt_offset": "02:00:00",
+      "is_cancelled": false
+    },
+    {
+      "session_name": "Practice 3",
+      "session_key": 11329,
+      "date_start": "2026-07-18T10:30:00+00:00",
+      "date_end": "2026-07-18T11:30:00+00:00",
+      "gmt_offset": "02:00:00",
+      "is_cancelled": false
+    },
+    {
+      "session_name": "Qualifying",
+      "session_key": 11330,
+      "date_start": "2026-07-18T14:00:00+00:00",
+      "date_end": "2026-07-18T15:00:00+00:00",
+      "gmt_offset": "02:00:00",
+      "is_cancelled": false
+    },
+    {
+      "session_name": "Race",
+      "session_key": 11334,
+      "date_start": "2026-07-19T13:00:00+00:00",
+      "date_end": "2026-07-19T15:00:00+00:00",
+      "gmt_offset": "02:00:00",
+      "is_cancelled": false
+    }
+  ]
+}
