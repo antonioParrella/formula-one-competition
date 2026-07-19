@@ -1,0 +1,36 @@
+{
+  "round": 10,
+  "race_name": "Spa-Francorchamps",
+  "year": 2026,
+  "is_sprint_weekend": false,
+  "top10": [
+    "ANT",
+    "LEC",
+    "VER",
+    "HAM",
+    "PIA",
+    "HAD",
+    "NOR",
+    "BOR",
+    "LIN",
+    "COL"
+  ],
+  "dnfs": [
+    "STR",
+    "PER",
+    "RUS"
+  ],
+  "sprint_top3": null,
+  "championship_top10_before_race": [
+    "ANT",
+    "HAM",
+    "RUS",
+    "LEC",
+    "NOR",
+    "PIA",
+    "VER",
+    "HAD",
+    "GAS",
+    "LAW"
+  ]
+}

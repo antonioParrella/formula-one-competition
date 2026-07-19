@@ -28,6 +28,7 @@ from scipy.optimize import minimize
 from scipy.special import expit, ndtr
 
 from odds.snapshot import race_slug
+from progress import Spinner
 
 DATA_DIR = Path(__file__).resolve().parent.parent / "data"
 SOFT_DNF_DEMOTION = 60.0   # saturates the sigmoids just like the hard sim
@@ -139,6 +140,7 @@ def fit_strengths(
     ]
 
     inv_tau = np.float32(1.0 / tau)
+    state = {"loss": float("nan")}   # last objective value, for the spinner
 
     def objective(theta: np.ndarray) -> float:
         theta = theta - theta.mean()
@@ -155,7 +157,9 @@ def fit_strengths(
         for i, j, p_target, weight in h2h_targets:
             p_model = _analytic_h2h(theta[i], theta[j], dnf_vec[i], dnf_vec[j])
             sse += weight * (p_model - p_target) ** 2
-        return sse + L2_PENALTY * float((theta**2).sum())
+        loss = sse + L2_PENALTY * float((theta**2).sum())
+        state["loss"] = loss
+        return loss
 
     win_probs = market_probs["topk"][1]
     floor = min(win_probs.values())
@@ -166,12 +170,15 @@ def fit_strengths(
     theta0 -= theta0.mean()
 
     t0 = time.perf_counter()
+    spinner = Spinner("fitting θ")
     # eps: the objective runs in float32, where scipy's default 1e-8
     # finite-difference step vanishes below the dtype's resolution and
     # stalls L-BFGS with zero gradients. The soft objective is smooth,
     # so a coarse step is fine.
     result = minimize(objective, theta0, method="L-BFGS-B",
-                      options={"maxiter": 150, "eps": 1e-3})
+                      options={"maxiter": 150, "eps": 1e-3},
+                      callback=lambda _xk: spinner.tick(f"loss {state['loss']:.5f}"))
+    spinner.close()
     elapsed = time.perf_counter() - t0
 
     theta = result.x - result.x.mean()
@@ -241,6 +248,7 @@ def fit_dispersion(
     ]
 
     inv_tau = np.float32(1.0 / tau)
+    state = {"loss": float("nan")}   # last objective value, for the spinner
 
     def objective(params: np.ndarray) -> float:
         mu = params[:n]
@@ -262,8 +270,10 @@ def fit_dispersion(
             p_model = _analytic_h2h_gaussian(
                 mu[i], mu[j], sigma[i], sigma[j], dnf_vec[i], dnf_vec[j])
             sse += weight * (p_model - p_target) ** 2
-        return (sse + L2_PENALTY * float((mu**2).sum())
+        loss = (sse + L2_PENALTY * float((mu**2).sum())
                 + L2_LOGSIGMA * float((log_sigma**2).sum()))
+        state["loss"] = loss
+        return loss
 
     win_probs = market_probs["topk"][1]
     floor = min(win_probs.values())
@@ -273,8 +283,11 @@ def fit_dispersion(
     params0 = np.concatenate([mu0, np.zeros(n)])  # σ⁰ = 1
 
     t0 = time.perf_counter()
+    spinner = Spinner("fitting μ,σ")
     result = minimize(objective, params0, method="L-BFGS-B",
-                      options={"maxiter": 300, "eps": 1e-3})
+                      options={"maxiter": 300, "eps": 1e-3},
+                      callback=lambda _xk: spinner.tick(f"loss {state['loss']:.5f}"))
+    spinner.close()
     elapsed = time.perf_counter() - t0
 
     mu = result.x[:n] - result.x[:n].mean()

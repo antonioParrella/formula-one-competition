@@ -24,6 +24,7 @@ import numpy as np
 from scipy.optimize import linear_sum_assignment
 
 from model.simulate import SimSet, mean_finish
+from progress import Progress
 from scoring.rules import expected_points_matrix, ticket_scores
 
 
@@ -117,6 +118,7 @@ def optimise(
         starts.append(rng.choice(n, size=10, replace=False))
 
     seen: dict[tuple[int, ...], float] = {}
+    bar = Progress(len(starts), "restarts") if verbose else None
     for k, start in enumerate(starts):
         ticket, ticket_ev = local_search(
             start, exp_points, sims, multipliers, max_iters, assume_additive
@@ -124,7 +126,11 @@ def optimise(
         seen[tuple(ticket)] = ticket_ev
         if verbose and k in (0, 1):
             label = ("greedy start", "assignment start")[k]
-            print(f"  {label:<17} -> local optimum EV {ticket_ev:.2f}")
+            bar.log(f"  {label:<17} -> local optimum EV {ticket_ev:.2f}")
+        if bar:
+            bar.update(extra=f"best EV {max(seen.values()):.2f}")
+    if bar:
+        bar.close()
 
     best = max(seen, key=seen.get)
     best_ticket = np.array(best, dtype=np.intp)

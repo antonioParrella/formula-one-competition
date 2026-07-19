@@ -1,0 +1,278 @@
+{
+  "race_name": "Belgian Grand Prix",
+  "source": "polymarket",
+  "markets": {
+    "h2h": [
+      {
+        "market_name": "Who will finish higher: Leclerc or Piastri?",
+        "market_id": "f1-belgian-grand-prix-h2h-leclerc-vs-piastri-2026-07-19",
+        "total_matched": 46.153842,
+        "runners": {
+          "LEC": {
+            "last_traded": 1.5384615384615383,
+            "back": null,
+            "lay": null
+          },
+          "PIA": {
+            "last_traded": 2.857142857142857,
+            "back": null,
+            "lay": null
+          }
+        }
+      },
+      {
+        "market_name": "Who will finish higher: Verstappen or Piastri?",
+        "market_id": "f1-belgian-grand-prix-h2h-verstappen-vs-piastri-2026-07-19",
+        "total_matched": 24.193547,
+        "runners": {
+          "VER": {
+            "last_traded": 1.6129032258064517,
+            "back": null,
+            "lay": null
+          },
+          "PIA": {
+            "last_traded": 2.6315789473684212,
+            "back": null,
+            "lay": null
+          }
+        }
+      }
+    ],
+    "classified": {},
+    "win": {
+      "market_name": "Belgian Grand Prix: Driver Winner",
+      "market_id": "f1-belgian-grand-prix-winner-2026-07-19",
+      "total_matched": 78732.020126,
+      "runners": {
+        "GAS": {
+          "last_traded": 333.3333333333333,
+          "back": 250.0,
+          "lay": 333.3333333333333
+        },
+        "ALO": {
+          "last_traded": 1000.0,
+          "back": 333.3333333333333,
+          "lay": 1000.0
+        },
+        "ALB": {
+          "last_traded": 1000.0,
+          "back": 333.3333333333333,
+          "lay": 1000.0
+        },
+        "BOR": {
+          "last_traded": 1000.0,
+          "back": 1000.0,
+          "lay": null
+        },
+        "PER": {
+          "last_traded": 1000.0,
+          "back": 333.3333333333333,
+          "lay": 1000.0
+        },
+        "LEC": {
+          "last_traded": 8.333333333333334,
+          "back": 8.333333333333334,
+          "lay": 9.090909090909092
+        },
+        "OCO": {
+          "last_traded": 1000.0,
+          "back": 333.3333333333333,
+          "lay": 1000.0
+        },
+        "NOR": {
+          "last_traded": 38.46153846153846,
+          "back": 37.03703703703704,
+          "lay": 38.46153846153846
+        },
+        "ANT": {
+          "last_traded": 2.564102564102564,
+          "back": 2.564102564102564,
+          "lay": 2.7027027027027026
+        },
+        "VER": {
+          "last_traded": 13.333333333333334,
+          "back": 14.285714285714285,
+          "lay": 14.705882352941176
+        },
+        "COL": {
+          "last_traded": 1000.0,
+          "back": 333.3333333333333,
+          "lay": 1000.0
+        },
+        "SAI": {
+          "last_traded": 1000.0,
+          "back": 1000.0,
+          "lay": null
+        },
+        "HUL": {
+          "last_traded": 1000.0,
+          "back": 333.3333333333333,
+          "lay": 1000.0
+        },
+        "BOT": {
+          "last_traded": 1000.0,
+          "back": 1000.0,
+          "lay": null
+        },
+        "HAM": {
+          "last_traded": 5.88235294117647,
+          "back": 5.88235294117647,
+          "lay": 6.25
+        },
+        "BEA": {
+          "last_traded": 1000.0,
+          "back": 333.3333333333333,
+          "lay": 1000.0
+        },
+        "PIA": {
+          "last_traded": 62.5,
+          "back": 50.0,
+          "lay": 62.5
+        },
+        "RUS": {
+          "last_traded": 4.3478260869565215,
+          "back": 4.3478260869565215,
+          "lay": 4.545454545454546
+        },
+        "LIN": {
+          "last_traded": 1000.0,
+          "back": 500.0,
+          "lay": 1000.0
+        },
+        "HAD": {
+          "last_traded": 200.0,
+          "back": 125.0,
+          "lay": 200.0
+        },
+        "LAW": {
+          "last_traded": 1000.0,
+          "back": 250.0,
+          "lay": 1000.0
+        },
+        "STR": {
+          "last_traded": 1000.0,
+          "back": 333.3333333333333,
+          "lay": 1000.0
+        }
+      }
+    },
+    "top3": {
+      "market_name": "Belgian Grand Prix: Driver Podium Finish",
+      "market_id": "f1-belgian-grand-prix-driver-podium-2026-07-19",
+      "total_matched": 3523.297359,
+      "runners": {
+        "GAS": {
+          "last_traded": null,
+          "back": 22.72727272727273,
+          "lay": 100.0
+        },
+        "ALO": {
+          "last_traded": null,
+          "back": 111.11111111111111,
+          "lay": 1000.0
+        },
+        "ALB": {
+          "last_traded": null,
+          "back": 111.11111111111111,
+          "lay": 500.0
+        },
+        "BOR": {
+          "last_traded": null,
+          "back": 62.5,
+          "lay": 100.0
+        },
+        "PER": {
+          "last_traded": null,
+          "back": 111.11111111111111,
+          "lay": 1000.0
+        },
+        "LEC": {
+          "last_traded": 2.1739130434782608,
+          "back": 2.0,
+          "lay": 2.2222222222222223
+        },
+        "OCO": {
+          "last_traded": null,
+          "back": 71.42857142857143,
+          "lay": 90.90909090909092
+        },
+        "NOR": {
+          "last_traded": 7.692307692307692,
+          "back": 7.692307692307692,
+          "lay": 10.0
+        },
+        "ANT": {
+          "last_traded": 1.282051282051282,
+          "back": 1.3157894736842106,
+          "lay": 1.4084507042253522
+        },
+        "VER": {
+          "last_traded": 2.941176470588235,
+          "back": 2.941176470588235,
+          "lay": 3.125
+        },
+        "COL": {
+          "last_traded": null,
+          "back": 111.11111111111111,
+          "lay": 333.3333333333333
+        },
+        "SAI": {
+          "last_traded": null,
+          "back": 500.0,
+          "lay": 1000.0
+        },
+        "HUL": {
+          "last_traded": null,
+          "back": 111.11111111111111,
+          "lay": 333.3333333333333
+        },
+        "BOT": {
+          "last_traded": null,
+          "back": 100.0,
+          "lay": 333.3333333333333
+        },
+        "HAM": {
+          "last_traded": 1.5873015873015872,
+          "back": 1.639344262295082,
+          "lay": 1.923076923076923
+        },
+        "BEA": {
+          "last_traded": null,
+          "back": 25.0,
+          "lay": 100.0
+        },
+        "PIA": {
+          "last_traded": 8.333333333333334,
+          "back": 11.11111111111111,
+          "lay": 14.285714285714285
+        },
+        "RUS": {
+          "last_traded": 1.3513513513513513,
+          "back": 1.4285714285714286,
+          "lay": 1.5151515151515151
+        },
+        "LIN": {
+          "last_traded": null,
+          "back": 27.77777777777778,
+          "lay": 90.90909090909092
+        },
+        "HAD": {
+          "last_traded": null,
+          "back": 22.72727272727273,
+          "lay": 90.90909090909092
+        },
+        "LAW": {
+          "last_traded": 25.641025641025642,
+          "back": 23.809523809523807,
+          "lay": 76.92307692307692
+        },
+        "STR": {
+          "last_traded": 1000.0,
+          "back": 111.11111111111111,
+          "lay": 1000.0
+        }
+      }
+    }
+  },
+  "fetched_at": "2026-07-16T02:34:13.963497+00:00"
+}
