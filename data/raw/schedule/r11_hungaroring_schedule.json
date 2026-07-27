@@ -1,0 +1,50 @@
+{
+  "round": 11,
+  "race_name": "Hungaroring",
+  "year": 2026,
+  "meeting_key": 1291,
+  "is_sprint_weekend": false,
+  "fetched_at": "2026-07-27T09:05:50.584543",
+  "sessions": [
+    {
+      "session_name": "Practice 1",
+      "session_key": 11335,
+      "date_start": "2026-07-24T11:30:00+00:00",
+      "date_end": "2026-07-24T12:30:00+00:00",
+      "gmt_offset": "02:00:00",
+      "is_cancelled": false
+    },
+    {
+      "session_name": "Practice 2",
+      "session_key": 11336,
+      "date_start": "2026-07-24T15:00:00+00:00",
+      "date_end": "2026-07-24T16:00:00+00:00",
+      "gmt_offset": "02:00:00",
+      "is_cancelled": false
+    },
+    {
+      "session_name": "Practice 3",
+      "session_key": 11337,
+      "date_start": "2026-07-25T10:30:00+00:00",
+      "date_end": "2026-07-25T11:30:00+00:00",
+      "gmt_offset": "02:00:00",
+      "is_cancelled": false
+    },
+    {
+      "session_name": "Qualifying",
+      "session_key": 11338,
+      "date_start": "2026-07-25T14:00:00+00:00",
+      "date_end": "2026-07-25T15:00:00+00:00",
+      "gmt_offset": "02:00:00",
+      "is_cancelled": false
+    },
+    {
+      "session_name": "Race",
+      "session_key": 11342,
+      "date_start": "2026-07-26T13:00:00+00:00",
+      "date_end": "2026-07-26T15:00:00+00:00",
+      "gmt_offset": "02:00:00",
+      "is_cancelled": false
+    }
+  ]
+}
