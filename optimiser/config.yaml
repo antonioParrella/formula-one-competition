@@ -4,9 +4,9 @@
 race:
   # Update these before each fetch — used to find the Betfair event and to
   # name snapshot files. Round drives the underdog rule (no bonus in round 1).
-  name: "Belgian Grand Prix"    # must match the Betfair event text (e.g. "F1 Belgian Grand Prix")
+  name: "Hungarian Grand Prix"  # must match the Betfair event text (e.g. "F1 Hungarian Grand Prix")
   year: 2026
-  round: 10                     # comp round (Spa, race 2026-07-19)
+  round: 11                     # comp round (Hungaroring, race 2026-07-26)
   include_sprint_markets: false   # sprint weekends list separate markets — keep GP only
 
 betfair:
@@ -134,9 +134,9 @@ underdogs:
   # Championship top-10 before the race: picks OUTSIDE this set score double
   # (Scorer.MULTIPLIER_UNDERDOG) from round 2 onwards.
   source: openf1                # openf1 | manual
-  # Fallback / manual list. Snapshot is standings AFTER round 9 (Silverstone),
-  # i.e. entering round 10 (Spa) — refresh before relying on it.
-  manual_top10: [ANT, RUS, HAM, LEC, NOR, PIA, VER, HAD, GAS, LAW]
+  # Fallback / manual list. Snapshot is standings AFTER round 10 (Spa),
+  # i.e. entering round 11 (Hungaroring) — refresh before relying on it.
+  manual_top10: [ANT, HAM, RUS, LEC, NOR, PIA, VER, HAD, GAS, LAW]
 
 optimise:
   n_restarts: 20
