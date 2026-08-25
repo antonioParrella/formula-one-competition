@@ -3,9 +3,9 @@
     {
       "name": "Rino",
       "rank": 1,
-      "games_played": 11,
-      "points": 266,
-      "lastRace": 21,
+      "games_played": 12,
+      "points": 288,
+      "lastRace": 22,
       "bestRound": 49,
       "roundScores": {
         "1": {
@@ -51,15 +51,19 @@
         "11": {
           "race": "Hungarian",
           "points": 21
+        },
+        "12": {
+          "race": "Dutch",
+          "points": 22
         }
       }
     },
     {
       "name": "Jake",
       "rank": 2,
-      "games_played": 11,
-      "points": 256,
-      "lastRace": 26,
+      "games_played": 12,
+      "points": 280,
+      "lastRace": 19,
       "bestRound": 41,
       "roundScores": {
         "1": {
@@ -105,15 +109,19 @@
         "11": {
           "race": "Hungarian",
           "points": 26
+        },
+        "12": {
+          "race": "Dutch",
+          "points": 24
         }
       }
     },
     {
       "name": "Luca",
       "rank": 3,
-      "games_played": 11,
-      "points": 247,
-      "lastRace": 21,
+      "games_played": 12,
+      "points": 264,
+      "lastRace": 17,
       "bestRound": 59,
       "roundScores": {
         "1": {
@@ -159,15 +167,19 @@
         "11": {
           "race": "Hungarian",
           "points": 21
+        },
+        "12": {
+          "race": "Dutch",
+          "points": 17
         }
       }
     },
     {
       "name": "Dean",
       "rank": 4,
-      "games_played": 11,
-      "points": 235,
-      "lastRace": 5,
+      "games_played": 12,
+      "points": 261,
+      "lastRace": 26,
       "bestRound": 53,
       "roundScores": {
         "1": {
@@ -213,15 +225,19 @@
         "11": {
           "race": "Hungarian",
           "points": 5
+        },
+        "12": {
+          "race": "Dutch",
+          "points": 26
         }
       }
     },
     {
       "name": "Antonio",
       "rank": 5,
-      "games_played": 11,
-      "points": 230,
-      "lastRace": 22,
+      "games_played": 12,
+      "points": 257,
+      "lastRace": 27,
       "bestRound": 42,
       "roundScores": {
         "1": {
@@ -267,15 +283,19 @@
         "11": {
           "race": "Hungarian",
           "points": 22
+        },
+        "12": {
+          "race": "Dutch",
+          "points": 27
         }
       }
     },
     {
       "name": "Josh",
       "rank": 6,
-      "games_played": 11,
-      "points": 224,
-      "lastRace": 6,
+      "games_played": 12,
+      "points": 251,
+      "lastRace": 22,
       "bestRound": 40,
       "roundScores": {
         "1": {
@@ -321,15 +341,19 @@
         "11": {
           "race": "Hungarian",
           "points": 6
+        },
+        "12": {
+          "race": "Dutch",
+          "points": 27
         }
       }
     },
     {
       "name": "Barry",
       "rank": 7,
-      "games_played": 11,
-      "points": 194,
-      "lastRace": 10,
+      "games_played": 12,
+      "points": 225,
+      "lastRace": 26,
       "bestRound": 47,
       "roundScores": {
         "1": {
@@ -375,15 +399,19 @@
         "11": {
           "race": "Hungarian",
           "points": 10
+        },
+        "12": {
+          "race": "Dutch",
+          "points": 31
         }
       }
     },
     {
       "name": "Veljko",
       "rank": 8,
-      "games_played": 11,
-      "points": 190,
-      "lastRace": 17,
+      "games_played": 12,
+      "points": 222,
+      "lastRace": 32,
       "bestRound": 35,
       "roundScores": {
         "1": {
@@ -429,15 +457,19 @@
         "11": {
           "race": "Hungarian",
           "points": 17
+        },
+        "12": {
+          "race": "Dutch",
+          "points": 32
         }
       }
     },
     {
       "name": "Tara",
       "rank": 9,
-      "games_played": 11,
-      "points": 189,
-      "lastRace": 11,
+      "games_played": 12,
+      "points": 212,
+      "lastRace": 23,
       "bestRound": 36,
       "roundScores": {
         "1": {
@@ -483,6 +515,10 @@
         "11": {
           "race": "Hungarian",
           "points": 11
+        },
+        "12": {
+          "race": "Dutch",
+          "points": 23
         }
       }
     },
@@ -587,5 +623,5 @@
       }
     }
   ],
-  "total_rounds": 11
+  "total_rounds": 12
 }

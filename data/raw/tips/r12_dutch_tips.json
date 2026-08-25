@@ -1,0 +1,230 @@
+{
+  "round": 12,
+  "race_name": "Dutch",
+  "survey_id": "y2hGlPumV",
+  "is_sprint_weekend": true,
+  "fetched_at": "2026-08-25T09:03:44.651404",
+  "total_responses": 9,
+  "submissions": [
+    {
+      "player": "Antonio",
+      "response_id": 11,
+      "submitted_at": "2026-08-21T20:56:24",
+      "time_spent_s": 86,
+      "main_race": [
+        "ANT",
+        "NOR",
+        "HAM",
+        "LEC",
+        "VER",
+        "PIA",
+        "LAW",
+        "HUL",
+        "LIN",
+        "BOR"
+      ],
+      "sprint": [
+        "ANT",
+        "NOR",
+        "HAM"
+      ],
+      "dnf_picks": []
+    },
+    {
+      "player": "Barry",
+      "response_id": 10,
+      "submitted_at": "2026-08-21T18:37:38",
+      "time_spent_s": 198,
+      "main_race": [
+        "VER",
+        "ANT",
+        "NOR",
+        "HAM",
+        "RUS",
+        "PIA",
+        "LEC",
+        "LAW",
+        "SAI",
+        "GAS"
+      ],
+      "sprint": [
+        "VER",
+        "ANT",
+        "NOR"
+      ],
+      "dnf_picks": []
+    },
+    {
+      "player": "Rino",
+      "response_id": 9,
+      "submitted_at": "2026-08-21T16:31:51",
+      "time_spent_s": 74,
+      "main_race": [
+        "ANT",
+        "NOR",
+        "HAM",
+        "LEC",
+        "RUS",
+        "VER",
+        "PIA",
+        "LAW",
+        "GAS",
+        "OCO"
+      ],
+      "sprint": [
+        "ANT",
+        "NOR",
+        "RUS"
+      ],
+      "dnf_picks": []
+    },
+    {
+      "player": "Tara",
+      "response_id": 8,
+      "submitted_at": "2026-08-21T15:49:32",
+      "time_spent_s": 87,
+      "main_race": [
+        "ANT",
+        "NOR",
+        "VER",
+        "HAM",
+        "LEC",
+        "PIA",
+        "RUS",
+        "BOT",
+        "LAW",
+        "COL"
+      ],
+      "sprint": [
+        "HAM",
+        "NOR",
+        "ANT"
+      ],
+      "dnf_picks": [
+        "TSU"
+      ]
+    },
+    {
+      "player": "Jake",
+      "response_id": 7,
+      "submitted_at": "2026-08-21T15:47:09",
+      "time_spent_s": 59,
+      "main_race": [
+        "ANT",
+        "HAM",
+        "NOR",
+        "RUS",
+        "LEC",
+        "VER",
+        "PIA",
+        "LAW",
+        "LIN",
+        "ALB"
+      ],
+      "sprint": [
+        "ANT",
+        "HAM",
+        "NOR"
+      ],
+      "dnf_picks": []
+    },
+    {
+      "player": "Dean",
+      "response_id": 6,
+      "submitted_at": "2026-08-21T15:10:44",
+      "time_spent_s": 565,
+      "main_race": [
+        "VER",
+        "NOR",
+        "ANT",
+        "HAM",
+        "RUS",
+        "LEC",
+        "PIA",
+        "LAW",
+        "LIN",
+        "GAS"
+      ],
+      "sprint": [
+        "VER",
+        "NOR",
+        "ANT"
+      ],
+      "dnf_picks": []
+    },
+    {
+      "player": "Josh",
+      "response_id": 5,
+      "submitted_at": "2026-08-21T15:00:29",
+      "time_spent_s": 103,
+      "main_race": [
+        "ANT",
+        "HAM",
+        "RUS",
+        "PIA",
+        "VER",
+        "LEC",
+        "NOR",
+        "LAW",
+        "LIN",
+        "GAS"
+      ],
+      "sprint": [
+        "RUS",
+        "HAM",
+        "LEC"
+      ],
+      "dnf_picks": []
+    },
+    {
+      "player": "Veljko",
+      "response_id": 3,
+      "submitted_at": "2026-08-21T03:50:38",
+      "time_spent_s": 121,
+      "main_race": [
+        "HAM",
+        "ANT",
+        "LEC",
+        "RUS",
+        "VER",
+        "NOR",
+        "PIA",
+        "LAW",
+        "BEA",
+        "LIN"
+      ],
+      "sprint": [
+        "NOR",
+        "VER",
+        "LEC"
+      ],
+      "dnf_picks": [
+        "BOT"
+      ]
+    },
+    {
+      "player": "Luca",
+      "response_id": 2,
+      "submitted_at": "2026-08-20T20:46:12",
+      "time_spent_s": 130,
+      "main_race": [
+        "HAM",
+        "RUS",
+        "ANT",
+        "NOR",
+        "LEC",
+        "VER",
+        "PIA",
+        "GAS",
+        "BOR",
+        "COL"
+      ],
+      "sprint": [
+        "NOR",
+        "HAM",
+        "PIA"
+      ],
+      "dnf_picks": []
+    }
+  ]
+}

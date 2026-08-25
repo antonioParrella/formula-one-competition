@@ -1,0 +1,897 @@
+{
+  "round": 12,
+  "race_name": "Dutch",
+  "scores": {
+    "Antonio": 27,
+    "Barry": 26,
+    "Rino": 22,
+    "Tara": 23,
+    "Jake": 19,
+    "Dean": 26,
+    "Josh": 22,
+    "Veljko": 32,
+    "Luca": 17
+  },
+  "player_tips": [
+    {
+      "player": "Antonio",
+      "response_id": 11,
+      "submitted_at": "2026-08-21T20:56:24",
+      "score": 27,
+      "penalty": 5,
+      "auto_penalty": 5,
+      "override_penalty": 0,
+      "late_sessions": [
+        "Practice 1"
+      ],
+      "zeroed": false,
+      "picks": [
+        {
+          "driver": "Antonelli",
+          "result": "close",
+          "underdog": false,
+          "points": 3
+        },
+        {
+          "driver": "Norris",
+          "result": "close",
+          "underdog": false,
+          "points": 3
+        },
+        {
+          "driver": "Hamilton",
+          "result": "close",
+          "underdog": false,
+          "points": 3
+        },
+        {
+          "driver": "Leclerc",
+          "result": "close",
+          "underdog": false,
+          "points": 3
+        },
+        {
+          "driver": "Verstappen",
+          "result": "miss",
+          "underdog": false,
+          "points": 0
+        },
+        {
+          "driver": "Piastri",
+          "result": "exact",
+          "underdog": false,
+          "points": 5
+        },
+        {
+          "driver": "Lawson",
+          "result": "exact",
+          "underdog": false,
+          "points": 5
+        },
+        {
+          "driver": "Hulkenberg",
+          "result": "exact",
+          "underdog": true,
+          "points": 10
+        },
+        {
+          "driver": "Lindblad",
+          "result": "miss",
+          "underdog": true,
+          "points": 0
+        },
+        {
+          "driver": "Bortoleto",
+          "result": "miss",
+          "underdog": true,
+          "points": 0
+        }
+      ],
+      "dnf_picks": []
+    },
+    {
+      "player": "Barry",
+      "response_id": 10,
+      "submitted_at": "2026-08-21T18:37:38",
+      "score": 26,
+      "penalty": 0,
+      "auto_penalty": 0,
+      "override_penalty": 0,
+      "late_sessions": [],
+      "zeroed": false,
+      "picks": [
+        {
+          "driver": "Verstappen",
+          "result": "miss",
+          "underdog": false,
+          "points": 0
+        },
+        {
+          "driver": "Antonelli",
+          "result": "exact",
+          "underdog": false,
+          "points": 5
+        },
+        {
+          "driver": "Norris",
+          "result": "top10",
+          "underdog": false,
+          "points": 1
+        },
+        {
+          "driver": "Hamilton",
+          "result": "exact",
+          "underdog": false,
+          "points": 5
+        },
+        {
+          "driver": "Russell",
+          "result": "top10",
+          "underdog": false,
+          "points": 1
+        },
+        {
+          "driver": "Piastri",
+          "result": "exact",
+          "underdog": false,
+          "points": 5
+        },
+        {
+          "driver": "Leclerc",
+          "result": "top10",
+          "underdog": false,
+          "points": 1
+        },
+        {
+          "driver": "Lawson",
+          "result": "close",
+          "underdog": false,
+          "points": 3
+        },
+        {
+          "driver": "Sainz",
+          "result": "miss",
+          "underdog": true,
+          "points": 0
+        },
+        {
+          "driver": "Gasly",
+          "result": "exact",
+          "underdog": false,
+          "points": 5
+        }
+      ],
+      "dnf_picks": []
+    },
+    {
+      "player": "Rino",
+      "response_id": 9,
+      "submitted_at": "2026-08-21T16:31:51",
+      "score": 22,
+      "penalty": 0,
+      "auto_penalty": 0,
+      "override_penalty": 0,
+      "late_sessions": [],
+      "zeroed": false,
+      "picks": [
+        {
+          "driver": "Antonelli",
+          "result": "close",
+          "underdog": false,
+          "points": 3
+        },
+        {
+          "driver": "Norris",
+          "result": "close",
+          "underdog": false,
+          "points": 3
+        },
+        {
+          "driver": "Hamilton",
+          "result": "close",
+          "underdog": false,
+          "points": 3
+        },
+        {
+          "driver": "Leclerc",
+          "result": "close",
+          "underdog": false,
+          "points": 3
+        },
+        {
+          "driver": "Russell",
+          "result": "top10",
+          "underdog": false,
+          "points": 1
+        },
+        {
+          "driver": "Verstappen",
+          "result": "miss",
+          "underdog": false,
+          "points": 0
+        },
+        {
+          "driver": "Piastri",
+          "result": "close",
+          "underdog": false,
+          "points": 3
+        },
+        {
+          "driver": "Lawson",
+          "result": "close",
+          "underdog": false,
+          "points": 3
+        },
+        {
+          "driver": "Gasly",
+          "result": "close",
+          "underdog": false,
+          "points": 3
+        },
+        {
+          "driver": "Ocon",
+          "result": "miss",
+          "underdog": true,
+          "points": 0
+        }
+      ],
+      "dnf_picks": []
+    },
+    {
+      "player": "Tara",
+      "response_id": 8,
+      "submitted_at": "2026-08-21T15:49:32",
+      "score": 23,
+      "penalty": 0,
+      "auto_penalty": 0,
+      "override_penalty": 0,
+      "late_sessions": [],
+      "zeroed": false,
+      "picks": [
+        {
+          "driver": "Antonelli",
+          "result": "close",
+          "underdog": false,
+          "points": 3
+        },
+        {
+          "driver": "Norris",
+          "result": "close",
+          "underdog": false,
+          "points": 3
+        },
+        {
+          "driver": "Verstappen",
+          "result": "miss",
+          "underdog": false,
+          "points": 0
+        },
+        {
+          "driver": "Hamilton",
+          "result": "exact",
+          "underdog": false,
+          "points": 5
+        },
+        {
+          "driver": "Leclerc",
+          "result": "exact",
+          "underdog": false,
+          "points": 5
+        },
+        {
+          "driver": "Piastri",
+          "result": "exact",
+          "underdog": false,
+          "points": 5
+        },
+        {
+          "driver": "Russell",
+          "result": "top10",
+          "underdog": false,
+          "points": 1
+        },
+        {
+          "driver": "Bottas",
+          "result": "miss",
+          "underdog": true,
+          "points": 0
+        },
+        {
+          "driver": "Lawson",
+          "result": "top10",
+          "underdog": false,
+          "points": 1
+        },
+        {
+          "driver": "Colapinto",
+          "result": "miss",
+          "underdog": true,
+          "points": 0
+        }
+      ],
+      "dnf_picks": [
+        {
+          "driver": "Tsunoda",
+          "dnfd": false,
+          "points": 0
+        }
+      ]
+    },
+    {
+      "player": "Jake",
+      "response_id": 7,
+      "submitted_at": "2026-08-21T15:47:09",
+      "score": 19,
+      "penalty": 0,
+      "auto_penalty": 0,
+      "override_penalty": 0,
+      "late_sessions": [],
+      "zeroed": false,
+      "picks": [
+        {
+          "driver": "Antonelli",
+          "result": "close",
+          "underdog": false,
+          "points": 3
+        },
+        {
+          "driver": "Hamilton",
+          "result": "top10",
+          "underdog": false,
+          "points": 1
+        },
+        {
+          "driver": "Norris",
+          "result": "top10",
+          "underdog": false,
+          "points": 1
+        },
+        {
+          "driver": "Russell",
+          "result": "close",
+          "underdog": false,
+          "points": 3
+        },
+        {
+          "driver": "Leclerc",
+          "result": "exact",
+          "underdog": false,
+          "points": 5
+        },
+        {
+          "driver": "Verstappen",
+          "result": "miss",
+          "underdog": false,
+          "points": 0
+        },
+        {
+          "driver": "Piastri",
+          "result": "close",
+          "underdog": false,
+          "points": 3
+        },
+        {
+          "driver": "Lawson",
+          "result": "close",
+          "underdog": false,
+          "points": 3
+        },
+        {
+          "driver": "Lindblad",
+          "result": "miss",
+          "underdog": true,
+          "points": 0
+        },
+        {
+          "driver": "Albon",
+          "result": "miss",
+          "underdog": true,
+          "points": 0
+        }
+      ],
+      "dnf_picks": []
+    },
+    {
+      "player": "Dean",
+      "response_id": 6,
+      "submitted_at": "2026-08-21T15:10:44",
+      "score": 26,
+      "penalty": 0,
+      "auto_penalty": 0,
+      "override_penalty": 0,
+      "late_sessions": [],
+      "zeroed": false,
+      "picks": [
+        {
+          "driver": "Verstappen",
+          "result": "miss",
+          "underdog": false,
+          "points": 0
+        },
+        {
+          "driver": "Norris",
+          "result": "close",
+          "underdog": false,
+          "points": 3
+        },
+        {
+          "driver": "Antonelli",
+          "result": "close",
+          "underdog": false,
+          "points": 3
+        },
+        {
+          "driver": "Hamilton",
+          "result": "exact",
+          "underdog": false,
+          "points": 5
+        },
+        {
+          "driver": "Russell",
+          "result": "top10",
+          "underdog": false,
+          "points": 1
+        },
+        {
+          "driver": "Leclerc",
+          "result": "close",
+          "underdog": false,
+          "points": 3
+        },
+        {
+          "driver": "Piastri",
+          "result": "close",
+          "underdog": false,
+          "points": 3
+        },
+        {
+          "driver": "Lawson",
+          "result": "close",
+          "underdog": false,
+          "points": 3
+        },
+        {
+          "driver": "Lindblad",
+          "result": "miss",
+          "underdog": true,
+          "points": 0
+        },
+        {
+          "driver": "Gasly",
+          "result": "exact",
+          "underdog": false,
+          "points": 5
+        }
+      ],
+      "dnf_picks": []
+    },
+    {
+      "player": "Josh",
+      "response_id": 5,
+      "submitted_at": "2026-08-21T15:00:29",
+      "score": 22,
+      "penalty": 0,
+      "auto_penalty": 0,
+      "override_penalty": 0,
+      "late_sessions": [],
+      "zeroed": false,
+      "picks": [
+        {
+          "driver": "Antonelli",
+          "result": "close",
+          "underdog": false,
+          "points": 3
+        },
+        {
+          "driver": "Hamilton",
+          "result": "top10",
+          "underdog": false,
+          "points": 1
+        },
+        {
+          "driver": "Russell",
+          "result": "exact",
+          "underdog": false,
+          "points": 5
+        },
+        {
+          "driver": "Piastri",
+          "result": "top10",
+          "underdog": false,
+          "points": 1
+        },
+        {
+          "driver": "Verstappen",
+          "result": "miss",
+          "underdog": false,
+          "points": 0
+        },
+        {
+          "driver": "Leclerc",
+          "result": "close",
+          "underdog": false,
+          "points": 3
+        },
+        {
+          "driver": "Norris",
+          "result": "top10",
+          "underdog": false,
+          "points": 1
+        },
+        {
+          "driver": "Lawson",
+          "result": "close",
+          "underdog": false,
+          "points": 3
+        },
+        {
+          "driver": "Lindblad",
+          "result": "miss",
+          "underdog": true,
+          "points": 0
+        },
+        {
+          "driver": "Gasly",
+          "result": "exact",
+          "underdog": false,
+          "points": 5
+        }
+      ],
+      "dnf_picks": []
+    },
+    {
+      "player": "Veljko",
+      "response_id": 3,
+      "submitted_at": "2026-08-21T03:50:38",
+      "score": 32,
+      "penalty": 0,
+      "auto_penalty": 0,
+      "override_penalty": 0,
+      "late_sessions": [],
+      "zeroed": false,
+      "picks": [
+        {
+          "driver": "Hamilton",
+          "result": "top10",
+          "underdog": false,
+          "points": 1
+        },
+        {
+          "driver": "Antonelli",
+          "result": "exact",
+          "underdog": false,
+          "points": 5
+        },
+        {
+          "driver": "Leclerc",
+          "result": "top10",
+          "underdog": false,
+          "points": 1
+        },
+        {
+          "driver": "Russell",
+          "result": "close",
+          "underdog": false,
+          "points": 3
+        },
+        {
+          "driver": "Verstappen",
+          "result": "miss",
+          "underdog": false,
+          "points": 0
+        },
+        {
+          "driver": "Norris",
+          "result": "top10",
+          "underdog": false,
+          "points": 1
+        },
+        {
+          "driver": "Piastri",
+          "result": "close",
+          "underdog": false,
+          "points": 3
+        },
+        {
+          "driver": "Lawson",
+          "result": "close",
+          "underdog": false,
+          "points": 3
+        },
+        {
+          "driver": "Bearman",
+          "result": "miss",
+          "underdog": true,
+          "points": 0
+        },
+        {
+          "driver": "Lindblad",
+          "result": "miss",
+          "underdog": true,
+          "points": 0
+        }
+      ],
+      "dnf_picks": [
+        {
+          "driver": "Bottas",
+          "dnfd": true,
+          "points": 15
+        }
+      ]
+    },
+    {
+      "player": "Luca",
+      "response_id": 2,
+      "submitted_at": "2026-08-20T20:46:12",
+      "score": 17,
+      "penalty": 0,
+      "auto_penalty": 0,
+      "override_penalty": 0,
+      "late_sessions": [],
+      "zeroed": false,
+      "picks": [
+        {
+          "driver": "Hamilton",
+          "result": "top10",
+          "underdog": false,
+          "points": 1
+        },
+        {
+          "driver": "Russell",
+          "result": "close",
+          "underdog": false,
+          "points": 3
+        },
+        {
+          "driver": "Antonelli",
+          "result": "close",
+          "underdog": false,
+          "points": 3
+        },
+        {
+          "driver": "Norris",
+          "result": "top10",
+          "underdog": false,
+          "points": 1
+        },
+        {
+          "driver": "Leclerc",
+          "result": "exact",
+          "underdog": false,
+          "points": 5
+        },
+        {
+          "driver": "Verstappen",
+          "result": "miss",
+          "underdog": false,
+          "points": 0
+        },
+        {
+          "driver": "Piastri",
+          "result": "close",
+          "underdog": false,
+          "points": 3
+        },
+        {
+          "driver": "Gasly",
+          "result": "top10",
+          "underdog": false,
+          "points": 1
+        },
+        {
+          "driver": "Bortoleto",
+          "result": "miss",
+          "underdog": true,
+          "points": 0
+        },
+        {
+          "driver": "Colapinto",
+          "result": "miss",
+          "underdog": true,
+          "points": 0
+        }
+      ],
+      "dnf_picks": []
+    }
+  ],
+  "sprint_tips": [
+    {
+      "player": "Antonio",
+      "picks": [
+        {
+          "driver": "Antonelli",
+          "result": "miss",
+          "points": 0
+        },
+        {
+          "driver": "Norris",
+          "result": "miss",
+          "points": 0
+        },
+        {
+          "driver": "Hamilton",
+          "result": "miss",
+          "points": 0
+        }
+      ],
+      "score": 0,
+      "zeroed": true
+    },
+    {
+      "player": "Barry",
+      "picks": [
+        {
+          "driver": "Verstappen",
+          "result": "miss",
+          "points": 0
+        },
+        {
+          "driver": "Antonelli",
+          "result": "miss",
+          "points": 0
+        },
+        {
+          "driver": "Norris",
+          "result": "exact",
+          "points": 5
+        }
+      ],
+      "score": 5,
+      "zeroed": false
+    },
+    {
+      "player": "Rino",
+      "picks": [
+        {
+          "driver": "Antonelli",
+          "result": "miss",
+          "points": 0
+        },
+        {
+          "driver": "Norris",
+          "result": "miss",
+          "points": 0
+        },
+        {
+          "driver": "Russell",
+          "result": "miss",
+          "points": 0
+        }
+      ],
+      "score": 0,
+      "zeroed": false
+    },
+    {
+      "player": "Tara",
+      "picks": [
+        {
+          "driver": "Hamilton",
+          "result": "miss",
+          "points": 0
+        },
+        {
+          "driver": "Norris",
+          "result": "miss",
+          "points": 0
+        },
+        {
+          "driver": "Antonelli",
+          "result": "miss",
+          "points": 0
+        }
+      ],
+      "score": 0,
+      "zeroed": false
+    },
+    {
+      "player": "Jake",
+      "picks": [
+        {
+          "driver": "Antonelli",
+          "result": "miss",
+          "points": 0
+        },
+        {
+          "driver": "Hamilton",
+          "result": "miss",
+          "points": 0
+        },
+        {
+          "driver": "Norris",
+          "result": "exact",
+          "points": 5
+        }
+      ],
+      "score": 5,
+      "zeroed": false
+    },
+    {
+      "player": "Dean",
+      "picks": [
+        {
+          "driver": "Verstappen",
+          "result": "miss",
+          "points": 0
+        },
+        {
+          "driver": "Norris",
+          "result": "miss",
+          "points": 0
+        },
+        {
+          "driver": "Antonelli",
+          "result": "miss",
+          "points": 0
+        }
+      ],
+      "score": 0,
+      "zeroed": false
+    },
+    {
+      "player": "Josh",
+      "picks": [
+        {
+          "driver": "Russell",
+          "result": "exact",
+          "points": 5
+        },
+        {
+          "driver": "Hamilton",
+          "result": "miss",
+          "points": 0
+        },
+        {
+          "driver": "Leclerc",
+          "result": "miss",
+          "points": 0
+        }
+      ],
+      "score": 5,
+      "zeroed": false
+    },
+    {
+      "player": "Veljko",
+      "picks": [
+        {
+          "driver": "Norris",
+          "result": "miss",
+          "points": 0
+        },
+        {
+          "driver": "Verstappen",
+          "result": "miss",
+          "points": 0
+        },
+        {
+          "driver": "Leclerc",
+          "result": "miss",
+          "points": 0
+        }
+      ],
+      "score": 0,
+      "zeroed": false
+    },
+    {
+      "player": "Luca",
+      "picks": [
+        {
+          "driver": "Norris",
+          "result": "miss",
+          "points": 0
+        },
+        {
+          "driver": "Hamilton",
+          "result": "miss",
+          "points": 0
+        },
+        {
+          "driver": "Piastri",
+          "result": "miss",
+          "points": 0
+        }
+      ],
+      "score": 0,
+      "zeroed": false
+    }
+  ]
+}

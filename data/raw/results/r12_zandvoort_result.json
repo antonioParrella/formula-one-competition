@@ -1,0 +1,43 @@
+{
+  "round": 12,
+  "race_name": "Zandvoort",
+  "year": 2026,
+  "is_sprint_weekend": true,
+  "top10": [
+    "NOR",
+    "ANT",
+    "RUS",
+    "HAM",
+    "LEC",
+    "PIA",
+    "LAW",
+    "HUL",
+    "ALO",
+    "GAS"
+  ],
+  "dnfs": [
+    "ALB",
+    "BOT",
+    "OCO",
+    "STR",
+    "BEA",
+    "VER"
+  ],
+  "sprint_top3": [
+    "RUS",
+    "LEC",
+    "NOR"
+  ],
+  "championship_top10_before_race": [
+    "ANT",
+    "HAM",
+    "RUS",
+    "LEC",
+    "NOR",
+    "VER",
+    "PIA",
+    NaN,
+    "GAS",
+    "LAW"
+  ]
+}

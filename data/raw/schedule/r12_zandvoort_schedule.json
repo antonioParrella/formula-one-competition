@@ -1,0 +1,50 @@
+{
+  "round": 12,
+  "race_name": "Zandvoort",
+  "year": 2026,
+  "meeting_key": 1292,
+  "is_sprint_weekend": true,
+  "fetched_at": "2026-08-25T18:33:46.688532",
+  "sessions": [
+    {
+      "session_name": "Practice 1",
+      "session_key": 11343,
+      "date_start": "2026-08-21T10:30:00+00:00",
+      "date_end": "2026-08-21T11:30:00+00:00",
+      "gmt_offset": "02:00:00",
+      "is_cancelled": false
+    },
+    {
+      "session_name": "Sprint Qualifying",
+      "session_key": 11344,
+      "date_start": "2026-08-21T14:30:00+00:00",
+      "date_end": "2026-08-21T15:14:00+00:00",
+      "gmt_offset": "02:00:00",
+      "is_cancelled": false
+    },
+    {
+      "session_name": "Sprint",
+      "session_key": 11348,
+      "date_start": "2026-08-22T10:00:00+00:00",
+      "date_end": "2026-08-22T11:00:00+00:00",
+      "gmt_offset": "02:00:00",
+      "is_cancelled": false
+    },
+    {
+      "session_name": "Qualifying",
+      "session_key": 11349,
+      "date_start": "2026-08-22T14:00:00+00:00",
+      "date_end": "2026-08-22T15:00:00+00:00",
+      "gmt_offset": "02:00:00",
+      "is_cancelled": false
+    },
+    {
+      "session_name": "Race",
+      "session_key": 11353,
+      "date_start": "2026-08-23T13:00:00+00:00",
+      "date_end": "2026-08-23T15:00:00+00:00",
+      "gmt_offset": "02:00:00",
+      "is_cancelled": false
+    }
+  ]
+}
