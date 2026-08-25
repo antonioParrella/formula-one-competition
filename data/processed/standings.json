@@ -6,7 +6,7 @@
       "games_played": 12,
       "points": 288,
       "lastRace": 22,
-      "bestRound": 49,
+      "bestRound": 54,
       "roundScores": {
         "1": {
           "race": "Melbourne",
@@ -63,8 +63,8 @@
       "rank": 2,
       "games_played": 12,
       "points": 280,
-      "lastRace": 19,
-      "bestRound": 41,
+      "lastRace": 24,
+      "bestRound": 46,
       "roundScores": {
         "1": {
           "race": "Melbourne",
@@ -180,7 +180,7 @@
       "games_played": 12,
       "points": 261,
       "lastRace": 26,
-      "bestRound": 53,
+      "bestRound": 58,
       "roundScores": {
         "1": {
           "race": "Melbourne",
@@ -295,7 +295,7 @@
       "rank": 6,
       "games_played": 12,
       "points": 251,
-      "lastRace": 22,
+      "lastRace": 27,
       "bestRound": 40,
       "roundScores": {
         "1": {
@@ -353,7 +353,7 @@
       "rank": 7,
       "games_played": 12,
       "points": 225,
-      "lastRace": 26,
+      "lastRace": 31,
       "bestRound": 47,
       "roundScores": {
         "1": {
@@ -412,7 +412,7 @@
       "games_played": 12,
       "points": 222,
       "lastRace": 32,
-      "bestRound": 35,
+      "bestRound": 38,
       "roundScores": {
         "1": {
           "race": "Melbourne",
@@ -470,7 +470,7 @@
       "games_played": 12,
       "points": 212,
       "lastRace": 23,
-      "bestRound": 36,
+      "bestRound": 41,
       "roundScores": {
         "1": {
           "race": "Melbourne",
@@ -578,7 +578,7 @@
       "games_played": 10,
       "points": 133,
       "lastRace": 11,
-      "bestRound": 23,
+      "bestRound": 28,
       "roundScores": {
         "1": {
           "race": "Melbourne",

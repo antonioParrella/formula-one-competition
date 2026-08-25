@@ -24,6 +24,21 @@ from aggregator import Aggregator
 from build_site import SiteBuilder
 
 
+def _use_utf8_console() -> None:
+    """Make stdout able to carry the non-ASCII the summaries print.
+
+    A default Windows console reports cp1252, which cannot encode the box-drawing
+    rules and em dashes in the survey/tips summaries — so the run died with
+    UnicodeEncodeError on the very first table, before any work was done.
+    `errors="replace"` keeps output flowing even where UTF-8 isn't available.
+    """
+    for stream in (sys.stdout, sys.stderr):
+        try:
+            stream.reconfigure(encoding="utf-8", errors="replace")
+        except (AttributeError, OSError, ValueError):
+            pass  # not a reconfigurable stream (redirected, wrapped) — carry on
+
+
 def run_pipeline(round_filter=None, tip_only=False, force_rebuild=False):
     """Run the full pipeline.
 
@@ -36,6 +51,8 @@ def run_pipeline(round_filter=None, tip_only=False, force_rebuild=False):
     force_rebuild : bool
         If True, re-fetch and overwrite existing tips files.
     """
+    _use_utf8_console()
+
     print("=" * 60)
     print("  F1 TIPPING PIPELINE")
     print("=" * 60)

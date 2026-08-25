@@ -102,9 +102,86 @@ class ResultAggregator:
             self.championship_standings = self._fetch("championship_drivers", session_key=self.sprint_session_key)
             self.drivers = self._fetch("drivers", session_key=self.sprint_session_key)
             self.sprint_results = self._fetch("session_result", session_key=self.sprint_session_key)
+        self._backfill_missing_drivers()
 
     def _fetch(self, endpoint: str, **params) -> pd.DataFrame:
         return _fetch_openf1(endpoint, **params)
+
+    def _backfill_missing_drivers(self) -> None:
+        """Fill gaps in the session `drivers` table from meeting-wide lookups.
+
+        OpenF1's `drivers?session_key=...` sometimes omits a driver who did take
+        part: the 2026 Zandvoort sprint left out car #6 (Hadjar) even though
+        `drivers?driver_number=6&meeting_key=...` reports him in that very
+        session. Every acronym lookup downstream is a left merge on this table,
+        so a gap silently becomes NaN — an unnamed finisher in the results, and
+        a hole in the championship top 10 that decides the underdog multiplier.
+        """
+        referenced: set[int] = set()
+        for frame in (self.race_results, self.sprint_results, self.championship_standings):
+            if frame is None or frame.empty or "driver_number" not in frame:
+                continue
+            referenced |= set(frame["driver_number"].dropna().astype(int))
+
+        known: set[int] = set()
+        if not self.drivers.empty and {"driver_number", "name_acronym"} <= set(self.drivers.columns):
+            named = self.drivers[self.drivers["name_acronym"].notna()]
+            known = set(named["driver_number"].dropna().astype(int))
+
+        missing = sorted(referenced - known)
+        if not missing:
+            return
+
+        print(f"drivers table is missing {missing} for this session - looking them up by meeting")
+        found_rows = []
+        for number in missing:
+            row = self._lookup_driver(number)
+            if row is not None:
+                found_rows.append(row)
+
+        if not found_rows:
+            print(f"warning: could not resolve driver number(s) {missing} from the meeting either")
+            return
+
+        existing = self.drivers
+        if "name_acronym" in existing.columns:
+            # Drop the unnamed placeholders the lookups just replaced.
+            existing = existing[
+                ~(existing["driver_number"].isin(missing) & existing["name_acronym"].isna())
+            ]
+        self.drivers = (
+            pd.concat([existing, *found_rows], ignore_index=True)
+            .drop_duplicates(subset="driver_number", keep="first")
+        )
+
+    def _lookup_driver(self, number: int):
+        """Find one driver's row, or None if this season has never named them.
+
+        Scoped to the meeting first, then to this season's earlier race
+        sessions. A driver replaced mid-season keeps their championship points
+        — and so their place in the top 10 that decides the underdog multiplier
+        — while dropping out of the session driver tables, so the meeting
+        lookup alone can come back empty for someone we still have to name.
+
+        Never falls back to an unscoped `drivers?driver_number=N`: car numbers
+        are reused across seasons (#6 returns both HAD and GOE), so an unscoped
+        answer can name the wrong driver entirely.
+        """
+        scopes = [{"meeting_key": self.meeting_key}]
+        earlier = self.race_calendar[
+            (self.race_calendar["session_name"] == "Race")
+            & (self.race_calendar["round_number"] < self.round_number)
+        ].sort_values("round_number", ascending=False)
+        scopes += [{"session_key": int(k)} for k in earlier["session_key"]]
+
+        for scope in scopes:
+            found = self._fetch("drivers", driver_number=number, **scope)
+            if found.empty or "name_acronym" not in found.columns:
+                continue
+            named = found[found["name_acronym"].notna()]
+            if not named.empty:
+                return named.iloc[[0]]
+        return None
     
     def _find_meeting_keys(self):
         current_sessions = self.race_calendar[self.race_calendar["round_number"] == self.round_number]
