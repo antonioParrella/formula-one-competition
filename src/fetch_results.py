@@ -108,7 +108,7 @@ class ResultsFetcher:
         top10_df = self.aggregator._get_position_scores(
             self.aggregator.race_results, top_k=10
         )
-        return top10_df["name_acronym"].tolist()
+        return self._require_acronyms(top10_df, "top10")
 
     def _get_dnfs(self) -> list[str]:
         """Drivers who started the race but didn't finish (dnf=true)."""
@@ -122,7 +122,7 @@ class ResultsFetcher:
         )
 
         dnfs = merged[merged["dnf"] == True]
-        return dnfs["name_acronym"].tolist()
+        return self._require_acronyms(dnfs, "dnfs")
 
     def _get_sprint_top3(self) -> list[str] | None:
         """Top 3 from the sprint race, or None if no sprint this round."""
@@ -131,7 +131,7 @@ class ResultsFetcher:
         sprint_df = self.aggregator._get_position_scores(
             self.aggregator.sprint_results, top_k=3
         )
-        return sprint_df["name_acronym"].tolist()
+        return self._require_acronyms(sprint_df, "sprint_top3")
 
     def _is_sprint_weekend(self) -> bool:
         return self.aggregator.sprint_results is not None
@@ -151,4 +151,29 @@ class ResultsFetcher:
             on="driver_number",
             how="left",
         )
+        return self._require_acronyms(merged, "championship_top10_before_race")
+
+    # ─────────────────────────────────────────────────────────
+    # Helpers
+    # ─────────────────────────────────────────────────────────
+
+    @staticmethod
+    def _require_acronyms(merged, label: str) -> list[str]:
+        """Driver acronyms from a merged frame, or a loud failure.
+
+        Every acronym here comes from a left merge onto the OpenF1 drivers
+        table, which yields NaN for a driver the table doesn't list. Letting
+        that through is worse than stopping: `json.dump` writes it as a bare
+        `NaN` token that no strict JSON parser accepts, and in
+        `championship_top10_before_race` it drops a driver out of the set that
+        decides the underdog multiplier — so a top-10 driver picked by anyone
+        would silently score double.
+        """
+        unresolved = merged[merged["name_acronym"].isna()]
+        if not unresolved.empty:
+            numbers = sorted(unresolved["driver_number"].tolist())
+            raise ValueError(
+                f"{label}: OpenF1 has no name_acronym for driver number(s) "
+                f"{numbers} - the drivers table for this session is incomplete"
+            )
         return merged["name_acronym"].tolist()
