@@ -2,24 +2,24 @@
   "round": 6,
   "race_name": "Monaco",
   "scores": {
-    "Alex": 11,
-    "Veljko": 4,
-    "Antonio": 3,
-    "Dean": 9,
-    "Rino": 26,
-    "Riki": 14,
-    "Luca": 6,
+    "Alex": 14,
+    "Veljko": 5,
+    "Antonio": 4,
+    "Dean": 10,
+    "Rino": 27,
+    "Riki": 15,
+    "Luca": 7,
     "Tara": 23,
-    "Josh": 14,
-    "Barry": 7,
-    "Jake": 14
+    "Josh": 15,
+    "Barry": 8,
+    "Jake": 15
   },
   "player_tips": [
     {
       "player": "Alex",
       "response_id": 14,
       "submitted_at": "2026-06-05T22:59:26",
-      "score": 11,
+      "score": 14,
       "penalty": 5,
       "auto_penalty": 5,
       "override_penalty": 0,
@@ -43,8 +43,8 @@
         {
           "driver": "Hadjar",
           "result": "close",
-          "underdog": false,
-          "points": 3
+          "underdog": true,
+          "points": 6
         },
         {
           "driver": "Antonelli",
@@ -95,7 +95,7 @@
       "player": "Veljko",
       "response_id": 13,
       "submitted_at": "2026-06-05T22:05:00",
-      "score": 4,
+      "score": 5,
       "penalty": 5,
       "auto_penalty": 5,
       "override_penalty": 0,
@@ -143,7 +143,7 @@
         {
           "driver": "Bearman",
           "result": "miss",
-          "underdog": true,
+          "underdog": false,
           "points": 0
         },
         {
@@ -161,8 +161,8 @@
         {
           "driver": "Hadjar",
           "result": "top10",
-          "underdog": false,
-          "points": 1
+          "underdog": true,
+          "points": 2
         }
       ],
       "dnf_picks": []
@@ -171,7 +171,7 @@
       "player": "Antonio",
       "response_id": 12,
       "submitted_at": "2026-06-05T22:00:15",
-      "score": 3,
+      "score": 4,
       "penalty": 5,
       "auto_penalty": 5,
       "override_penalty": 0,
@@ -225,8 +225,8 @@
         {
           "driver": "Hadjar",
           "result": "top10",
-          "underdog": false,
-          "points": 1
+          "underdog": true,
+          "points": 2
         },
         {
           "driver": "Colapinto",
@@ -247,7 +247,7 @@
       "player": "Dean",
       "response_id": 11,
       "submitted_at": "2026-06-05T18:13:48",
-      "score": 9,
+      "score": 10,
       "penalty": 0,
       "auto_penalty": 0,
       "override_penalty": 0,
@@ -311,8 +311,8 @@
         {
           "driver": "Hadjar",
           "result": "top10",
-          "underdog": false,
-          "points": 1
+          "underdog": true,
+          "points": 2
         }
       ],
       "dnf_picks": []
@@ -321,7 +321,7 @@
       "player": "Rino",
       "response_id": 10,
       "submitted_at": "2026-06-05T17:12:04",
-      "score": 26,
+      "score": 27,
       "penalty": 0,
       "auto_penalty": 0,
       "override_penalty": 0,
@@ -367,7 +367,7 @@
         {
           "driver": "Bearman",
           "result": "miss",
-          "underdog": true,
+          "underdog": false,
           "points": 0
         },
         {
@@ -379,8 +379,8 @@
         {
           "driver": "Hadjar",
           "result": "top10",
-          "underdog": false,
-          "points": 1
+          "underdog": true,
+          "points": 2
         },
         {
           "driver": "Gasly",
@@ -401,7 +401,7 @@
       "player": "Riki",
       "response_id": 9,
       "submitted_at": "2026-06-05T16:38:48",
-      "score": 14,
+      "score": 15,
       "penalty": 0,
       "auto_penalty": 0,
       "override_penalty": 0,
@@ -447,8 +447,8 @@
         {
           "driver": "Hadjar",
           "result": "top10",
-          "underdog": false,
-          "points": 1
+          "underdog": true,
+          "points": 2
         },
         {
           "driver": "Hamilton",
@@ -465,7 +465,7 @@
         {
           "driver": "Bearman",
           "result": "miss",
-          "underdog": true,
+          "underdog": false,
           "points": 0
         }
       ],
@@ -475,7 +475,7 @@
       "player": "Luca",
       "response_id": 8,
       "submitted_at": "2026-06-05T14:19:11",
-      "score": 6,
+      "score": 7,
       "penalty": 0,
       "auto_penalty": 0,
       "override_penalty": 0,
@@ -527,8 +527,8 @@
         {
           "driver": "Hadjar",
           "result": "top10",
-          "underdog": false,
-          "points": 1
+          "underdog": true,
+          "points": 2
         },
         {
           "driver": "Sainz",
@@ -607,7 +607,7 @@
         {
           "driver": "Bearman",
           "result": "miss",
-          "underdog": true,
+          "underdog": false,
           "points": 0
         },
         {
@@ -629,7 +629,7 @@
       "player": "Josh",
       "response_id": 4,
       "submitted_at": "2026-06-04T22:57:31",
-      "score": 14,
+      "score": 15,
       "penalty": 0,
       "auto_penalty": 0,
       "override_penalty": 0,
@@ -693,8 +693,8 @@
         {
           "driver": "Hadjar",
           "result": "top10",
-          "underdog": false,
-          "points": 1
+          "underdog": true,
+          "points": 2
         }
       ],
       "dnf_picks": [
@@ -709,7 +709,7 @@
       "player": "Barry",
       "response_id": 2,
       "submitted_at": "2026-06-04T18:04:49",
-      "score": 7,
+      "score": 8,
       "penalty": 0,
       "auto_penalty": 0,
       "override_penalty": 0,
@@ -767,8 +767,8 @@
         {
           "driver": "Hadjar",
           "result": "top10",
-          "underdog": false,
-          "points": 1
+          "underdog": true,
+          "points": 2
         },
         {
           "driver": "Gasly",
@@ -789,7 +789,7 @@
       "player": "Jake",
       "response_id": 1,
       "submitted_at": "2026-06-03T08:45:05",
-      "score": 14,
+      "score": 15,
       "penalty": 0,
       "auto_penalty": 0,
       "override_penalty": 0,
@@ -841,8 +841,8 @@
         {
           "driver": "Hadjar",
           "result": "top10",
-          "underdog": false,
-          "points": 1
+          "underdog": true,
+          "points": 2
         },
         {
           "driver": "Albon",

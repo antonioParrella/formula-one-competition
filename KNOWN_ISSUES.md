@@ -9,6 +9,7 @@ record of what went wrong and why the fix is shaped the way it is.
 | 1 | `lastRace`/`bestRound` ignore sprint points | fixed |
 | 2 | `NaN` in `championship_top10_before_race` | fixed |
 | 3 | Pipeline crashes on Windows consoles (cp1252) | fixed |
+| 4 | Pre-race ladder was the *after*-the-race ladder | fixed |
 
 Round 12 was also the season's first mid-season driver change — Yuki Tsunoda
 (#22) replaced Isack Hadjar (#6) for the whole weekend, running the sprint and
@@ -219,3 +220,81 @@ covers every print in the pipeline rather than one rule at a time, keeps the
 box-drawing output intact wherever the terminal can render it, and degrades to
 replacement characters instead of an exception where it can't. A stream that
 cannot be reconfigured at all (redirected, wrapped) is left alone.
+
+---
+
+## 4. The pre-race ladder was really the after-the-race ladder
+
+**Severity:** high — it mis-scored the underdog multiplier in live results.
+
+**Status:** fixed. Regression tests: `tests/test_pre_race_ladder.py`.
+
+### What was wrong
+
+`championship_drivers` carries two orderings per driver:
+
+| field | meaning |
+|-------|---------|
+| `position_start` | the ladder **before** the session |
+| `position_current` | the ladder **after** it |
+
+The API returns its rows in `position_current` order, and
+[`ResultsFetcher._get_championship_top10`](src/fetch_results.py) took
+`championship_standings.head(10)` — so `championship_top10_before_race` was
+populated with the ladder as it stood *after* the weekend's points had been
+added. Nobody was picking against that ladder: tips lock before Practice 1.
+
+`ResultAggregator` already asks for the weekend's **first** competitive session
+(the sprint, where there is one), so `position_start` on those standings is
+exactly the ladder the players saw. Checked against every 2026 round: a round's
+`position_start` matches the previous round's `position_current` driver for
+driver, the one exception being a countback shuffle between two drivers on zero
+points, well outside the top 10.
+
+### Why it matters
+
+The underdog rule is set membership, not order — a driver outside the top 10
+scores double. So a reordering inside the ten is harmless, but a driver crossing
+the P10/P11 line during the weekend is scored against a ladder that did not
+exist when tips were submitted. That happened in three rounds:
+
+| Round | Wrongly in the ladder | Wrongly out |
+|-------|------|------|
+| 2 Shanghai | PIA | GAS |
+| 3 Suzuka | PIA | LIN |
+| 6 Monaco | HAD | BEA |
+
+Piastri at Suzuka and Hadjar at Monaco were both widely picked and should have
+paid double, so every player was **under**-scored. Shanghai's swap changed two
+underdog flags but no points — neither driver was picked into a scoring slot.
+
+**Score corrections** (rounds 3 and 6; all other rounds unchanged):
+
+| Player | Was | Now | Player | Was | Now |
+|--------|-----|-----|--------|-----|-----|
+| Rino | 288 | 290 | Barry | 225 | 227 |
+| Jake | 280 | 282 | Veljko | 222 | 224 |
+| Luca | 264 | 266 | Tara | 212 | 213 |
+| Dean | 261 | 263 | Riki | 159 | 161 |
+| Antonio | 257 | 259 | Alex | 133 | 139 |
+| Josh | 251 | 253 | | | |
+
+**No ranking changed** — the corrections are near-uniform.
+
+### The fix
+
+`ResultsFetcher._pre_race_ladder` sorts by `position_start` and takes the first
+ten, and insists the result is *complete*: it raises if the column is absent, if
+any driver has a null `position_start`, or if the top ten is not exactly
+positions 1-10 (a gap, a tie, or standings too short). Ordering by an explicit
+field rather than trusting row order is the actual fix; the completeness checks
+stop a partial ladder from quietly becoming a short one.
+
+The choice of session is now commented at the fetch site in
+[src/leaderboard.py](src/leaderboard.py), since it is load-bearing: reading
+`position_start` off the *race* session of a sprint weekend would give the
+post-sprint ladder.
+
+All twelve rounds were re-fetched, re-scored and republished. Only
+`championship_top10_before_race` changed in the raw results; only rounds 2, 3
+and 6 changed in the scored files.

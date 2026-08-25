@@ -43,7 +43,7 @@
         {
           "driver": "Piastri",
           "result": "miss",
-          "underdog": false,
+          "underdog": true,
           "points": 0
         },
         {
@@ -157,7 +157,7 @@
         {
           "driver": "Piastri",
           "result": "miss",
-          "underdog": false,
+          "underdog": true,
           "points": 0
         },
         {
@@ -253,7 +253,7 @@
         {
           "driver": "Piastri",
           "result": "miss",
-          "underdog": false,
+          "underdog": true,
           "points": 0
         },
         {
@@ -309,7 +309,7 @@
         {
           "driver": "Piastri",
           "result": "miss",
-          "underdog": false,
+          "underdog": true,
           "points": 0
         },
         {
@@ -389,7 +389,7 @@
         {
           "driver": "Piastri",
           "result": "miss",
-          "underdog": false,
+          "underdog": true,
           "points": 0
         },
         {
@@ -486,7 +486,7 @@
         {
           "driver": "Piastri",
           "result": "miss",
-          "underdog": false,
+          "underdog": true,
           "points": 0
         },
         {
@@ -554,7 +554,7 @@
         {
           "driver": "Piastri",
           "result": "miss",
-          "underdog": false,
+          "underdog": true,
           "points": 0
         },
         {
@@ -634,7 +634,7 @@
         {
           "driver": "Piastri",
           "result": "miss",
-          "underdog": false,
+          "underdog": true,
           "points": 0
         },
         {
@@ -713,7 +713,7 @@
         {
           "driver": "Piastri",
           "result": "miss",
-          "underdog": false,
+          "underdog": true,
           "points": 0
         },
         {
@@ -781,7 +781,7 @@
         {
           "driver": "Piastri",
           "result": "miss",
-          "underdog": false,
+          "underdog": true,
           "points": 0
         },
         {
@@ -867,7 +867,7 @@
         {
           "driver": "Piastri",
           "result": "miss",
-          "underdog": false,
+          "underdog": true,
           "points": 0
         },
         {

@@ -144,7 +144,7 @@ class ResultsFetcher:
         if self.round_num == 1:
             return None
 
-        standings = self.aggregator.championship_standings.head(10)
+        standings = self._pre_race_ladder(self.aggregator.championship_standings)
 
         merged = standings.merge(
             self.aggregator.drivers[["driver_number", "name_acronym"]],
@@ -156,6 +156,52 @@ class ResultsFetcher:
     # ─────────────────────────────────────────────────────────
     # Helpers
     # ─────────────────────────────────────────────────────────
+
+    @staticmethod
+    def _pre_race_ladder(standings, size: int = 10):
+        """The championship ladder as it stood *before* this weekend began.
+
+        `championship_drivers` carries two orderings, and picking the wrong one
+        silently mis-scores the underdog multiplier:
+
+        * `position_start`  — the ladder before the session.
+        * `position_current` — the ladder after it.
+
+        The API returns rows in `position_current` order, so the old
+        `standings.head(10)` took the ladder *after* the weekend's points had
+        been added. Nobody was picking against that: tips lock before Practice
+        1, and `ResultAggregator` deliberately asks for the weekend's first
+        competitive session (the sprint, where there is one), so
+        `position_start` there is the ladder the players actually saw. It was
+        checked against every 2026 round — a round's `position_start` matches
+        the previous round's `position_current` exactly.
+
+        Being off by one place matters whenever it changes the *set*: at
+        Suzuka the post-race ladder had Piastri inside the top 10 and Lindblad
+        out, when pre-race it was the other way around.
+        """
+        if "position_start" not in standings.columns:
+            raise ValueError(
+                "championship standings have no position_start column — cannot "
+                "establish the pre-race ladder"
+            )
+
+        missing = standings[standings["position_start"].isna()]
+        if not missing.empty:
+            numbers = sorted(missing["driver_number"].tolist())
+            raise ValueError(
+                f"championship standings have no position_start for driver "
+                f"number(s) {numbers} — the pre-race ladder is incomplete"
+            )
+
+        top = standings.sort_values("position_start").head(size)
+        positions = [int(p) for p in top["position_start"]]
+        if positions != list(range(1, size + 1)):
+            raise ValueError(
+                f"pre-race ladder is not a complete 1-{size}: got {positions} "
+                "(gap, tie or short standings)"
+            )
+        return top
 
     @staticmethod
     def _require_acronyms(merged, label: str) -> list[str]:

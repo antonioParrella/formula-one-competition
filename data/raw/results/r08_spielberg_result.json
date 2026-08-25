@@ -24,14 +24,14 @@
   "sprint_top3": null,
   "championship_top10_before_race": [
     "ANT",
-    "RUS",
     "HAM",
-    "PIA",
-    "NOR",
+    "RUS",
     "LEC",
+    "NOR",
+    "PIA",
     "VER",
-    "HAD",
     "GAS",
+    "HAD",
     "LAW"
   ]
 }

@@ -94,6 +94,12 @@ class ResultAggregator:
         self.race_calendar = get_race_calendar(year)
         self.meeting_key, self.race_session_key, self.sprint_session_key = self._find_meeting_keys()
         self.race_results = self._fetch("session_result", session_key=self.race_session_key)
+        # Championship standings come from the weekend's FIRST competitive
+        # session — the sprint where there is one. That session's
+        # `position_start` is the ladder as it stood before any of the
+        # weekend's points, which is what tips were submitted against and what
+        # the comp's underdog rule keys off. See
+        # ResultsFetcher._pre_race_ladder.
         if self.sprint_session_key is None:
             self.championship_standings = self._fetch("championship_drivers", session_key=self.race_session_key)
             self.drivers = self._fetch("drivers", session_key=self.race_session_key)
