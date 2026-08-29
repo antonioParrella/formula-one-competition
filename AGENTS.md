@@ -483,13 +483,9 @@ Triggers:
 - **Manual** — `workflow_dispatch` trigger for immediate runs from the GitHub UI
 
 Steps:
-1. Fetch tips (`SurveyIndex` + `TipsParser`)
-2. Fetch session schedules (`ScheduleFetcher`, OpenF1)
-3. Fetch results (OpenF1)
-4. Score round
-5. Aggregate standings
-6. Build site
-7. Commit updated files and push
+The workflow runs the same stages as `scripts/pipeline.py`; use
+`.agents/skills/run-race-pipeline/SKILL.md` for the manual race-weekend commands,
+including the pre-race tip-only path and post-race scoring path.
 
 ### Secrets Required
 | Secret | Description |
