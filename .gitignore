@@ -19,3 +19,14 @@ Thumbs.db
 
 # Environment
 .env
+
+# BEGIN agent-skills (managed) — generated links, do not edit
+/.agents/skills/devig-odds/
+/.agents/skills/net-of-costs/
+/.agents/skills/no-look-ahead/
+/.agents/skills/research-log/
+/.claude/skills/devig-odds/
+/.claude/skills/net-of-costs/
+/.claude/skills/no-look-ahead/
+/.claude/skills/research-log/
+# END agent-skills (managed)
