@@ -760,13 +760,17 @@
           "points": 6
         }
       ],
-      "dnf_picks": [
-        {
-          "driver": "Alonso",
-          "dnfd": false,
-          "points": 0
-        }
-      ]
+      "dnf_picks": [],
+      "dnf_budget": {
+        "limit": 5,
+        "used_before": 5,
+        "submitted": 1,
+        "accepted": 0,
+        "rejected_picks": [
+          "Alonso"
+        ],
+        "remaining_after": 0
+      }
     }
   ],
   "sprint_tips": null

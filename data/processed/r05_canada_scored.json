@@ -89,13 +89,17 @@
           "points": 1
         }
       ],
-      "dnf_picks": [
-        {
-          "driver": "Bottas",
-          "dnfd": false,
-          "points": 0
-        }
-      ]
+      "dnf_picks": [],
+      "dnf_budget": {
+        "limit": 5,
+        "used_before": 5,
+        "submitted": 1,
+        "accepted": 0,
+        "rejected_picks": [
+          "Bottas"
+        ],
+        "remaining_after": 0
+      }
     },
     {
       "player": "Antonio",

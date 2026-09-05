@@ -407,66 +407,8 @@
       }
     },
     {
-      "name": "Veljko",
-      "rank": 8,
-      "games_played": 12,
-      "points": 224,
-      "lastRace": 32,
-      "bestRound": 38,
-      "roundScores": {
-        "1": {
-          "race": "Melbourne",
-          "points": 1
-        },
-        "2": {
-          "race": "China",
-          "points": 38
-        },
-        "3": {
-          "race": "Japan",
-          "points": 14
-        },
-        "4": {
-          "race": "Miami",
-          "points": 12
-        },
-        "5": {
-          "race": "Canada",
-          "points": 25
-        },
-        "6": {
-          "race": "Monaco",
-          "points": 5
-        },
-        "7": {
-          "race": "Barcelona",
-          "points": 12
-        },
-        "8": {
-          "race": "Austria",
-          "points": 20
-        },
-        "9": {
-          "race": "Silverstone",
-          "points": 13
-        },
-        "10": {
-          "race": "Belgium",
-          "points": 35
-        },
-        "11": {
-          "race": "Hungarian",
-          "points": 17
-        },
-        "12": {
-          "race": "Dutch",
-          "points": 32
-        }
-      }
-    },
-    {
       "name": "Tara",
-      "rank": 9,
+      "rank": 8,
       "games_played": 12,
       "points": 213,
       "lastRace": 23,
@@ -523,12 +465,70 @@
       }
     },
     {
+      "name": "Veljko",
+      "rank": 9,
+      "games_played": 12,
+      "points": 194,
+      "lastRace": 17,
+      "bestRound": 38,
+      "roundScores": {
+        "1": {
+          "race": "Melbourne",
+          "points": 1
+        },
+        "2": {
+          "race": "China",
+          "points": 38
+        },
+        "3": {
+          "race": "Japan",
+          "points": 14
+        },
+        "4": {
+          "race": "Miami",
+          "points": 12
+        },
+        "5": {
+          "race": "Canada",
+          "points": 25
+        },
+        "6": {
+          "race": "Monaco",
+          "points": 5
+        },
+        "7": {
+          "race": "Barcelona",
+          "points": 12
+        },
+        "8": {
+          "race": "Austria",
+          "points": 20
+        },
+        "9": {
+          "race": "Silverstone",
+          "points": 13
+        },
+        "10": {
+          "race": "Belgium",
+          "points": 20
+        },
+        "11": {
+          "race": "Hungarian",
+          "points": 17
+        },
+        "12": {
+          "race": "Dutch",
+          "points": 17
+        }
+      }
+    },
+    {
       "name": "Riki",
       "rank": 10,
       "games_played": 10,
-      "points": 161,
+      "points": 146,
       "lastRace": 9,
-      "bestRound": 30,
+      "bestRound": 29,
       "roundScores": {
         "1": {
           "race": "Melbourne",
@@ -560,7 +560,7 @@
         },
         "8": {
           "race": "Austria",
-          "points": 30
+          "points": 15
         },
         "9": {
           "race": "Silverstone",

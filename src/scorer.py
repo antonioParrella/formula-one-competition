@@ -12,12 +12,9 @@ Usage:
 """
 
 import json
-import os
 from pathlib import Path
-from datetime import datetime
 
-from tips_parser import TipsParser
-from race_utils import clean_race_name, DRIVER_MAP
+from race_utils import DRIVER_MAP
 from penalties import assess_lateness
 
 
@@ -44,6 +41,7 @@ class Scorer:
     POINTS_TOP10  = 1
     POINTS_MISS   = 0
     POINTS_DNF    = 15
+    DNF_SEASON_BUDGET = 5
     MULTIPLIER_UNDERDOG = 2
 
     # ── Penalties ─────────────────────────────────────────────
@@ -165,6 +163,7 @@ class Scorer:
         position_map = self._position_map(top10_codes)
         champ_set = set(champ_top10)
         dnf_set = set(actual_dnfs)
+        dnf_used_before = self._dnf_picks_used_before_round()
 
         # Parse overrides by player name -> penalty
         penalty_map = self._parse_overrides(overrides)
@@ -175,7 +174,11 @@ class Scorer:
 
         for submission in tips["submissions"]:
             picks = self._score_main_race(submission, position_map, champ_set)
-            dnf_result = self._score_dnfs(submission, dnf_set)
+            dnf_result = self._score_dnfs(
+                submission,
+                dnf_set,
+                used_before=dnf_used_before.get(submission["player"], 0),
+            )
 
             # Automatic late-submission penalty from the session schedule,
             # stacked on top of any manual override penalty.
@@ -195,7 +198,7 @@ class Scorer:
 
             player_scores[submission["player"]] = total
 
-            player_tips.append({
+            player_tip = {
                 "player": submission["player"],
                 "response_id": submission.get("response_id"),
                 "submitted_at": submission.get("submitted_at"),
@@ -207,7 +210,10 @@ class Scorer:
                 "zeroed": late_info["zeroed"],
                 "picks": picks,
                 "dnf_picks": dnf_result["picks"],
-            })
+            }
+            if dnf_result["budget"]["rejected_picks"]:
+                player_tip["dnf_budget"] = dnf_result["budget"]
+            player_tips.append(player_tip)
 
         # Sprint scoring (if applicable — scored separately for display).
         # Late submissions cannot earn sprint points.
@@ -330,11 +336,30 @@ class Scorer:
     # DNF scoring
     # ─────────────────────────────────────────────────────────
 
-    def _score_dnfs(self, submission: dict, dnf_set: set) -> dict:
-        """Score DNF picks. 15 pts per pick that actually DNFed."""
+    def _score_dnfs(
+        self,
+        submission: dict,
+        dnf_set: set,
+        used_before: int = 0,
+    ) -> dict:
+        """Score only the DNF picks that fit inside the season budget.
+
+        Picks are accepted in submission order until the player's five season
+        slots are exhausted.  Excess picks remain visible in ``budget`` for
+        audit purposes, but they do not score and are not exposed to the site's
+        DNF tracker as used picks.
+        """
+        submitted_codes = [
+            code for code in (submission.get("dnf_picks") or []) if code
+        ]
+        used_before = min(max(used_before, 0), self.DNF_SEASON_BUDGET)
+        remaining = self.DNF_SEASON_BUDGET - used_before
+        accepted_codes = submitted_codes[:remaining]
+        rejected_codes = submitted_codes[remaining:]
+
         picks = []
         total = 0
-        for code in submission.get("dnf_picks") or []:
+        for code in accepted_codes:
             surname = DRIVER_MAP.get(code, code)
             dnfd = code in dnf_set
             points = self.POINTS_DNF if dnfd else 0
@@ -345,7 +370,48 @@ class Scorer:
                 "points": points,
             })
 
-        return {"picks": picks, "score": total}
+        return {
+            "picks": picks,
+            "score": total,
+            "budget": {
+                "limit": self.DNF_SEASON_BUDGET,
+                "used_before": used_before,
+                "submitted": len(submitted_codes),
+                "accepted": len(accepted_codes),
+                "rejected_picks": [
+                    DRIVER_MAP.get(code, code) for code in rejected_codes
+                ],
+                "remaining_after": remaining - len(accepted_codes),
+            },
+        }
+
+    def _dnf_picks_used_before_round(self) -> dict[str, int]:
+        """Return accepted DNF slots used by each player before this round.
+
+        The count is rebuilt from immutable raw tips, not processed scores, so
+        scoring any round in isolation gives the same answer as a full-season
+        rebuild.  Counts are capped at the budget because earlier excess picks
+        were never eligible to consume additional slots.
+        """
+        used: dict[str, int] = {}
+        for path in sorted(self.tips_dir.glob("r*_tips.json")):
+            data = json.loads(path.read_text())
+            if int(data["round"]) >= self.round_num:
+                continue
+
+            for submission in data.get("submissions", []):
+                player = submission.get("player")
+                if not player:
+                    continue
+                submitted = sum(
+                    1 for code in (submission.get("dnf_picks") or []) if code
+                )
+                used[player] = min(
+                    self.DNF_SEASON_BUDGET,
+                    used.get(player, 0) + submitted,
+                )
+
+        return used
 
     # ─────────────────────────────────────────────────────────
     # Overrides

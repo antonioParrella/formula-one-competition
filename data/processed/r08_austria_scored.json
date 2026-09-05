@@ -6,7 +6,7 @@
     "Alex": 2,
     "Antonio": 11,
     "Dean": 9,
-    "Riki": 30,
+    "Riki": 15,
     "Rino": 17,
     "Luca": 59,
     "Barry": 15,
@@ -332,7 +332,7 @@
       "player": "Riki",
       "response_id": 7,
       "submitted_at": "2026-06-26T09:25:41",
-      "score": 30,
+      "score": 15,
       "penalty": 0,
       "auto_penalty": 0,
       "override_penalty": 0,
@@ -420,13 +420,18 @@
           "driver": "Hulkenberg",
           "dnfd": false,
           "points": 0
-        },
-        {
-          "driver": "Bottas",
-          "dnfd": true,
-          "points": 15
         }
-      ]
+      ],
+      "dnf_budget": {
+        "limit": 5,
+        "used_before": 1,
+        "submitted": 5,
+        "accepted": 4,
+        "rejected_picks": [
+          "Bottas"
+        ],
+        "remaining_after": 0
+      }
     },
     {
       "player": "Rino",

@@ -956,7 +956,7 @@ nav {
 */
 
 // DATA_START
-const PLAYERS = ["Rino", "Jake", "Luca", "Dean", "Antonio", "Josh", "Barry", "Veljko", "Tara", "Riki", "Alex"];
+const PLAYERS = ["Rino", "Jake", "Luca", "Dean", "Antonio", "Josh", "Barry", "Tara", "Veljko", "Riki", "Alex"];
 
 const STANDINGS = [
   {
@@ -1107,27 +1107,6 @@ const STANDINGS = [
     ]
   },
   {
-    "name": "Veljko",
-    "points": 224,
-    "lastRace": 32,
-    "bestRound": 38,
-    "games_played": 12,
-    "roundScores": [
-      1,
-      38,
-      14,
-      12,
-      25,
-      5,
-      12,
-      20,
-      13,
-      35,
-      17,
-      32
-    ]
-  },
-  {
     "name": "Tara",
     "points": 213,
     "lastRace": 23,
@@ -1149,10 +1128,31 @@ const STANDINGS = [
     ]
   },
   {
+    "name": "Veljko",
+    "points": 194,
+    "lastRace": 17,
+    "bestRound": 38,
+    "games_played": 12,
+    "roundScores": [
+      1,
+      38,
+      14,
+      12,
+      25,
+      5,
+      12,
+      20,
+      13,
+      20,
+      17,
+      17
+    ]
+  },
+  {
     "name": "Riki",
-    "points": 161,
+    "points": 146,
     "lastRace": 9,
-    "bestRound": 30,
+    "bestRound": 29,
     "games_played": 10,
     "roundScores": [
       8,
@@ -1162,7 +1162,7 @@ const STANDINGS = [
       27,
       15,
       0,
-      30,
+      15,
       5,
       0,
       9,
@@ -1756,10 +1756,10 @@ const ROUNDS = [
     "scores": {
       "Luca": 59,
       "Josh": 35,
-      "Riki": 30,
       "Veljko": 20,
       "Jake": 19,
       "Rino": 17,
+      "Riki": 15,
       "Barry": 15,
       "Antonio": 11,
       "Dean": 9,
@@ -1793,7 +1793,7 @@ const ROUNDS = [
       },
       "Riki": {
         "main": 15,
-        "dnf": 15,
+        "dnf": 0,
         "sprint": 0
       },
       "Rino": {
@@ -1918,11 +1918,11 @@ const ROUNDS = [
     "scores": {
       "Antonio": 42,
       "Josh": 40,
-      "Veljko": 35,
       "Rino": 31,
       "Dean": 27,
       "Luca": 25,
       "Barry": 23,
+      "Veljko": 20,
       "Tara": 13,
       "Alex": 11,
       "Jake": 9
@@ -1975,7 +1975,7 @@ const ROUNDS = [
       },
       "Veljko": {
         "main": 20,
-        "dnf": 15,
+        "dnf": 0,
         "sprint": 0
       }
     }
@@ -2062,7 +2062,6 @@ const ROUNDS = [
     "pole": "\u2014",
     "fastest": "\u2014",
     "scores": {
-      "Veljko": 32,
       "Barry": 31,
       "Antonio": 27,
       "Josh": 27,
@@ -2070,6 +2069,7 @@ const ROUNDS = [
       "Jake": 24,
       "Tara": 23,
       "Rino": 22,
+      "Veljko": 17,
       "Luca": 17
     },
     "breakdown": {
@@ -2111,7 +2111,7 @@ const ROUNDS = [
       },
       "Veljko": {
         "main": 17,
-        "dnf": 15,
+        "dnf": 0,
         "sprint": 0
       },
       "Luca": {
@@ -6151,7 +6151,7 @@ const MAIN_TIPS = [
       },
       {
         "player": "Riki",
-        "score": 30,
+        "score": 15,
         "picks": [
           {
             "driver": "Russell",
@@ -7466,7 +7466,7 @@ const MAIN_TIPS = [
       },
       {
         "player": "Veljko",
-        "score": 35,
+        "score": 20,
         "picks": [
           {
             "driver": "Verstappen",
@@ -8358,7 +8358,7 @@ const MAIN_TIPS = [
       },
       {
         "player": "Veljko",
-        "score": 32,
+        "score": 17,
         "picks": [
           {
             "driver": "Hamilton",
@@ -9546,10 +9546,9 @@ const DNF_TIPS = [
         "player": "Alex",
         "picks": [
           "Lawson",
-          "Bortoleto",
-          "P\u00e9rez"
+          "Bortoleto"
         ],
-        "picksUsed": 3,
+        "picksUsed": 2,
         "score": 0
       },
       {
@@ -9673,14 +9672,6 @@ const DNF_TIPS = [
     ],
     "tips": [
       {
-        "player": "Veljko",
-        "picks": [
-          "Bottas"
-        ],
-        "picksUsed": 1,
-        "score": 0
-      },
-      {
         "player": "Rino",
         "picks": [
           "Norris",
@@ -9759,14 +9750,6 @@ const DNF_TIPS = [
         ],
         "picksUsed": 1,
         "score": 0
-      },
-      {
-        "player": "Veljko",
-        "picks": [
-          "P\u00e9rez"
-        ],
-        "picksUsed": 1,
-        "score": 0
       }
     ]
   },
@@ -9794,11 +9777,10 @@ const DNF_TIPS = [
           "Ocon",
           "Bearman",
           "Gasly",
-          "Hulkenberg",
-          "Bottas"
+          "Hulkenberg"
         ],
-        "picksUsed": 5,
-        "score": 15
+        "picksUsed": 4,
+        "score": 0
       },
       {
         "player": "Luca",
@@ -9847,14 +9829,6 @@ const DNF_TIPS = [
         ],
         "picksUsed": 1,
         "score": 15
-      },
-      {
-        "player": "Veljko",
-        "picks": [
-          "Stroll"
-        ],
-        "picksUsed": 1,
-        "score": 15
       }
     ]
   },
@@ -9866,16 +9840,7 @@ const DNF_TIPS = [
       "P\u00e9rez",
       "Bottas"
     ],
-    "tips": [
-      {
-        "player": "Veljko",
-        "picks": [
-          "Alonso"
-        ],
-        "picksUsed": 1,
-        "score": 0
-      }
-    ]
+    "tips": []
   },
   {
     "round": 12,
@@ -9896,14 +9861,6 @@ const DNF_TIPS = [
         ],
         "picksUsed": 1,
         "score": 0
-      },
-      {
-        "player": "Veljko",
-        "picks": [
-          "Bottas"
-        ],
-        "picksUsed": 1,
-        "score": 15
       }
     ]
   }

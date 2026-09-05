@@ -11,7 +11,7 @@
     "Antonio": 42,
     "Barry": 23,
     "Jake": 9,
-    "Veljko": 35
+    "Veljko": 20
   },
   "player_tips": [
     {
@@ -690,7 +690,7 @@
       "player": "Veljko",
       "response_id": 1,
       "submitted_at": "2026-07-14T22:10:16",
-      "score": 35,
+      "score": 20,
       "penalty": 0,
       "auto_penalty": 0,
       "override_penalty": 0,
@@ -758,13 +758,17 @@
           "points": 0
         }
       ],
-      "dnf_picks": [
-        {
-          "driver": "Stroll",
-          "dnfd": true,
-          "points": 15
-        }
-      ]
+      "dnf_picks": [],
+      "dnf_budget": {
+        "limit": 5,
+        "used_before": 5,
+        "submitted": 1,
+        "accepted": 0,
+        "rejected_picks": [
+          "Stroll"
+        ],
+        "remaining_after": 0
+      }
     }
   ],
   "sprint_tips": null

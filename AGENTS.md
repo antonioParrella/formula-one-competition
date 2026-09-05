@@ -109,6 +109,10 @@ Penalties are detected automatically by comparing each submission's
 - The driver must have **started the race** to count
 - Each player has a **season budget of 5 DNF picks total** across all rounds
 - Players can use 0–5 picks per round as long as the season total does not exceed 5
+- Enforcement is chronological: the first 5 submitted picks across the season
+  are eligible (using the survey's pick order within a round); later picks are
+  rejected and cannot score. Raw tips remain unchanged, while rejected picks
+  are recorded in the processed player's `dnf_budget` audit field.
 
 
 

@@ -688,13 +688,17 @@
           "points": 0
         }
       ],
-      "dnf_picks": [
-        {
-          "driver": "P\u00e9rez",
-          "dnfd": false,
-          "points": 0
-        }
-      ]
+      "dnf_picks": [],
+      "dnf_budget": {
+        "limit": 5,
+        "used_before": 5,
+        "submitted": 1,
+        "accepted": 0,
+        "rejected_picks": [
+          "P\u00e9rez"
+        ],
+        "remaining_after": 0
+      }
     },
     {
       "player": "Jake",

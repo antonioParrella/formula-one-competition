@@ -9,7 +9,7 @@
     "Jake": 19,
     "Dean": 26,
     "Josh": 22,
-    "Veljko": 32,
+    "Veljko": 17,
     "Luca": 17
   },
   "player_tips": [
@@ -543,7 +543,7 @@
       "player": "Veljko",
       "response_id": 3,
       "submitted_at": "2026-08-21T03:50:38",
-      "score": 32,
+      "score": 17,
       "penalty": 0,
       "auto_penalty": 0,
       "override_penalty": 0,
@@ -611,13 +611,17 @@
           "points": 0
         }
       ],
-      "dnf_picks": [
-        {
-          "driver": "Bottas",
-          "dnfd": true,
-          "points": 15
-        }
-      ]
+      "dnf_picks": [],
+      "dnf_budget": {
+        "limit": 5,
+        "used_before": 5,
+        "submitted": 1,
+        "accepted": 0,
+        "rejected_picks": [
+          "Bottas"
+        ],
+        "remaining_after": 0
+      }
     },
     {
       "player": "Luca",
