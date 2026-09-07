@@ -1,0 +1,36 @@
+{
+  "round": 13,
+  "race_name": "Monza",
+  "year": 2026,
+  "is_sprint_weekend": false,
+  "top10": [
+    "ANT",
+    "RUS",
+    "VER",
+    "NOR",
+    "PIA",
+    "HAM",
+    "GAS",
+    "LIN",
+    "COL",
+    "TSU"
+  ],
+  "dnfs": [
+    "STR",
+    "ALO",
+    "LEC"
+  ],
+  "sprint_top3": null,
+  "championship_top10_before_race": [
+    "ANT",
+    "RUS",
+    "HAM",
+    "NOR",
+    "LEC",
+    "VER",
+    "PIA",
+    "HAD",
+    "LAW",
+    "GAS"
+  ]
+}

@@ -13,6 +13,7 @@ anyone picking him would have been paid double.
 
 import json
 import sys
+from urllib.error import HTTPError
 
 import pandas as pd
 import pytest
@@ -152,6 +153,26 @@ class TestDriverLookupScopes:
         row = agg._lookup_driver(6)
         assert row is not None and row.iloc[0]["name_acronym"] == "HAD"
         # Meeting first, then the most recent earlier race — and it stops on a hit.
+        assert calls == [
+            {"driver_number": 6, "meeting_key": ZANDVOORT_MEETING},
+            {"driver_number": 6, "session_key": 11342},
+        ]
+
+    def test_404_scope_falls_back_to_earlier_race(self):
+        """The live API uses HTTP 404, not [], for an empty driver filter."""
+        agg = _bare_aggregator(SPRINT_DRIVERS.copy(), STANDINGS)
+        calls = []
+
+        def fake_fetch(endpoint, **params):
+            calls.append(params)
+            if "meeting_key" in params:
+                raise HTTPError("https://example.test", 404, "Not Found", {}, None)
+            return pd.DataFrame([{"driver_number": 6, "name_acronym": "HAD"}])
+
+        agg._fetch = fake_fetch
+        row = agg._lookup_driver(6)
+
+        assert row is not None and row.iloc[0]["name_acronym"] == "HAD"
         assert calls == [
             {"driver_number": 6, "meeting_key": ZANDVOORT_MEETING},
             {"driver_number": 6, "session_key": 11342},

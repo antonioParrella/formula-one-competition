@@ -181,7 +181,16 @@ class ResultAggregator:
         scopes += [{"session_key": int(k)} for k in earlier["session_key"]]
 
         for scope in scopes:
-            found = self._fetch("drivers", driver_number=number, **scope)
+            try:
+                found = self._fetch("drivers", driver_number=number, **scope)
+            except HTTPError as exc:
+                # OpenF1 reports an empty filtered result as HTTP 404 rather
+                # than an empty JSON list.  That is expected when a driver has
+                # left the grid, so continue to the earlier-session fallback.
+                # Other client errors still indicate a real request problem.
+                if exc.code == 404:
+                    continue
+                raise
             if found.empty or "name_acronym" not in found.columns:
                 continue
             named = found[found["name_acronym"].notna()]

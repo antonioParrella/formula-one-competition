@@ -1,0 +1,50 @@
+{
+  "round": 13,
+  "race_name": "Monza",
+  "year": 2026,
+  "meeting_key": 1293,
+  "is_sprint_weekend": false,
+  "fetched_at": "2026-09-07T18:21:57.141870",
+  "sessions": [
+    {
+      "session_name": "Practice 1",
+      "session_key": 11354,
+      "date_start": "2026-09-04T10:30:00+00:00",
+      "date_end": "2026-09-04T11:30:00+00:00",
+      "gmt_offset": "02:00:00",
+      "is_cancelled": false
+    },
+    {
+      "session_name": "Practice 2",
+      "session_key": 11355,
+      "date_start": "2026-09-04T14:00:00+00:00",
+      "date_end": "2026-09-04T15:00:00+00:00",
+      "gmt_offset": "02:00:00",
+      "is_cancelled": false
+    },
+    {
+      "session_name": "Practice 3",
+      "session_key": 11356,
+      "date_start": "2026-09-05T10:30:00+00:00",
+      "date_end": "2026-09-05T11:30:00+00:00",
+      "gmt_offset": "02:00:00",
+      "is_cancelled": false
+    },
+    {
+      "session_name": "Qualifying",
+      "session_key": 11357,
+      "date_start": "2026-09-05T14:00:00+00:00",
+      "date_end": "2026-09-05T15:00:00+00:00",
+      "gmt_offset": "02:00:00",
+      "is_cancelled": false
+    },
+    {
+      "session_name": "Race",
+      "session_key": 11361,
+      "date_start": "2026-09-06T13:00:00+00:00",
+      "date_end": "2026-09-06T15:00:00+00:00",
+      "gmt_offset": "02:00:00",
+      "is_cancelled": false
+    }
+  ]
+}

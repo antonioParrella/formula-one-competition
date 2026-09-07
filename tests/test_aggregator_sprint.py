@@ -137,15 +137,15 @@ def players():
 class TestRealSeason:
     """The published season — the numbers KNOWN_ISSUES #1 predicted."""
 
-    @pytest.mark.parametrize("name,last_race", [("Barry", 31), ("Jake", 24), ("Josh", 27)])
-    def test_last_race_after_round_12(self, players, name, last_race):
+    @pytest.mark.parametrize("name,last_race", [("Barry", 15), ("Jake", 30), ("Josh", 21)])
+    def test_last_race_after_round_13(self, players, name, last_race):
         assert players[name]["lastRace"] == last_race
 
     @pytest.mark.parametrize("name,best", [
         ("Rino", 54), ("Jake", 46), ("Dean", 58),
         ("Veljko", 38), ("Tara", 41), ("Alex", 28),
     ])
-    def test_best_round_after_round_12(self, players, name, best):
+    def test_best_round_after_round_13(self, players, name, best):
         assert players[name]["bestRound"] == best
 
     def test_every_player_total_matches_their_rounds(self, players):
