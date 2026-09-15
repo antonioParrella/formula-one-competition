@@ -3,9 +3,9 @@
     {
       "name": "Jake",
       "rank": 1,
-      "games_played": 13,
-      "points": 312,
-      "lastRace": 30,
+      "games_played": 14,
+      "points": 328,
+      "lastRace": 16,
       "bestRound": 46,
       "roundScores": {
         "1": {
@@ -59,15 +59,19 @@
         "13": {
           "race": "Italian",
           "points": 30
+        },
+        "14": {
+          "race": "Madrid",
+          "points": 16
         }
       }
     },
     {
       "name": "Rino",
       "rank": 2,
-      "games_played": 13,
-      "points": 301,
-      "lastRace": 11,
+      "games_played": 14,
+      "points": 324,
+      "lastRace": 23,
       "bestRound": 54,
       "roundScores": {
         "1": {
@@ -121,77 +125,19 @@
         "13": {
           "race": "Italian",
           "points": 11
-        }
-      }
-    },
-    {
-      "name": "Antonio",
-      "rank": 3,
-      "games_played": 13,
-      "points": 286,
-      "lastRace": 27,
-      "bestRound": 42,
-      "roundScores": {
-        "1": {
-          "race": "Melbourne",
-          "points": 11
         },
-        "2": {
-          "race": "China",
-          "points": 37
-        },
-        "3": {
-          "race": "Japan",
-          "points": 18
-        },
-        "4": {
-          "race": "Miami",
-          "points": 16
-        },
-        "5": {
-          "race": "Canada",
-          "points": 25
-        },
-        "6": {
-          "race": "Monaco",
-          "points": 4
-        },
-        "7": {
-          "race": "Barcelona",
-          "points": 24
-        },
-        "8": {
-          "race": "Austria",
-          "points": 11
-        },
-        "9": {
-          "race": "Silverstone",
-          "points": 22
-        },
-        "10": {
-          "race": "Belgium",
-          "points": 42
-        },
-        "11": {
-          "race": "Hungarian",
-          "points": 22
-        },
-        "12": {
-          "race": "Dutch",
-          "points": 27
-        },
-        "13": {
-          "race": "Italian",
-          "points": 27
+        "14": {
+          "race": "Madrid",
+          "points": 23
         }
       }
     },
     {
       "name": "Luca",
-      "rank": 4,
-      "games_played": 13,
-      "points": 281,
-      "lastRace": 15,
+      "rank": 3,
+      "games_played": 14,
+      "points": 316,
+      "lastRace": 35,
       "bestRound": 59,
       "roundScores": {
         "1": {
@@ -245,15 +191,85 @@
         "13": {
           "race": "Italian",
           "points": 15
+        },
+        "14": {
+          "race": "Madrid",
+          "points": 35
+        }
+      }
+    },
+    {
+      "name": "Antonio",
+      "rank": 4,
+      "games_played": 14,
+      "points": 316,
+      "lastRace": 30,
+      "bestRound": 42,
+      "roundScores": {
+        "1": {
+          "race": "Melbourne",
+          "points": 11
+        },
+        "2": {
+          "race": "China",
+          "points": 37
+        },
+        "3": {
+          "race": "Japan",
+          "points": 18
+        },
+        "4": {
+          "race": "Miami",
+          "points": 16
+        },
+        "5": {
+          "race": "Canada",
+          "points": 25
+        },
+        "6": {
+          "race": "Monaco",
+          "points": 4
+        },
+        "7": {
+          "race": "Barcelona",
+          "points": 24
+        },
+        "8": {
+          "race": "Austria",
+          "points": 11
+        },
+        "9": {
+          "race": "Silverstone",
+          "points": 22
+        },
+        "10": {
+          "race": "Belgium",
+          "points": 42
+        },
+        "11": {
+          "race": "Hungarian",
+          "points": 22
+        },
+        "12": {
+          "race": "Dutch",
+          "points": 27
+        },
+        "13": {
+          "race": "Italian",
+          "points": 27
+        },
+        "14": {
+          "race": "Madrid",
+          "points": 30
         }
       }
     },
     {
       "name": "Dean",
       "rank": 5,
-      "games_played": 13,
-      "points": 281,
-      "lastRace": 18,
+      "games_played": 14,
+      "points": 304,
+      "lastRace": 23,
       "bestRound": 58,
       "roundScores": {
         "1": {
@@ -307,15 +323,19 @@
         "13": {
           "race": "Italian",
           "points": 18
+        },
+        "14": {
+          "race": "Madrid",
+          "points": 23
         }
       }
     },
     {
       "name": "Josh",
       "rank": 6,
-      "games_played": 13,
-      "points": 274,
-      "lastRace": 21,
+      "games_played": 14,
+      "points": 296,
+      "lastRace": 22,
       "bestRound": 40,
       "roundScores": {
         "1": {
@@ -369,15 +389,19 @@
         "13": {
           "race": "Italian",
           "points": 21
+        },
+        "14": {
+          "race": "Madrid",
+          "points": 22
         }
       }
     },
     {
       "name": "Barry",
       "rank": 7,
-      "games_played": 13,
-      "points": 242,
-      "lastRace": 15,
+      "games_played": 14,
+      "points": 255,
+      "lastRace": 13,
       "bestRound": 47,
       "roundScores": {
         "1": {
@@ -431,15 +455,19 @@
         "13": {
           "race": "Italian",
           "points": 15
+        },
+        "14": {
+          "race": "Madrid",
+          "points": 13
         }
       }
     },
     {
       "name": "Tara",
       "rank": 8,
-      "games_played": 13,
-      "points": 229,
-      "lastRace": 16,
+      "games_played": 14,
+      "points": 248,
+      "lastRace": 19,
       "bestRound": 41,
       "roundScores": {
         "1": {
@@ -493,15 +521,19 @@
         "13": {
           "race": "Italian",
           "points": 16
+        },
+        "14": {
+          "race": "Madrid",
+          "points": 19
         }
       }
     },
     {
       "name": "Veljko",
       "rank": 9,
-      "games_played": 13,
-      "points": 219,
-      "lastRace": 25,
+      "games_played": 14,
+      "points": 235,
+      "lastRace": 16,
       "bestRound": 38,
       "roundScores": {
         "1": {
@@ -555,6 +587,10 @@
         "13": {
           "race": "Italian",
           "points": 25
+        },
+        "14": {
+          "race": "Madrid",
+          "points": 16
         }
       }
     },
@@ -663,5 +699,5 @@
       }
     }
   ],
-  "total_rounds": 13
+  "total_rounds": 14
 }

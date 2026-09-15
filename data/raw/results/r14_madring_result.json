@@ -1,0 +1,37 @@
+{
+  "round": 14,
+  "race_name": "Madring",
+  "year": 2026,
+  "is_sprint_weekend": false,
+  "top10": [
+    "ANT",
+    "VER",
+    "NOR",
+    "LEC",
+    "RUS",
+    "LAW",
+    "COL",
+    "PIA",
+    "LIN",
+    "HUL"
+  ],
+  "dnfs": [
+    "SAI",
+    "PER",
+    "STR",
+    "HAM"
+  ],
+  "sprint_top3": null,
+  "championship_top10_before_race": [
+    "ANT",
+    "RUS",
+    "HAM",
+    "NOR",
+    "LEC",
+    "VER",
+    "PIA",
+    "HAD",
+    "LAW",
+    "GAS"
+  ]
+}

@@ -956,15 +956,15 @@ nav {
 */
 
 // DATA_START
-const PLAYERS = ["Jake", "Rino", "Antonio", "Luca", "Dean", "Josh", "Barry", "Tara", "Veljko", "Alex", "Riki"];
+const PLAYERS = ["Jake", "Rino", "Luca", "Antonio", "Dean", "Josh", "Barry", "Tara", "Veljko", "Alex", "Riki"];
 
 const STANDINGS = [
   {
     "name": "Jake",
-    "points": 312,
-    "lastRace": 30,
+    "points": 328,
+    "lastRace": 16,
     "bestRound": 46,
-    "games_played": 13,
+    "games_played": 14,
     "roundScores": [
       19,
       46,
@@ -978,15 +978,16 @@ const STANDINGS = [
       9,
       26,
       24,
-      30
+      30,
+      16
     ]
   },
   {
     "name": "Rino",
-    "points": 301,
-    "lastRace": 11,
+    "points": 324,
+    "lastRace": 23,
     "bestRound": 54,
-    "games_played": 13,
+    "games_played": 14,
     "roundScores": [
       23,
       17,
@@ -1000,37 +1001,16 @@ const STANDINGS = [
       31,
       21,
       22,
-      11
-    ]
-  },
-  {
-    "name": "Antonio",
-    "points": 286,
-    "lastRace": 27,
-    "bestRound": 42,
-    "games_played": 13,
-    "roundScores": [
       11,
-      37,
-      18,
-      16,
-      25,
-      4,
-      24,
-      11,
-      22,
-      42,
-      22,
-      27,
-      27
+      23
     ]
   },
   {
     "name": "Luca",
-    "points": 281,
-    "lastRace": 15,
+    "points": 316,
+    "lastRace": 35,
     "bestRound": 59,
-    "games_played": 13,
+    "games_played": 14,
     "roundScores": [
       28,
       14,
@@ -1044,15 +1024,39 @@ const STANDINGS = [
       25,
       21,
       17,
-      15
+      15,
+      35
+    ]
+  },
+  {
+    "name": "Antonio",
+    "points": 316,
+    "lastRace": 30,
+    "bestRound": 42,
+    "games_played": 14,
+    "roundScores": [
+      11,
+      37,
+      18,
+      16,
+      25,
+      4,
+      24,
+      11,
+      22,
+      42,
+      22,
+      27,
+      27,
+      30
     ]
   },
   {
     "name": "Dean",
-    "points": 281,
-    "lastRace": 18,
+    "points": 304,
+    "lastRace": 23,
     "bestRound": 58,
-    "games_played": 13,
+    "games_played": 14,
     "roundScores": [
       28,
       58,
@@ -1066,15 +1070,16 @@ const STANDINGS = [
       27,
       5,
       26,
-      18
+      18,
+      23
     ]
   },
   {
     "name": "Josh",
-    "points": 274,
-    "lastRace": 21,
+    "points": 296,
+    "lastRace": 22,
     "bestRound": 40,
-    "games_played": 13,
+    "games_played": 14,
     "roundScores": [
       31,
       25,
@@ -1088,15 +1093,16 @@ const STANDINGS = [
       40,
       6,
       27,
-      21
+      21,
+      22
     ]
   },
   {
     "name": "Barry",
-    "points": 242,
-    "lastRace": 15,
+    "points": 255,
+    "lastRace": 13,
     "bestRound": 47,
-    "games_played": 13,
+    "games_played": 14,
     "roundScores": [
       7,
       47,
@@ -1110,15 +1116,16 @@ const STANDINGS = [
       23,
       10,
       31,
-      15
+      15,
+      13
     ]
   },
   {
     "name": "Tara",
-    "points": 229,
-    "lastRace": 16,
+    "points": 248,
+    "lastRace": 19,
     "bestRound": 41,
-    "games_played": 13,
+    "games_played": 14,
     "roundScores": [
       7,
       41,
@@ -1132,15 +1139,16 @@ const STANDINGS = [
       13,
       11,
       23,
-      16
+      16,
+      19
     ]
   },
   {
     "name": "Veljko",
-    "points": 219,
-    "lastRace": 25,
+    "points": 235,
+    "lastRace": 16,
     "bestRound": 38,
-    "games_played": 13,
+    "games_played": 14,
     "roundScores": [
       1,
       38,
@@ -1154,7 +1162,8 @@ const STANDINGS = [
       20,
       17,
       17,
-      25
+      25,
+      16
     ]
   },
   {
@@ -1176,7 +1185,8 @@ const STANDINGS = [
       11,
       0,
       0,
-      9
+      9,
+      0
     ]
   },
   {
@@ -1197,6 +1207,7 @@ const STANDINGS = [
       5,
       0,
       9,
+      0,
       0,
       0
     ]
@@ -2201,6 +2212,73 @@ const ROUNDS = [
       },
       "Barry": {
         "main": 15,
+        "dnf": 0,
+        "sprint": 0
+      }
+    }
+  },
+  {
+    "round": 14,
+    "name": "Madrid",
+    "date": "\u2014",
+    "winner": "\u2014",
+    "pole": "\u2014",
+    "fastest": "\u2014",
+    "scores": {
+      "Luca": 35,
+      "Antonio": 30,
+      "Dean": 23,
+      "Rino": 23,
+      "Josh": 22,
+      "Tara": 19,
+      "Veljko": 16,
+      "Jake": 16,
+      "Barry": 13
+    },
+    "breakdown": {
+      "Veljko": {
+        "main": 21,
+        "dnf": 0,
+        "sprint": 0,
+        "penalty": 5
+      },
+      "Antonio": {
+        "main": 30,
+        "dnf": 0,
+        "sprint": 0
+      },
+      "Tara": {
+        "main": 19,
+        "dnf": 0,
+        "sprint": 0
+      },
+      "Dean": {
+        "main": 23,
+        "dnf": 0,
+        "sprint": 0
+      },
+      "Josh": {
+        "main": 22,
+        "dnf": 0,
+        "sprint": 0
+      },
+      "Rino": {
+        "main": 23,
+        "dnf": 0,
+        "sprint": 0
+      },
+      "Luca": {
+        "main": 20,
+        "dnf": 15,
+        "sprint": 0
+      },
+      "Barry": {
+        "main": 13,
+        "dnf": 0,
+        "sprint": 0
+      },
+      "Jake": {
+        "main": 16,
         "dnf": 0,
         "sprint": 0
       }
@@ -9032,6 +9110,453 @@ const MAIN_TIPS = [
         ]
       }
     ]
+  },
+  {
+    "round": 14,
+    "raceName": "Madrid",
+    "positions": [
+      "ANT",
+      "VER",
+      "NOR",
+      "LEC",
+      "RUS",
+      "LAW",
+      "COL",
+      "PIA",
+      "LIN",
+      "HUL"
+    ],
+    "tips": [
+      {
+        "player": "Veljko",
+        "score": 16,
+        "picks": [
+          {
+            "driver": "Hamilton",
+            "result": "miss"
+          },
+          {
+            "driver": "Verstappen",
+            "result": "exact"
+          },
+          {
+            "driver": "Russell",
+            "result": "top10"
+          },
+          {
+            "driver": "Antonelli",
+            "result": "top10"
+          },
+          {
+            "driver": "Leclerc",
+            "result": "close"
+          },
+          {
+            "driver": "Norris",
+            "result": "top10"
+          },
+          {
+            "driver": "Piastri",
+            "result": "close"
+          },
+          {
+            "driver": "Colapinto",
+            "result": "close",
+            "underdog": true
+          },
+          {
+            "driver": "Gasly",
+            "result": "miss"
+          },
+          {
+            "driver": "Lawson",
+            "result": "top10"
+          }
+        ]
+      },
+      {
+        "player": "Antonio",
+        "score": 30,
+        "picks": [
+          {
+            "driver": "Antonelli",
+            "result": "exact"
+          },
+          {
+            "driver": "Norris",
+            "result": "close"
+          },
+          {
+            "driver": "Russell",
+            "result": "top10"
+          },
+          {
+            "driver": "Hamilton",
+            "result": "miss"
+          },
+          {
+            "driver": "Leclerc",
+            "result": "close"
+          },
+          {
+            "driver": "Piastri",
+            "result": "top10"
+          },
+          {
+            "driver": "Lawson",
+            "result": "close"
+          },
+          {
+            "driver": "Hulkenberg",
+            "result": "top10",
+            "underdog": true
+          },
+          {
+            "driver": "Lindblad",
+            "result": "exact",
+            "underdog": true
+          },
+          {
+            "driver": "Colapinto",
+            "result": "top10",
+            "underdog": true
+          }
+        ]
+      },
+      {
+        "player": "Tara",
+        "score": 19,
+        "picks": [
+          {
+            "driver": "Norris",
+            "result": "top10"
+          },
+          {
+            "driver": "Antonelli",
+            "result": "close"
+          },
+          {
+            "driver": "Hamilton",
+            "result": "miss"
+          },
+          {
+            "driver": "Leclerc",
+            "result": "exact"
+          },
+          {
+            "driver": "Verstappen",
+            "result": "top10"
+          },
+          {
+            "driver": "Piastri",
+            "result": "top10"
+          },
+          {
+            "driver": "Hadjar",
+            "result": "miss"
+          },
+          {
+            "driver": "Lindblad",
+            "result": "close",
+            "underdog": true
+          },
+          {
+            "driver": "Bearman",
+            "result": "miss",
+            "underdog": true
+          },
+          {
+            "driver": "Colapinto",
+            "result": "top10",
+            "underdog": true
+          }
+        ]
+      },
+      {
+        "player": "Dean",
+        "score": 23,
+        "picks": [
+          {
+            "driver": "Norris",
+            "result": "top10"
+          },
+          {
+            "driver": "Antonelli",
+            "result": "close"
+          },
+          {
+            "driver": "Verstappen",
+            "result": "close"
+          },
+          {
+            "driver": "Russell",
+            "result": "close"
+          },
+          {
+            "driver": "Hamilton",
+            "result": "miss"
+          },
+          {
+            "driver": "Piastri",
+            "result": "top10"
+          },
+          {
+            "driver": "Leclerc",
+            "result": "top10"
+          },
+          {
+            "driver": "Lawson",
+            "result": "top10"
+          },
+          {
+            "driver": "Lindblad",
+            "result": "exact",
+            "underdog": true
+          },
+          {
+            "driver": "Gasly",
+            "result": "miss"
+          }
+        ]
+      },
+      {
+        "player": "Josh",
+        "score": 22,
+        "picks": [
+          {
+            "driver": "Antonelli",
+            "result": "exact"
+          },
+          {
+            "driver": "Hamilton",
+            "result": "miss"
+          },
+          {
+            "driver": "Verstappen",
+            "result": "close"
+          },
+          {
+            "driver": "Piastri",
+            "result": "top10"
+          },
+          {
+            "driver": "Russell",
+            "result": "exact"
+          },
+          {
+            "driver": "Norris",
+            "result": "top10"
+          },
+          {
+            "driver": "Gasly",
+            "result": "miss"
+          },
+          {
+            "driver": "Colapinto",
+            "result": "close",
+            "underdog": true
+          },
+          {
+            "driver": "Hadjar",
+            "result": "miss"
+          },
+          {
+            "driver": "Lawson",
+            "result": "top10"
+          }
+        ]
+      },
+      {
+        "player": "Rino",
+        "score": 23,
+        "picks": [
+          {
+            "driver": "Antonelli",
+            "result": "exact"
+          },
+          {
+            "driver": "Norris",
+            "result": "close"
+          },
+          {
+            "driver": "Russell",
+            "result": "top10"
+          },
+          {
+            "driver": "Hamilton",
+            "result": "miss"
+          },
+          {
+            "driver": "Leclerc",
+            "result": "close"
+          },
+          {
+            "driver": "Verstappen",
+            "result": "top10"
+          },
+          {
+            "driver": "Piastri",
+            "result": "close"
+          },
+          {
+            "driver": "Lawson",
+            "result": "top10"
+          },
+          {
+            "driver": "Gasly",
+            "result": "miss"
+          },
+          {
+            "driver": "Lindblad",
+            "result": "close",
+            "underdog": true
+          }
+        ]
+      },
+      {
+        "player": "Luca",
+        "score": 35,
+        "picks": [
+          {
+            "driver": "Antonelli",
+            "result": "exact"
+          },
+          {
+            "driver": "Norris",
+            "result": "close"
+          },
+          {
+            "driver": "Russell",
+            "result": "top10"
+          },
+          {
+            "driver": "Hamilton",
+            "result": "miss"
+          },
+          {
+            "driver": "Verstappen",
+            "result": "top10"
+          },
+          {
+            "driver": "Piastri",
+            "result": "top10"
+          },
+          {
+            "driver": "Leclerc",
+            "result": "top10"
+          },
+          {
+            "driver": "Gasly",
+            "result": "miss"
+          },
+          {
+            "driver": "Colapinto",
+            "result": "top10",
+            "underdog": true
+          },
+          {
+            "driver": "Lindblad",
+            "result": "close",
+            "underdog": true
+          }
+        ]
+      },
+      {
+        "player": "Barry",
+        "score": 13,
+        "picks": [
+          {
+            "driver": "Antonelli",
+            "result": "exact"
+          },
+          {
+            "driver": "Piastri",
+            "result": "top10"
+          },
+          {
+            "driver": "Russell",
+            "result": "top10"
+          },
+          {
+            "driver": "Norris",
+            "result": "close"
+          },
+          {
+            "driver": "Verstappen",
+            "result": "top10"
+          },
+          {
+            "driver": "Sainz",
+            "result": "miss",
+            "underdog": true
+          },
+          {
+            "driver": "Gasly",
+            "result": "miss"
+          },
+          {
+            "driver": "Hamilton",
+            "result": "miss"
+          },
+          {
+            "driver": "Leclerc",
+            "result": "top10"
+          },
+          {
+            "driver": "Lawson",
+            "result": "top10"
+          }
+        ]
+      },
+      {
+        "player": "Jake",
+        "score": 16,
+        "picks": [
+          {
+            "driver": "Antonelli",
+            "result": "exact"
+          },
+          {
+            "driver": "Russell",
+            "result": "top10"
+          },
+          {
+            "driver": "Norris",
+            "result": "exact"
+          },
+          {
+            "driver": "Hamilton",
+            "result": "miss"
+          },
+          {
+            "driver": "Verstappen",
+            "result": "top10"
+          },
+          {
+            "driver": "Piastri",
+            "result": "top10"
+          },
+          {
+            "driver": "Leclerc",
+            "result": "top10"
+          },
+          {
+            "driver": "Gasly",
+            "result": "miss"
+          },
+          {
+            "driver": "Colapinto",
+            "result": "top10",
+            "underdog": true
+          },
+          {
+            "driver": "Tsunoda",
+            "result": "miss",
+            "underdog": true
+          }
+        ]
+      }
+    ]
   }
 ];
 
@@ -10452,6 +10977,26 @@ const DNF_TIPS = [
       "Leclerc"
     ],
     "tips": []
+  },
+  {
+    "round": 14,
+    "raceName": "Madrid",
+    "actualDnfs": [
+      "Sainz",
+      "P\u00e9rez",
+      "Stroll",
+      "Hamilton"
+    ],
+    "tips": [
+      {
+        "player": "Luca",
+        "picks": [
+          "Stroll"
+        ],
+        "picksUsed": 1,
+        "score": 15
+      }
+    ]
   }
 ];
 // DATA_END
