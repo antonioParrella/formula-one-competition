@@ -19,3 +19,12 @@ Thumbs.db
 
 # Environment
 .env
+
+# BEGIN agent-skills (managed) — generated links, do not edit
+/.agents/skills/audit-data-timing/
+/.agents/skills/log-experiments/
+/.claude/skills/audit-data-timing/
+/.claude/skills/log-experiments/
+/.claude/skills/run-f1-optimiser/
+/.claude/skills/update-f1-website/
+# END agent-skills (managed)

@@ -90,4 +90,36 @@ def _top10_at_race(calendar, round_num: int, position_col: str) -> list[str]:
         .merge(drivers[["driver_number", "name_acronym"]],
                on="driver_number", how="left")
     )
-    return top10["name_acronym"].tolist()
+
+    # A session's drivers response can omit a competitor who still appears in
+    # the championship table (Zandvoort 2026 did this for Hadjar).  Do the
+    # same meeting-scoped repair as ResultAggregator before returning a list
+    # that controls the underdog multiplier.
+    missing = top10[top10["name_acronym"].isna()]["driver_number"].dropna()
+    if not missing.empty:
+        meeting_key = row.iloc[0].get("meeting_key")
+        earlier = calendar[
+            (calendar["session_name"] == "Race")
+            & (calendar["round_number"] < round_num)
+        ].sort_values("round_number", ascending=False)
+        scopes = ([] if meeting_key is None else [{"meeting_key": meeting_key}])
+        scopes += [{"session_key": int(key)} for key in earlier["session_key"]]
+
+        for number in sorted({int(n) for n in missing}):
+            for scope in scopes:
+                found = _fetch_openf1("drivers", driver_number=number, **scope)
+                if found.empty or "name_acronym" not in found.columns:
+                    continue
+                named = found[found["name_acronym"].notna()]
+                if not named.empty:
+                    top10.loc[top10["driver_number"] == number, "name_acronym"] = (
+                        named.iloc[0]["name_acronym"]
+                    )
+                    break
+
+    codes = top10["name_acronym"].tolist()
+    if not all(isinstance(code, str) and code.strip() for code in codes):
+        raise RuntimeError(
+            f"OpenF1 could not resolve every driver in round {round_num} standings: {codes}"
+        )
+    return [code.upper() for code in codes]
