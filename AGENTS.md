@@ -14,9 +14,6 @@ Fully automate a multiplayer F1 tipping competition. Players submit tips via Sur
 
 ```
 /
-├── .github/
-│   └── workflows/
-│       └── score.yml          # GitHub Actions pipeline
 ├── config/
 │   ├── .env                   # Local environment variables
 │   ├── .env.example           # Example environment variables
@@ -478,30 +475,27 @@ The following modules previously marked as TODO have been implemented:
 
 ---
 
-## GitHub Actions
+## Automations
 
-Workflow file: `.github/workflows/score.yml`
-
-Triggers:
-- **Scheduled** — a Codex automation runs at 9:00 Monday morning
+- **Post-race website** — a Codex automation runs at 9:00 Monday morning
   (Australia/Adelaide) and follows `.agents/skills/update-f1-website/SKILL.md`;
-  it makes no changes when no newly completed race is available
-- **Manual** — `workflow_dispatch` trigger for immediate runs from the GitHub UI
+  it makes no changes when no newly completed race is available.
+- **Pre-race optimiser** — a Codex automation runs at 9:00 Friday morning
+  (Australia/Adelaide) and follows
+  `.agents/skills/run-f1-optimiser/SKILL.md`; it makes no changes when there is
+  no race weekend and emails the verified self-contained analysis HTML through
+  the configured Gmail account.
 
-Steps:
-1. Fetch tips (`SurveyIndex` + `TipsParser`)
-2. Fetch session schedules (`ScheduleFetcher`, OpenF1)
-3. Fetch results (OpenF1)
-4. Score round
-5. Aggregate standings
-6. Build site
-7. Commit updated files and push
+There is no GitHub Actions workflow. The Monday automation commits and pushes
+validated leaderboard updates directly; the Friday optimiser never commits its
+generated analysis artifacts.
 
-### Secrets Required
-| Secret | Description |
+### Local credentials required
+
+| Credential | Purpose |
 |---|---|
-| `SURVEYMARS_ACCOUNT_ID` | OAuth account ID |
-| `SURVEYMARS_SECRET` | OAuth secret |
+| `SURVEYMARS_ACCOUNT_ID` / `SURVEYMARS_SECRET` | Survey and response access |
+| Betfair credentials configured outside the repository | Optional live Betfair odds source for the optimiser |
 
 ---
 

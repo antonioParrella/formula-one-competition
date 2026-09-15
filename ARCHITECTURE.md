@@ -65,9 +65,6 @@ If the points system changes or a bug is found in logic, you just **re-run the p
 
 ```
 /
-├── .github/
-│   └── workflows/
-│       └── score.yml          # GitHub Actions pipeline (scheduled + manual)
 ├── data/
 │   ├── raw/
 │   │   ├── tips/              # One JSON per race — write once, never modify
@@ -611,19 +608,21 @@ const DNF_TIPS = [...];
 
 ---
 
-## Automation & CI/CD
+## Automation
 
-### GitHub Actions (`.github/workflows/score.yml`)
+Codex runs two repository-owned skills on local schedules:
 
-```yaml
-Triggers:
-  - Scheduled (cron) — Sunday after race weekend
-  - Manual (workflow_dispatch) — run immediately from GitHub UI
+- Monday post-race publishing uses
+  `.agents/skills/update-f1-website/SKILL.md`. It checks for a newly completed
+  Grand Prix before running the scoring pipeline, then validates and pushes the
+  leaderboard update.
+- Friday pre-race analysis uses
+  `.agents/skills/run-f1-optimiser/SKILL.md`. It runs only for a current race
+  weekend, generates the self-contained optimiser HTML, and emails it through
+  the configured Gmail account.
 
-Steps:
-  1. python pipeline.py
-  2. git commit + push (scored files, standings, website)
-```
+The repository has no GitHub Actions workflow. The detailed procedures and
+their stopping conditions live in the skills above.
 
 ### Local Development
 
@@ -647,7 +646,7 @@ python -c "import sys; sys.path.insert(0, 'src'); from aggregator import Aggrega
 python -c "import sys; sys.path.insert(0, 'src'); from build_site import SiteBuilder; SiteBuilder().build_and_save()"
 ```
 
-### Required Secrets (for GitHub Actions)
+### Required local credentials
 
 | Secret | Description |
 |---|---|

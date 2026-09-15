@@ -308,9 +308,7 @@ Australia/Melbourne local time.
 │   └── overrides/         # Manual corrections
 ├── notebooks/             # Jupyter notebooks for exploration
 ├── tests/                 # Test files
-└── .github/
-    └── workflows/
-        └── score.yml      # GitHub Actions CI/CD pipeline
+└── .agents/skills/        # Repo-owned post-race and optimiser workflows
 ```
 
 Each module has a docstring at the top with usage examples. See `ARCHITECTURE.md` for detailed module documentation.
