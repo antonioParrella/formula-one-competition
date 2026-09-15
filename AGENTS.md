@@ -483,7 +483,9 @@ The following modules previously marked as TODO have been implemented:
 Workflow file: `.github/workflows/score.yml`
 
 Triggers:
-- **Scheduled** — Sunday night after each race weekend (adjust timing each season)
+- **Scheduled** — a Codex automation runs at 9:00 Monday morning
+  (Australia/Adelaide) and follows `.agents/skills/update-f1-website/SKILL.md`;
+  it makes no changes when no newly completed race is available
 - **Manual** — `workflow_dispatch` trigger for immediate runs from the GitHub UI
 
 Steps:

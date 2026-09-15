@@ -1,8 +1,8 @@
 name: Score Competition
 
 on:
-  schedule:
-    - cron: "0 22 * * 6"  # Saturday 10pm UTC (after race weekend)
+  # Scheduled post-race publishing is handled by the Codex automation using
+  # .agents/skills/update-f1-website/SKILL.md.
   workflow_dispatch:
 
 jobs:
