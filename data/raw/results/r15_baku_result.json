@@ -1,0 +1,40 @@
+{
+  "round": 15,
+  "race_name": "Baku",
+  "year": 2026,
+  "is_sprint_weekend": false,
+  "top10": [
+    "RUS",
+    "VER",
+    "HAD",
+    "LEC",
+    "ANT",
+    "HAM",
+    "LIN",
+    "OCO",
+    "BEA",
+    "SAI"
+  ],
+  "dnfs": [
+    "BOT",
+    "COL",
+    "GAS",
+    "NOR",
+    "ALB",
+    "ALO",
+    "STR"
+  ],
+  "sprint_top3": null,
+  "championship_top10_before_race": [
+    "ANT",
+    "RUS",
+    "HAM",
+    "NOR",
+    "LEC",
+    "VER",
+    "PIA",
+    "HAD",
+    "LAW",
+    "GAS"
+  ]
+}
