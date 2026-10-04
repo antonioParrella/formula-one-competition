@@ -1,0 +1,36 @@
+{
+  "round": 16,
+  "race_name": "Kuala Lumpur",
+  "year": 2026,
+  "is_sprint_weekend": false,
+  "top10": [
+    "VER",
+    "ANT",
+    "HAM",
+    "LEC",
+    "HAD",
+    "PIA",
+    "LAW",
+    "ALO",
+    "NOR",
+    "LIN"
+  ],
+  "dnfs": [
+    "RUS",
+    "ALB",
+    "BOT"
+  ],
+  "sprint_top3": null,
+  "championship_top10_before_race": [
+    "ANT",
+    "RUS",
+    "HAM",
+    "NOR",
+    "LEC",
+    "VER",
+    "PIA",
+    "HAD",
+    "LAW",
+    "GAS"
+  ]
+}

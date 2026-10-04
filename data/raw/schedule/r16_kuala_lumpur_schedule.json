@@ -1,0 +1,50 @@
+{
+  "round": 16,
+  "race_name": "Kuala Lumpur",
+  "year": 2026,
+  "meeting_key": 1308,
+  "is_sprint_weekend": false,
+  "fetched_at": "2026-10-05T09:04:05.613979",
+  "sessions": [
+    {
+      "session_name": "Practice 1",
+      "session_key": 11727,
+      "date_start": "2026-10-02T04:30:00+00:00",
+      "date_end": "2026-10-02T05:30:00+00:00",
+      "gmt_offset": "08:00:00",
+      "is_cancelled": false
+    },
+    {
+      "session_name": "Practice 2",
+      "session_key": 11728,
+      "date_start": "2026-10-02T08:00:00+00:00",
+      "date_end": "2026-10-02T09:00:00+00:00",
+      "gmt_offset": "08:00:00",
+      "is_cancelled": false
+    },
+    {
+      "session_name": "Practice 3",
+      "session_key": 11729,
+      "date_start": "2026-10-03T04:30:00+00:00",
+      "date_end": "2026-10-03T05:30:00+00:00",
+      "gmt_offset": "08:00:00",
+      "is_cancelled": false
+    },
+    {
+      "session_name": "Qualifying",
+      "session_key": 11730,
+      "date_start": "2026-10-03T08:00:00+00:00",
+      "date_end": "2026-10-03T09:00:00+00:00",
+      "gmt_offset": "08:00:00",
+      "is_cancelled": false
+    },
+    {
+      "session_name": "Race",
+      "session_key": 11731,
+      "date_start": "2026-10-04T07:00:00+00:00",
+      "date_end": "2026-10-04T09:00:00+00:00",
+      "gmt_offset": "08:00:00",
+      "is_cancelled": false
+    }
+  ]
+}
