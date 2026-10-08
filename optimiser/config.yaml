@@ -60,9 +60,9 @@ polymarket:
 
 devig:
   win_method: proportional      # proportional | power
-  # Top-N markets sum to N. Power keeps near-certain favourites pinned and
-  # removes the vig from the longshots, where it actually sits; proportional
-  # drags favourites below their win/top-6 prices.
+  # Remove top-N overround toward N. An underround can indicate missing
+  # priced runners, so it is left intact rather than inflating those quoted.
+  # Power removes excess mainly from longshots; proportional reduces all.
   topn_method: power            # power | proportional
 
 model:

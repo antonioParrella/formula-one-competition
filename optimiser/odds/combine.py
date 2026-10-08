@@ -27,6 +27,8 @@ from odds.devig import (
     _market_weight,
     devig_topn,
     devig_win,
+    has_traded_volume,
+    has_usable_h2h_volume,
     select_price,
 )
 from odds.snapshot import list_snapshots, load_snapshot, save_snapshot
@@ -54,7 +56,7 @@ def combine_snapshots(
         total_matched = 0.0
         for snap in snapshots:
             market = (snap.get("markets") or {}).get(key)
-            if not market:
+            if not market or not has_traded_volume(market):
                 continue
             odds = {code: p for code, runner in market.get("runners", {}).items()
                     if (p := select_price(runner)) is not None}
@@ -92,6 +94,8 @@ def combine_snapshots(
 
     for snap in snapshots:
         for entry in (snap.get("markets") or {}).get("h2h") or []:
+            if not has_usable_h2h_volume(entry):
+                continue
             markets["h2h"].append({
                 **entry,
                 "market_name": f"[{snap.get('source', '?')}] "
@@ -104,7 +108,8 @@ def combine_snapshots(
              ((s.get("markets") or {}).get("classified") or {}).get(side))
             for s in snapshots
         ]
-        offered = [(src, entry) for src, entry in offered if entry]
+        offered = [(src, entry) for src, entry in offered
+                   if entry and has_traded_volume(entry)]
         if not offered:
             continue
         offered.sort(key=lambda t: t[1].get("total_matched") or 0.0, reverse=True)

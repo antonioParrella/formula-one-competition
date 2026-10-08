@@ -1,0 +1,251 @@
+{
+  "race_name": "Singapore Grand Prix",
+  "source": "polymarket",
+  "markets": {
+    "h2h": [
+      {
+        "market_name": "Who will finish higher: Alonso or Stroll?",
+        "market_id": "f1-singapore-grand-prix-h2h-alonso-vs-stroll-2026-10-11",
+        "total_matched": 5.55555,
+        "runners": {
+          "ALO": {
+            "last_traded": 1.1111111111111112,
+            "back": null,
+            "lay": null
+          },
+          "STR": {
+            "last_traded": 10.000000000000002,
+            "back": null,
+            "lay": null
+          }
+        }
+      }
+    ],
+    "classified": {},
+    "win": {
+      "market_name": "Singapore Grand Prix: Driver Winner",
+      "market_id": "f1-singapore-grand-prix-winner-2026-10-11",
+      "total_matched": 24937.762389,
+      "runners": {
+        "GAS": {
+          "last_traded": null,
+          "back": 38.46153846153846,
+          "lay": 1000.0
+        },
+        "ALO": {
+          "last_traded": null,
+          "back": 111.11111111111111,
+          "lay": 1000.0
+        },
+        "ALB": {
+          "last_traded": null,
+          "back": 111.11111111111111,
+          "lay": 1000.0
+        },
+        "BOR": {
+          "last_traded": null,
+          "back": 111.11111111111111,
+          "lay": 1000.0
+        },
+        "LEC": {
+          "last_traded": 6.666666666666667,
+          "back": 8.333333333333334,
+          "lay": 9.090909090909092
+        },
+        "OCO": {
+          "last_traded": null,
+          "back": 111.11111111111111,
+          "lay": 1000.0
+        },
+        "NOR": {
+          "last_traded": 6.666666666666667,
+          "back": 7.692307692307692,
+          "lay": 8.333333333333334
+        },
+        "ANT": {
+          "last_traded": 4.166666666666667,
+          "back": 4.166666666666667,
+          "lay": 4.3478260869565215
+        },
+        "VER": {
+          "last_traded": 3.3333333333333335,
+          "back": 3.4482758620689657,
+          "lay": 3.571428571428571
+        },
+        "COL": {
+          "last_traded": null,
+          "back": 71.42857142857143,
+          "lay": 1000.0
+        },
+        "SAI": {
+          "last_traded": null,
+          "back": 111.11111111111111,
+          "lay": 1000.0
+        },
+        "HUL": {
+          "last_traded": null,
+          "back": 111.11111111111111,
+          "lay": 1000.0
+        },
+        "BOT": {
+          "last_traded": null,
+          "back": 125.0,
+          "lay": 1000.0
+        },
+        "HAM": {
+          "last_traded": 6.666666666666667,
+          "back": 7.692307692307692,
+          "lay": 8.333333333333334
+        },
+        "BEA": {
+          "last_traded": null,
+          "back": 111.11111111111111,
+          "lay": 1000.0
+        },
+        "PIA": {
+          "last_traded": 20.833333333333332,
+          "back": 21.27659574468085,
+          "lay": 22.22222222222222
+        },
+        "RUS": {
+          "last_traded": 37.03703703703704,
+          "back": 35.714285714285715,
+          "lay": 37.03703703703704
+        },
+        "LIN": {
+          "last_traded": null,
+          "back": 40.0,
+          "lay": 1000.0
+        },
+        "HAD": {
+          "last_traded": 18.867924528301888,
+          "back": 22.22222222222222,
+          "lay": 45.45454545454546
+        },
+        "LAW": {
+          "last_traded": null,
+          "back": 40.0,
+          "lay": 1000.0
+        },
+        "STR": {
+          "last_traded": null,
+          "back": 125.0,
+          "lay": 1000.0
+        }
+      }
+    },
+    "top3": {
+      "market_name": "Singapore Grand Prix: Driver Podium Finish",
+      "market_id": "f1-singapore-grand-prix-driver-podium-2026-10-11",
+      "total_matched": 5396.1488309999995,
+      "runners": {
+        "GAS": {
+          "last_traded": null,
+          "back": 50.0,
+          "lay": 1000.0
+        },
+        "ALO": {
+          "last_traded": null,
+          "back": 50.0,
+          "lay": 1000.0
+        },
+        "ALB": {
+          "last_traded": null,
+          "back": 100.0,
+          "lay": 1000.0
+        },
+        "BOR": {
+          "last_traded": null,
+          "back": 100.0,
+          "lay": 1000.0
+        },
+        "PER": {
+          "last_traded": null,
+          "back": 100.0,
+          "lay": 1000.0
+        },
+        "LEC": {
+          "last_traded": null,
+          "back": 2.2222222222222223,
+          "lay": 2.3255813953488373
+        },
+        "OCO": {
+          "last_traded": null,
+          "back": 100.0,
+          "lay": 1000.0
+        },
+        "NOR": {
+          "last_traded": 2.0,
+          "back": 2.380952380952381,
+          "lay": 2.4390243902439024
+        },
+        "ANT": {
+          "last_traded": 1.639344262295082,
+          "back": 1.7241379310344829,
+          "lay": 1.8181818181818181
+        },
+        "VER": {
+          "last_traded": 1.5625,
+          "back": 1.5625,
+          "lay": 1.5873015873015872
+        },
+        "COL": {
+          "last_traded": null,
+          "back": 50.0,
+          "lay": 1000.0
+        },
+        "SAI": {
+          "last_traded": null,
+          "back": 100.0,
+          "lay": 1000.0
+        },
+        "HUL": {
+          "last_traded": null,
+          "back": 50.0,
+          "lay": 1000.0
+        },
+        "BOT": {
+          "last_traded": null,
+          "back": 100.0,
+          "lay": 1000.0
+        },
+        "HAM": {
+          "last_traded": null,
+          "back": 2.272727272727273,
+          "lay": 2.857142857142857
+        },
+        "BEA": {
+          "last_traded": null,
+          "back": 50.0,
+          "lay": 1000.0
+        },
+        "PIA": {
+          "last_traded": 4.0,
+          "back": 4.0,
+          "lay": 4.3478260869565215
+        },
+        "RUS": {
+          "last_traded": 7.142857142857142,
+          "back": 8.333333333333334,
+          "lay": 12.5
+        },
+        "LIN": {
+          "last_traded": null,
+          "back": 50.0,
+          "lay": 1000.0
+        },
+        "HAD": {
+          "last_traded": 2.564102564102564,
+          "back": 3.846153846153846,
+          "lay": 4.545454545454546
+        },
+        "LAW": {
+          "last_traded": null,
+          "back": 50.0,
+          "lay": 1000.0
+        }
+      }
+    }
+  },
+  "fetched_at": "2026-10-07T22:34:47.359187+00:00"
+}

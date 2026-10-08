@@ -37,7 +37,7 @@ def test_power_equal_odds_is_uniform():
 
 @pytest.mark.parametrize("method", ["power", "proportional"])
 def test_topn_sums_to_n(method):
-    odds = {c: o for c, o in zip("ABCDEF", [1.3, 1.5, 2.0, 3.0, 5.0, 9.0])}
+    odds = {c: o for c, o in zip("ABCDEF", [1.1, 1.2, 1.4, 2.0, 3.0, 5.0])}
     probs = devig_topn(odds, 3, method)
     assert sum(probs.values()) == pytest.approx(3.0)
     assert all(0 < p <= PROB_CAP for p in probs.values())
@@ -64,6 +64,13 @@ def test_topn_with_exactly_n_runners_raises():
         devig_topn({"A": 1.05, "B": 1.10, "C": 1.20}, 3)
 
 
+def test_incomplete_topn_does_not_inflate_priced_runners():
+    odds = {"A": 1.2, "B": 1.5, "C": 3.0, "D": 10.0}
+    assert sum(1 / price for price in odds.values()) < 3
+    probs = devig_topn(odds, 3)
+    assert probs == pytest.approx({c: 1 / price for c, price in odds.items()})
+
+
 def test_devig_snapshot_skips_topn_with_exactly_n_runners(capsys):
     snapshot = {
         "race_name": "Test",
@@ -79,13 +86,11 @@ def test_devig_snapshot_skips_topn_with_exactly_n_runners(capsys):
     assert "only 3 priced runners" in capsys.readouterr().out
 
 
-def test_topn_proportional_caps_favourites_at_one():
-    # Scaling up would push the 1.01 shots above certainty.
+def test_topn_proportional_does_not_inflate_underround():
+    # An incomplete market must retain its missing probability mass.
     odds = {"A": 1.01, "B": 1.01, "C": 1.2, "D": 15.0, "E": 40.0, "F": 60.0}
     probs = devig_topn(odds, 3, "proportional")
-    assert sum(probs.values()) == pytest.approx(3.0)
-    assert probs["A"] == pytest.approx(PROB_CAP)
-    assert max(probs.values()) <= PROB_CAP
+    assert probs == pytest.approx({c: 1 / price for c, price in odds.items()})
 
 
 def test_h2h():
@@ -94,11 +99,31 @@ def test_h2h():
     assert p == pytest.approx((1 / 1.8) / (1 / 1.8 + 1 / 2.1))
 
 
-def test_select_price_prefers_last_traded_then_midpoint():
+def test_select_price_prefers_trade_or_tight_two_sided_book():
     assert select_price({"last_traded": 3.0, "back": 2.8, "lay": 3.4}) == 3.0
+    assert select_price({"last_traded": 1.7, "back": 1.62, "lay": 1.67}) == pytest.approx(1.645)
+    assert select_price({"last_traded": 2.0, "back": 2.2, "lay": 4.3}) is None
     assert select_price({"last_traded": None, "back": 2.8, "lay": 3.4}) == pytest.approx(3.1)
-    assert select_price({"last_traded": None, "back": 2.8, "lay": None}) == 2.8
+    assert select_price({"last_traded": None, "back": 2.8, "lay": None}) is None
+    assert select_price({"last_traded": None, "back": 1.01, "lay": None}) is None
+    assert select_price({"last_traded": None, "back": 1.55, "lay": 10.0}) is None
     assert select_price({"last_traded": None, "back": None, "lay": None}) is None
+
+
+def test_zero_volume_classified_market_cannot_override_season_prior():
+    snapshot = {
+        "race_name": "Test",
+        "markets": {
+            "win": {"market_name": "Winner", "total_matched": 10,
+                    "runners": {"AAA": {"last_traded": 2.0},
+                                "BBB": {"last_traded": 2.0}}},
+            "classified": {"yes": {"market_name": "Yes To be Classified",
+                                   "total_matched": 0,
+                                   "runners": {"AAA": {"back": 1.08,
+                                                       "lay": 1.3}}}},
+        },
+    }
+    assert devig_snapshot(snapshot)["dnf"] == {}
 
 
 def test_classified_two_way_normalises():

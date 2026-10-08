@@ -109,7 +109,7 @@ optimiser/
   5. Driver head-to-head matchups (search event for `v` in market names)
   6. `Yes To be Classified` / `No To be Classified` (driver-runner markets) — de-vigged into per-driver DNF probabilities
 - Use `listMarketCatalogue` filtered on eventTypeId `27` (Motor Sport) to discover markets for the race weekend, then `listMarketBook` with `EX_BEST_OFFERS` for prices.
-- Use **last traded price** where liquidity exists, else back/lay midpoint. Record both in the snapshot.
+- Use a **last traded price**, or a tight two-sided back/lay midpoint when no trade exists. If the last trade sits outside a current two-sided book, use its midpoint only when tight. Reject a lone untraded quote, a wide untraded spread, and any market with explicitly zero matched volume. Record available quotes in the snapshot for audit.
 - Cache every fetch to `data/` with a timestamp before doing anything else. All downstream steps read from snapshots, never live — makes runs reproducible and avoids hammering the API.
 - Rate limits are generous but don't poll; a snapshot per session is enough.
 
@@ -125,7 +125,7 @@ optimiser/
 ## Combining Sources
 
 - `odds/combine.py` merges the latest snapshot per source into a snapshot with `source: "combined"`. Per structural market: **de-vig each source separately first** (each has its own overround), then average per-driver probabilities weighted by `_market_weight(total_matched)`, and write back as decimal odds. Re-devigging the combined market downstream is a near no-op, so fit/validate/optimise are untouched.
-- H2H markets are concatenated (tagged `[source]` in the market name) — same pair from two sources is two independent fit targets, each at its own liquidity weight. Classified sides merge per driver, most liquid source first.
+- H2H markets with at least 100 matched currency units/contracts are concatenated (tagged `[source]` in the market name) — same pair from two sources is two independent fit targets, each at its own liquidity weight. Manual markets with unknown volume remain usable. Classified sides merge per driver, most liquid source first.
 - `python main.py fetch --source all` fetches every source in `sources.enabled` (failures warn and continue), then saves a combined snapshot if ≥ 2 succeeded — being newest, it is what `fit` picks up. `python main.py combine` re-combines the latest archived snapshot per source (respects `--allow-stale`).
 - Don't combine snapshots fetched far apart in time — odds move with news; `combine` reports each input's age.
 
@@ -133,7 +133,7 @@ optimiser/
 
 - Exchange midpoints have low overround but still normalise.
 - Win market: power method or simple proportional normalisation (configurable, default proportional).
-- Top-N markets: probabilities must sum to N (e.g. Top 10 probs sum to 10). Normalise accordingly.
+- Top-N markets: remove overround when priced probabilities sum above N. If the priced runners sum below N, retain those probabilities; missing runners can carry the remaining mass.
 - H2H markets: two-outcome, normalise to 1.
 
 ## Model

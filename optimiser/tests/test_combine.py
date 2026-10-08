@@ -43,8 +43,24 @@ def test_combine_keeps_drivers_priced_by_one_source_only():
     assert set(runners) == {"VER", "NOR", "PIA"}
 
 
+def test_combine_rejects_untraded_one_sided_winner_and_zero_volume_classified():
+    traded = _snap("betfair", {
+        "win": {**_market({"VER": 2.0, "NOR": 2.0}, 1000),
+                "runners": {
+                    "VER": {"last_traded": 2.0},
+                    "NOR": {"last_traded": 2.0},
+                    "OCO": {"last_traded": None, "back": 1.01, "lay": None},
+                }},
+        "classified": {"yes": _market({"VER": 1.08}, 0)},
+    })
+    other = _snap("kalshi", {"win": _market({"VER": 2.0, "NOR": 2.0}, 1000)})
+    combined = combine_snapshots([traded, other])
+    assert "OCO" not in combined["markets"]["win"]["runners"]
+    assert combined["markets"]["classified"] == {}
+
+
 def test_combine_concatenates_h2h_with_source_tags():
-    h2h = [{"market_name": "VER v NOR", "market_id": None, "total_matched": 10,
+    h2h = [{"market_name": "VER v NOR", "market_id": None, "total_matched": 1000,
             "runners": {"VER": {"last_traded": 1.8, "back": None, "lay": None},
                         "NOR": {"last_traded": 2.1, "back": None, "lay": None}}}]
     a = _snap("betfair",
@@ -54,6 +70,16 @@ def test_combine_concatenates_h2h_with_source_tags():
     combined = combine_snapshots([a, b])
     assert len(combined["markets"]["h2h"]) == 2
     assert combined["markets"]["h2h"][0]["market_name"] == "[betfair] VER v NOR"
+
+
+def test_combine_skips_micro_volume_h2h():
+    h2h = {"market_name": "ALO v STR", "total_matched": 5.56,
+           "runners": {"ALO": {"last_traded": 1.11},
+                       "STR": {"last_traded": 10.0}}}
+    a = _snap("betfair", {"win": _market({"VER": 2.0, "NOR": 2.0}, 1000)})
+    b = _snap("polymarket", {"win": _market({"VER": 2.0, "NOR": 2.0}, 1000),
+                              "h2h": [h2h]})
+    assert combine_snapshots([a, b])["markets"]["h2h"] == []
 
 
 def test_combine_merges_classified_most_liquid_first():
@@ -109,6 +135,7 @@ def test_devig_snapshot_accepts_top5_and_skips_short_topn(capsys):
     })
     out = devig_snapshot(snapshot)
     assert 5 in out["topk"]
-    assert sum(out["topk"][5].values()) == pytest.approx(5.0)
+    assert sum(out["topk"][5].values()) == pytest.approx(
+        sum(1 / price for price in (1.1, 1.2, 1.5, 2.0, 2.5, 3.0)))
     assert 10 not in out["topk"]
     assert "top10 market has only 2 priced runners" in capsys.readouterr().out

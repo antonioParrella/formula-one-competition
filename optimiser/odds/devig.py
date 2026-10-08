@@ -3,7 +3,8 @@
 Turns raw exchange odds into implied probabilities:
 
 - win market: proportional normalisation (default) or the power method
-- top-N markets: probabilities must sum to N, proportional with a cap at 1
+- top-N markets: remove overround only; leave missing probability mass in
+  incomplete books instead of inflating every priced runner
 - H2H markets: two outcomes, normalise to 1
 - "To Be Classified" Yes/No markets: two outcomes, normalise to 1;
   1 - P(classified) is the driver's DNF probability
@@ -17,6 +18,8 @@ import math
 from scipy.optimize import brentq
 
 PROB_CAP = 0.999  # no market outcome is treated as certain
+MAX_UNTRADED_SPREAD = 0.15  # probability points, matching prediction-market books
+MIN_H2H_MATCHED = 100.0  # a handful of matched contracts cannot anchor a fit
 
 # Structural market key -> top-k it informs. top5 is Kalshi's ladder
 # step (KXF1TOP5); Betfair prices top6 instead — the fit uses whichever
@@ -25,18 +28,38 @@ TOPK_BY_MARKET = {"win": 1, "top3": 3, "top5": 5, "top6": 6, "top10": 10}
 
 
 def select_price(runner: dict) -> float | None:
-    """Best available price for a runner: last traded where liquidity
-    exists, else back/lay midpoint, else whichever side is quoted."""
+    """Use a trade, or a reasonably tight two-sided book without one.
+
+    A lone resting order is not evidence of a fair price. In particular,
+    untraded Betfair longshots can have a 1.01 back offer with no lay, which
+    must not be read as a near-certain winner.
+    """
     last = runner.get("last_traded")
-    if last and last > 1.0:
-        return float(last)
     back, lay = runner.get("back"), runner.get("lay")
-    if back and lay:
+    two_sided = bool(back and lay and back > 1.0 and lay > 1.0)
+    tight = (two_sided and
+             abs(1.0 / back - 1.0 / lay) <= MAX_UNTRADED_SPREAD)
+    if last and last > 1.0:
+        # A trade outside the current bid/ask range is stale relative to
+        # the available book. Use that book if tight, else omit the runner.
+        if two_sided and not back <= last <= lay:
+            return (float(back) + float(lay)) / 2 if tight else None
+        return float(last)
+    if tight:
         return (float(back) + float(lay)) / 2
-    for side in (back, lay):
-        if side and side > 1.0:
-            return float(side)
     return None
+
+
+def has_traded_volume(market: dict) -> bool:
+    """Unknown volume is allowed for manual inputs; explicit zero is not."""
+    matched = market.get("total_matched")
+    return matched is None or matched > 0
+
+
+def has_usable_h2h_volume(market: dict) -> bool:
+    """Keep manual H2H odds; reject known micro-volume market trades."""
+    matched = market.get("total_matched")
+    return matched is None or matched >= MIN_H2H_MATCHED
 
 
 def implied(odds: dict[str, float]) -> dict[str, float]:
@@ -75,7 +98,7 @@ def _devig_power(q: dict[str, float]) -> dict[str, float]:
 
 
 def devig_topn(odds: dict[str, float], n: int, method: str = "power") -> dict[str, float]:
-    """De-vig a top-N market so probabilities sum to N.
+    """Remove top-N overround without inventing missing probability mass.
 
     Default is the power method (p_i = q_i^k, k solving the sum): top-N
     overround sits almost entirely in the longshots, and proportional
@@ -90,6 +113,10 @@ def devig_topn(odds: dict[str, float], n: int, method: str = "power") -> dict[st
         raise ValueError(
             f"Top-{n} market has only {len(q)} priced runners (needs > {n})"
         )
+    # A short book can be missing several runners. Scaling its observed
+    # probabilities up to N falsely treats every missing runner as a zero.
+    if sum(q.values()) <= n:
+        return q
 
     if method == "power":
         probs = [min(p, PROB_CAP) for p in q.values()]
@@ -187,7 +214,7 @@ def devig_snapshot(
 
     for key, k in TOPK_BY_MARKET.items():
         market = markets.get(key)
-        if not market:
+        if not market or not has_traded_volume(market):
             continue
         odds = {
             code: price
@@ -211,6 +238,8 @@ def devig_snapshot(
 
     h2h: list[tuple[tuple[str, str], float, float]] = []
     for market in markets.get("h2h", []):
+        if not has_usable_h2h_volume(market):
+            continue
         runners = market.get("runners", {})
         if len(runners) != 2:
             continue
@@ -227,9 +256,11 @@ def devig_snapshot(
     # listed) No side. Per driver this is a binary event — two-way de-vig
     # when both sides are priced, raw implied probability otherwise.
     classified = markets.get("classified") or {}
-    yes_runners = (classified.get("yes") or {}).get("runners", {})
-    no_runners = (classified.get("no") or {}).get("runners", {})
-    cls_weight = _market_weight((classified.get("yes") or {}).get("total_matched"))
+    yes_market = classified.get("yes") or {}
+    no_market = classified.get("no") or {}
+    yes_runners = yes_market.get("runners", {}) if has_traded_volume(yes_market) else {}
+    no_runners = no_market.get("runners", {}) if has_traded_volume(no_market) else {}
+    cls_weight = _market_weight(yes_market.get("total_matched"))
     dnf: dict[str, float] = {}
     dnf_weights: dict[str, float] = {}
     for code in set(yes_runners) | set(no_runners):
@@ -241,7 +272,8 @@ def devig_snapshot(
             dnf[code] = 1.0 - p_classified
             dnf_weights[code] = cls_weight
     if dnf:
-        sides = "+".join(s for s in ("yes", "no") if classified.get(s))
+        sides = "+".join(s for s, runners in (("yes", yes_runners),
+                                               ("no", no_runners)) if runners)
         used.append(f"classified({sides}): {len(dnf)} drivers")
 
     if 1 not in topk:
