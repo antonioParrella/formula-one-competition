@@ -1,0 +1,50 @@
+{
+  "round": 17,
+  "race_name": "Singapore",
+  "year": 2026,
+  "meeting_key": 1296,
+  "is_sprint_weekend": true,
+  "fetched_at": "2026-10-12T01:07:59.763205",
+  "sessions": [
+    {
+      "session_name": "Practice 1",
+      "session_key": 11378,
+      "date_start": "2026-10-09T08:30:00+00:00",
+      "date_end": "2026-10-09T09:30:00+00:00",
+      "gmt_offset": "08:00:00",
+      "is_cancelled": false
+    },
+    {
+      "session_name": "Sprint Qualifying",
+      "session_key": 11379,
+      "date_start": "2026-10-09T12:30:00+00:00",
+      "date_end": "2026-10-09T13:14:00+00:00",
+      "gmt_offset": "08:00:00",
+      "is_cancelled": false
+    },
+    {
+      "session_name": "Sprint",
+      "session_key": 11383,
+      "date_start": "2026-10-10T09:00:00+00:00",
+      "date_end": "2026-10-10T09:30:00+00:00",
+      "gmt_offset": "08:00:00",
+      "is_cancelled": false
+    },
+    {
+      "session_name": "Qualifying",
+      "session_key": 11384,
+      "date_start": "2026-10-10T13:00:00+00:00",
+      "date_end": "2026-10-10T14:00:00+00:00",
+      "gmt_offset": "08:00:00",
+      "is_cancelled": false
+    },
+    {
+      "session_name": "Race",
+      "session_key": 11388,
+      "date_start": "2026-10-11T12:00:00+00:00",
+      "date_end": "2026-10-11T14:00:00+00:00",
+      "gmt_offset": "08:00:00",
+      "is_cancelled": false
+    }
+  ]
+}

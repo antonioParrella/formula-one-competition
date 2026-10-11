@@ -1,0 +1,41 @@
+{
+  "round": 17,
+  "race_name": "Singapore",
+  "year": 2026,
+  "is_sprint_weekend": true,
+  "top10": [
+    "VER",
+    "LEC",
+    "ANT",
+    "NOR",
+    "PIA",
+    "HAM",
+    "LAW",
+    "HUL",
+    "RUS",
+    "HAD"
+  ],
+  "dnfs": [
+    "ALB",
+    "STR",
+    "COL",
+    "BOR"
+  ],
+  "sprint_top3": [
+    "VER",
+    "HAM",
+    "LEC"
+  ],
+  "championship_top10_before_race": [
+    "ANT",
+    "RUS",
+    "HAM",
+    "LEC",
+    "NOR",
+    "VER",
+    "PIA",
+    "HAD",
+    "LAW",
+    "GAS"
+  ]
+}
