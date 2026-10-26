@@ -1,0 +1,36 @@
+{
+  "round": 18,
+  "race_name": "Austin",
+  "year": 2026,
+  "is_sprint_weekend": false,
+  "top10": [
+    "ANT",
+    "LEC",
+    "VER",
+    "HAM",
+    "NOR",
+    "HAD",
+    "PIA",
+    "RUS",
+    "LAW",
+    "GAS"
+  ],
+  "dnfs": [
+    "BOT",
+    "COL",
+    "BEA"
+  ],
+  "sprint_top3": null,
+  "championship_top10_before_race": [
+    "ANT",
+    "RUS",
+    "HAM",
+    "VER",
+    "LEC",
+    "NOR",
+    "PIA",
+    "HAD",
+    "LAW",
+    "GAS"
+  ]
+}

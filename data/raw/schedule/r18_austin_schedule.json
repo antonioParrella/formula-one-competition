@@ -1,0 +1,50 @@
+{
+  "round": 18,
+  "race_name": "Austin",
+  "year": 2026,
+  "meeting_key": 1297,
+  "is_sprint_weekend": false,
+  "fetched_at": "2026-10-27T10:08:01.959777",
+  "sessions": [
+    {
+      "session_name": "Practice 1",
+      "session_key": 11389,
+      "date_start": "2026-10-23T17:30:00+00:00",
+      "date_end": "2026-10-23T18:30:00+00:00",
+      "gmt_offset": "-05:00:00",
+      "is_cancelled": false
+    },
+    {
+      "session_name": "Practice 2",
+      "session_key": 11390,
+      "date_start": "2026-10-23T21:00:00+00:00",
+      "date_end": "2026-10-23T22:00:00+00:00",
+      "gmt_offset": "-05:00:00",
+      "is_cancelled": false
+    },
+    {
+      "session_name": "Practice 3",
+      "session_key": 11391,
+      "date_start": "2026-10-24T17:30:00+00:00",
+      "date_end": "2026-10-24T18:30:00+00:00",
+      "gmt_offset": "-05:00:00",
+      "is_cancelled": false
+    },
+    {
+      "session_name": "Qualifying",
+      "session_key": 11392,
+      "date_start": "2026-10-24T21:00:00+00:00",
+      "date_end": "2026-10-24T22:00:00+00:00",
+      "gmt_offset": "-05:00:00",
+      "is_cancelled": false
+    },
+    {
+      "session_name": "Race",
+      "session_key": 11396,
+      "date_start": "2026-10-25T20:00:00+00:00",
+      "date_end": "2026-10-25T22:00:00+00:00",
+      "gmt_offset": "-05:00:00",
+      "is_cancelled": false
+    }
+  ]
+}
