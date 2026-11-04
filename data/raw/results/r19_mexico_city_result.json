@@ -1,0 +1,38 @@
+{
+  "round": 19,
+  "race_name": "Mexico City",
+  "year": 2026,
+  "is_sprint_weekend": false,
+  "top10": [
+    "VER",
+    "HAM",
+    "ANT",
+    "LEC",
+    "NOR",
+    "RUS",
+    "LAW",
+    "BOR",
+    "HAD",
+    "HIR"
+  ],
+  "dnfs": [
+    "LIN",
+    "BEA",
+    "BOT",
+    "STR",
+    "ALO"
+  ],
+  "sprint_top3": null,
+  "championship_top10_before_race": [
+    "ANT",
+    "RUS",
+    "HAM",
+    "VER",
+    "LEC",
+    "NOR",
+    "PIA",
+    "HAD",
+    "LAW",
+    "GAS"
+  ]
+}
