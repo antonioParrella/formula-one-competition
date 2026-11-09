@@ -1,0 +1,34 @@
+{
+  "round": 20,
+  "race_name": "Interlagos",
+  "year": 2026,
+  "is_sprint_weekend": false,
+  "top10": [
+    "NOR",
+    "VER",
+    "HAD",
+    "RUS",
+    "ANT",
+    "PIA",
+    "LAW",
+    "LEC",
+    "HAM",
+    "HUL"
+  ],
+  "dnfs": [
+    "STR"
+  ],
+  "sprint_top3": null,
+  "championship_top10_before_race": [
+    "ANT",
+    "VER",
+    "HAM",
+    "RUS",
+    "LEC",
+    "NOR",
+    "PIA",
+    "HAD",
+    "LAW",
+    "GAS"
+  ]
+}
