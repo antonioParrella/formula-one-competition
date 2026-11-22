@@ -1,0 +1,50 @@
+{
+  "round": 21,
+  "race_name": "Las Vegas",
+  "year": 2026,
+  "meeting_key": 1300,
+  "is_sprint_weekend": false,
+  "fetched_at": "2026-11-23T08:58:34.438508",
+  "sessions": [
+    {
+      "session_name": "Practice 1",
+      "session_key": 11413,
+      "date_start": "2026-11-20T00:30:00+00:00",
+      "date_end": "2026-11-20T01:30:00+00:00",
+      "gmt_offset": "-08:00:00",
+      "is_cancelled": false
+    },
+    {
+      "session_name": "Practice 2",
+      "session_key": 11414,
+      "date_start": "2026-11-20T04:00:00+00:00",
+      "date_end": "2026-11-20T05:00:00+00:00",
+      "gmt_offset": "-08:00:00",
+      "is_cancelled": false
+    },
+    {
+      "session_name": "Practice 3",
+      "session_key": 11415,
+      "date_start": "2026-11-21T00:30:00+00:00",
+      "date_end": "2026-11-21T01:30:00+00:00",
+      "gmt_offset": "-08:00:00",
+      "is_cancelled": false
+    },
+    {
+      "session_name": "Qualifying",
+      "session_key": 11416,
+      "date_start": "2026-11-21T04:00:00+00:00",
+      "date_end": "2026-11-21T05:00:00+00:00",
+      "gmt_offset": "-08:00:00",
+      "is_cancelled": false
+    },
+    {
+      "session_name": "Race",
+      "session_key": 11420,
+      "date_start": "2026-11-22T04:00:00+00:00",
+      "date_end": "2026-11-22T06:00:00+00:00",
+      "gmt_offset": "-08:00:00",
+      "is_cancelled": false
+    }
+  ]
+}

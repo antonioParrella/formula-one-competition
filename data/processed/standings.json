@@ -3,9 +3,9 @@
     {
       "name": "Antonio",
       "rank": 1,
-      "games_played": 20,
-      "points": 470,
-      "lastRace": 28,
+      "games_played": 21,
+      "points": 487,
+      "lastRace": 17,
       "bestRound": 42,
       "roundScores": {
         "1": {
@@ -87,15 +87,19 @@
         "20": {
           "race": "Brazil",
           "points": 28
+        },
+        "21": {
+          "race": "Las Vegas",
+          "points": 17
         }
       }
     },
     {
       "name": "Luca",
       "rank": 2,
-      "games_played": 20,
-      "points": 436,
-      "lastRace": 15,
+      "games_played": 21,
+      "points": 449,
+      "lastRace": 13,
       "bestRound": 59,
       "roundScores": {
         "1": {
@@ -177,15 +181,19 @@
         "20": {
           "race": "Brazil",
           "points": 15
+        },
+        "21": {
+          "race": "Las Vegas",
+          "points": 13
         }
       }
     },
     {
       "name": "Rino",
       "rank": 3,
-      "games_played": 19,
-      "points": 427,
-      "lastRace": 13,
+      "games_played": 20,
+      "points": 441,
+      "lastRace": 14,
       "bestRound": 54,
       "roundScores": {
         "1": {
@@ -263,105 +271,19 @@
         "20": {
           "race": "Brazil",
           "points": 13
-        }
-      }
-    },
-    {
-      "name": "Jake",
-      "rank": 4,
-      "games_played": 20,
-      "points": 422,
-      "lastRace": 5,
-      "bestRound": 46,
-      "roundScores": {
-        "1": {
-          "race": "Melbourne",
-          "points": 19
         },
-        "2": {
-          "race": "China",
-          "points": 46
-        },
-        "3": {
-          "race": "Japan",
-          "points": 19
-        },
-        "4": {
-          "race": "Miami",
-          "points": 36
-        },
-        "5": {
-          "race": "Canada",
-          "points": 22
-        },
-        "6": {
-          "race": "Monaco",
-          "points": 15
-        },
-        "7": {
-          "race": "Barcelona",
-          "points": 23
-        },
-        "8": {
-          "race": "Austria",
-          "points": 19
-        },
-        "9": {
-          "race": "Silverstone",
-          "points": 24
-        },
-        "10": {
-          "race": "Belgium",
-          "points": 9
-        },
-        "11": {
-          "race": "Hungarian",
-          "points": 26
-        },
-        "12": {
-          "race": "Dutch",
-          "points": 24
-        },
-        "13": {
-          "race": "Italian",
-          "points": 30
-        },
-        "14": {
-          "race": "Madrid",
-          "points": 16
-        },
-        "15": {
-          "race": "Azerbaijan",
-          "points": 13
-        },
-        "16": {
-          "race": "Bahrain",
-          "points": 24
-        },
-        "17": {
-          "race": "Singapore",
-          "points": 17
-        },
-        "18": {
-          "race": "US",
-          "points": 25
-        },
-        "19": {
-          "race": "Mexico",
-          "points": 10
-        },
-        "20": {
-          "race": "Brazil",
-          "points": 5
+        "21": {
+          "race": "Las Vegas",
+          "points": 14
         }
       }
     },
     {
       "name": "Josh",
-      "rank": 5,
-      "games_played": 20,
-      "points": 420,
-      "lastRace": 17,
+      "rank": 4,
+      "games_played": 21,
+      "points": 435,
+      "lastRace": 15,
       "bestRound": 40,
       "roundScores": {
         "1": {
@@ -443,15 +365,113 @@
         "20": {
           "race": "Brazil",
           "points": 17
+        },
+        "21": {
+          "race": "Las Vegas",
+          "points": 15
+        }
+      }
+    },
+    {
+      "name": "Jake",
+      "rank": 5,
+      "games_played": 21,
+      "points": 433,
+      "lastRace": 11,
+      "bestRound": 46,
+      "roundScores": {
+        "1": {
+          "race": "Melbourne",
+          "points": 19
+        },
+        "2": {
+          "race": "China",
+          "points": 46
+        },
+        "3": {
+          "race": "Japan",
+          "points": 19
+        },
+        "4": {
+          "race": "Miami",
+          "points": 36
+        },
+        "5": {
+          "race": "Canada",
+          "points": 22
+        },
+        "6": {
+          "race": "Monaco",
+          "points": 15
+        },
+        "7": {
+          "race": "Barcelona",
+          "points": 23
+        },
+        "8": {
+          "race": "Austria",
+          "points": 19
+        },
+        "9": {
+          "race": "Silverstone",
+          "points": 24
+        },
+        "10": {
+          "race": "Belgium",
+          "points": 9
+        },
+        "11": {
+          "race": "Hungarian",
+          "points": 26
+        },
+        "12": {
+          "race": "Dutch",
+          "points": 24
+        },
+        "13": {
+          "race": "Italian",
+          "points": 30
+        },
+        "14": {
+          "race": "Madrid",
+          "points": 16
+        },
+        "15": {
+          "race": "Azerbaijan",
+          "points": 13
+        },
+        "16": {
+          "race": "Bahrain",
+          "points": 24
+        },
+        "17": {
+          "race": "Singapore",
+          "points": 17
+        },
+        "18": {
+          "race": "US",
+          "points": 25
+        },
+        "19": {
+          "race": "Mexico",
+          "points": 10
+        },
+        "20": {
+          "race": "Brazil",
+          "points": 5
+        },
+        "21": {
+          "race": "Las Vegas",
+          "points": 11
         }
       }
     },
     {
       "name": "Dean",
       "rank": 6,
-      "games_played": 18,
-      "points": 359,
-      "lastRace": 8,
+      "games_played": 19,
+      "points": 370,
+      "lastRace": 11,
       "bestRound": 58,
       "roundScores": {
         "1": {
@@ -525,105 +545,19 @@
         "19": {
           "race": "Mexico",
           "points": 8
-        }
-      }
-    },
-    {
-      "name": "Barry",
-      "rank": 7,
-      "games_played": 20,
-      "points": 351,
-      "lastRace": 15,
-      "bestRound": 47,
-      "roundScores": {
-        "1": {
-          "race": "Melbourne",
-          "points": 7
         },
-        "2": {
-          "race": "China",
-          "points": 47
-        },
-        "3": {
-          "race": "Japan",
+        "21": {
+          "race": "Las Vegas",
           "points": 11
-        },
-        "4": {
-          "race": "Miami",
-          "points": 28
-        },
-        "5": {
-          "race": "Canada",
-          "points": 19
-        },
-        "6": {
-          "race": "Monaco",
-          "points": 8
-        },
-        "7": {
-          "race": "Barcelona",
-          "points": 11
-        },
-        "8": {
-          "race": "Austria",
-          "points": 15
-        },
-        "9": {
-          "race": "Silverstone",
-          "points": 17
-        },
-        "10": {
-          "race": "Belgium",
-          "points": 23
-        },
-        "11": {
-          "race": "Hungarian",
-          "points": 10
-        },
-        "12": {
-          "race": "Dutch",
-          "points": 31
-        },
-        "13": {
-          "race": "Italian",
-          "points": 15
-        },
-        "14": {
-          "race": "Madrid",
-          "points": 13
-        },
-        "15": {
-          "race": "Azerbaijan",
-          "points": 13
-        },
-        "16": {
-          "race": "Bahrain",
-          "points": 15
-        },
-        "17": {
-          "race": "Singapore",
-          "points": 11
-        },
-        "18": {
-          "race": "US",
-          "points": 24
-        },
-        "19": {
-          "race": "Mexico",
-          "points": 18
-        },
-        "20": {
-          "race": "Brazil",
-          "points": 15
         }
       }
     },
     {
       "name": "Veljko",
-      "rank": 8,
-      "games_played": 20,
-      "points": 349,
-      "lastRace": 14,
+      "rank": 7,
+      "games_played": 21,
+      "points": 364,
+      "lastRace": 15,
       "bestRound": 38,
       "roundScores": {
         "1": {
@@ -705,15 +639,19 @@
         "20": {
           "race": "Brazil",
           "points": 14
+        },
+        "21": {
+          "race": "Las Vegas",
+          "points": 15
         }
       }
     },
     {
       "name": "Tara",
-      "rank": 9,
-      "games_played": 19,
-      "points": 345,
-      "lastRace": 19,
+      "rank": 8,
+      "games_played": 20,
+      "points": 362,
+      "lastRace": 17,
       "bestRound": 41,
       "roundScores": {
         "1": {
@@ -791,6 +729,104 @@
         "20": {
           "race": "Brazil",
           "points": 19
+        },
+        "21": {
+          "race": "Las Vegas",
+          "points": 17
+        }
+      }
+    },
+    {
+      "name": "Barry",
+      "rank": 9,
+      "games_played": 21,
+      "points": 362,
+      "lastRace": 11,
+      "bestRound": 47,
+      "roundScores": {
+        "1": {
+          "race": "Melbourne",
+          "points": 7
+        },
+        "2": {
+          "race": "China",
+          "points": 47
+        },
+        "3": {
+          "race": "Japan",
+          "points": 11
+        },
+        "4": {
+          "race": "Miami",
+          "points": 28
+        },
+        "5": {
+          "race": "Canada",
+          "points": 19
+        },
+        "6": {
+          "race": "Monaco",
+          "points": 8
+        },
+        "7": {
+          "race": "Barcelona",
+          "points": 11
+        },
+        "8": {
+          "race": "Austria",
+          "points": 15
+        },
+        "9": {
+          "race": "Silverstone",
+          "points": 17
+        },
+        "10": {
+          "race": "Belgium",
+          "points": 23
+        },
+        "11": {
+          "race": "Hungarian",
+          "points": 10
+        },
+        "12": {
+          "race": "Dutch",
+          "points": 31
+        },
+        "13": {
+          "race": "Italian",
+          "points": 15
+        },
+        "14": {
+          "race": "Madrid",
+          "points": 13
+        },
+        "15": {
+          "race": "Azerbaijan",
+          "points": 13
+        },
+        "16": {
+          "race": "Bahrain",
+          "points": 15
+        },
+        "17": {
+          "race": "Singapore",
+          "points": 11
+        },
+        "18": {
+          "race": "US",
+          "points": 24
+        },
+        "19": {
+          "race": "Mexico",
+          "points": 18
+        },
+        "20": {
+          "race": "Brazil",
+          "points": 15
+        },
+        "21": {
+          "race": "Las Vegas",
+          "points": 11
         }
       }
     },
@@ -899,5 +935,5 @@
       }
     }
   ],
-  "total_rounds": 20
+  "total_rounds": 21
 }

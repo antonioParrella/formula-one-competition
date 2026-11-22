@@ -1,0 +1,36 @@
+{
+  "round": 21,
+  "race_name": "Las Vegas",
+  "year": 2026,
+  "is_sprint_weekend": false,
+  "top10": [
+    "VER",
+    "NOR",
+    "PIA",
+    "ANT",
+    "GAS",
+    "COL",
+    "HAM",
+    "SAI",
+    "RUS",
+    "LEC"
+  ],
+  "dnfs": [
+    "ALO",
+    "LIN",
+    "PER"
+  ],
+  "sprint_top3": null,
+  "championship_top10_before_race": [
+    "ANT",
+    "VER",
+    "RUS",
+    "HAM",
+    "LEC",
+    "NOR",
+    "PIA",
+    "HAD",
+    "LAW",
+    "GAS"
+  ]
+}
